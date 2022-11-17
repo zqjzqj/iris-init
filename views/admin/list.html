@@ -1,0 +1,87 @@
+{% extends "layouts/main.html" %}
+{% block content %}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">账户列表</div>
+                <div class="layui-card-body">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto" style="margin-bottom: 10px;">
+                        <form action="" class="list-search">
+                            搜索：
+                            <div class="layui-inline">
+                                <input class="layui-input" name="ID" placeholder="ID">
+                            </div>
+                            <div class="layui-inline">
+                                <input class="layui-input" name="Username" placeholder="账户名">
+                            </div>
+                            <button class="layui-btn" type="submit">搜索</button>
+                            <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                        </form>
+                    </div>
+
+                    <div style="padding-bottom: 10px;">
+                        <button data-action="open" href="/admin/item" data-title="添加账户" class="layui-btn layuiadmin-btn-list" >
+                            添加
+                        </button>
+                    </div>
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>头像</th>
+                            <th>账户名</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>电话</th>
+                            <th>QQ</th>
+                            <th>所属角色</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>上次登录时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in Data.List %}
+                        <tr>
+                            <td>{{item.ID}}</td>
+                            <td>
+                                <div class="layui-table-cell laytable-cell-1-0-3">
+                                    <img style="display: inline-block; width: 35%; height: 100%;" src="{{item.Avatar}}">
+                                </div>
+                            </td>
+                            <td>{{item.Username}}</td>
+                            <td>{{item.RealName}}</td>
+                            <td>{{item.SexDesc}}</td>
+                            <td>{{item.Phone}}</td>
+                            <td>{{item.QQ}}</td>
+                            <td>{{item.RolesNameStr}}</td>
+                            <td>{{item.StatusDesc}}</td>
+                            <td>{{item.CreatedAt}}</td>
+                            <td>{{item.LastLoginTime}}</td>
+                            <td>
+                                <button data-action="open" href="/admin/item?ID={{item.ID}}" data-title="编辑账户" class="layui-btn layui-btn-primary layui-btn-sm">
+                                    编辑
+                                </button>
+                                <button data-action="del" href="/admin/delete" data-id="{{item.ID}}" class="layui-btn layui-btn-primary layui-btn-sm">
+                                    删除
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include "../partials/pager.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

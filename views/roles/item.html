@@ -1,0 +1,38 @@
+{% extends "layouts/main.html" %}
+{% block content %}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="/roles/edit" method="post" data-action="form" data-ifr-index="0" lay-filter="component-form-group">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Name" value="{{Data.Role.Name}}" autocomplete="off" placeholder="角色名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">角色描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="Remark" placeholder="请输入内容" class="layui-textarea">{{Data.Role.Remark}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">角色权限</label>
+                    <div class="layui-input-block">
+                        <div id="rolePerms" data-json="{{Data.PermsTreeJson}}"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-layout-admin">
+                    <div class="layui-input-block">
+                        <div class="layui-footer" style="left: 0;">
+                            <input type="hidden" name="ID" value="{{Data.Role.ID}}">
+                            <button class="layui-btn">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

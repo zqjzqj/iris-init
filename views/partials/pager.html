@@ -1,0 +1,34 @@
+<div class="layui-box layui-laypage layui-laypage-default">
+    <span class="layui-laypage-count">共 {{Pager.Total}} 条</span>
+    {% if Pager.Current > 1 %}
+    <a href="{{Pager.FirstUrl}}{{ExtendStr}}" class="layui-laypage-prev" data-page="1">首页</a>
+    {% endif %}
+    {% if Pager.PrevUrl %}
+    <a href="{{Pager.PrevUrl}}{{ExtendStr}}" class="layui-laypage-prev" data-page="{{Pager.Current-1}}">上一页</a>
+    {% endif %}
+    {% for item in Pager.PagesUrl %}
+        {% if item.Page != Pager.Current %}
+            <a  href="{{item.Url}}{{ExtendStr}}">{{item.Page}}</a>
+        {% else %}
+            <span class="layui-laypage-curr">
+            <em class="layui-laypage-em"></em>
+            <em>{{item.Page}}</em>
+            </span>
+        {% endif %}
+    {% endfor %}
+    {% if Pager.NextUrl %}
+    <a href="{{Pager.NextUrl}}{{ExtendStr}}" class="layui-laypage-next" data-page="{{Pager.Current+1}}">下一页</a>
+    <a href="{{Pager.EndUrl}}{{ExtendStr}}" class="layui-laypage-last" title="尾页" data-page="{{Pager.TotalPage}}">尾页</a>
+    {% endif %}
+    <span class="layui-laypage-limits">
+      <select lay-ignore="" data-curr="{{Pager.Size}}">
+        <option value="10">10 条/页</option>
+        <option value="20">20 条/页</option>
+        <option value="30">30 条/页</option>
+        <option value="40">40 条/页</option>
+        <option value="50">50 条/页</option></select>
+    </span>
+    <span class="layui-laypage-skip">到第
+      <input type="text" min="1" value="{{Pager.Current}}" class="layui-input">页
+      <button type="button" class="layui-laypage-btn">确定</button></span>
+</div>

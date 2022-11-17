@@ -1,0 +1,25 @@
+<div class="layui-side layui-side-menu">
+  <div class="layui-side-scroll">
+    <div class="layui-logo">
+      <span>C-Customer</span>
+    </div>
+
+    <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+      {% for item in Data.Menus %}
+      <li data-name="app" class="layui-nav-item">
+        <a href="javascript:;" lay-tips="{{item.Name}}" lay-direction="2">
+          <i class="layui-icon layui-icon-template"></i>
+          <cite>{{item.Name}}</cite>
+        </a>
+        <dl class="layui-nav-child">
+          {% for _item in item.Children %}
+          <dd data-name="console">
+            <a lay-href="{{_item.Path}}">{{_item.Name}}</a>
+          </dd>
+          {% endfor %}
+        </dl>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

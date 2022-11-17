@@ -1,0 +1,15 @@
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery.min.js"></script>
+<script src="/static/views/js/helper.js"></script>
+<script src="/static/views/js/global.js"></script>
+<script>
+    layui.config({
+        base: '/static/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use('index', function(){
+    });
+</script>
+{% for item in PageJs %}
+<script src="{{item}}"></script>
+{% endfor %}

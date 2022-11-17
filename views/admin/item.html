@@ -1,0 +1,85 @@
+{% extends "layouts/main.html" %}
+{% block content %}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="{%if Data.Self == '1'%}/admin/self{%else%}/admin/edit{%endif%}" method="post" data-action="form" data-ifr-index="0" lay-filter="component-form-group">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Username" value="{{Data.Adm.Username}}" autocomplete="off" placeholder="账户名" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="Password" value="" autocomplete="off" placeholder="密码" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">真实姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="RealName" value="{{Data.Adm.RealName}}" autocomplete="off" placeholder="真实姓名" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系电话</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Phone" value="{{Data.Adm.Phone}}" autocomplete="off" placeholder="联系电话" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">QQ</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="QQ" value="{{Data.Adm.QQ}}" autocomplete="off" placeholder="QQ" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色</label>
+                    <div class="layui-input-block" data-action="checkboxChecked" data-value="{{Data.Adm.RolesId}}">
+                        <input type="checkbox" value="*" {%if Data.Self == "1"%}disabled{%endif%}   name="RolesId" title="超级管理员">
+                        {% for item in Data.Roles %}
+                        <input type="checkbox"  {%if Data.Self == "1"%}disabled{%endif%} name="RolesId" value="{{item.ID}}" title="{{item.Name}}">
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="Sex" value="1" title="男" {%if Data.Adm.Sex == 1%}checked{%endif%}>
+                        <div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                        <input type="radio" name="Sex" value="2" title="女" {%if Data.Adm.Sex == 2%}checked{%endif%}>
+                        <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="Status"  value="1" title="启用" {%if Data.Adm.Status == 1%}checked{%else%}{%if Data.Self == "1"%}disabled{%endif%} {%endif%}>
+                        <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
+                        <input type="radio" name="Status" value="0" title="禁用" {%if Data.Adm.Status == 0%}checked{%else%}{%if Data.Self == "1"%}disabled{%endif%}{%endif%}>
+                        <div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">简介</label>
+                    <div class="layui-input-block">
+                        <textarea name="Desc" placeholder="请输入内容" class="layui-textarea">{{Data.Adm.Desc}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-layout-admin">
+                    <div class="layui-input-block">
+                        <div class="layui-footer" style="left: 0;">
+                            <input type="hidden" name="ID" value="{{Data.Adm.ID}}">
+                            <input type="hidden" name="Self" value="{{Data.Self}}">
+                            <button class="layui-btn">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
