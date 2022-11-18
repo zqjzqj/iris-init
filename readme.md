@@ -5,9 +5,9 @@
 ---
 - 1.将config.env复制更名为config.yml 然后填写对应的配置
 ---
-* 2.运行迁移命令 go run main.go -migrate=run 创建数据库 初始账号 admin 123456
+- 2.运行迁移命令 go run main.go -migrate=run 创建数据库 初始账号 admin 123456
 ---
-* 3.启动程序go run main.go
+- 3.启动程序go run main.go
 
 ---
 支持参数
