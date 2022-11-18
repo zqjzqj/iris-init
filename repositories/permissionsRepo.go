@@ -1,10 +1,10 @@
 package repositories
 
 import (
+	"gorm.io/gorm"
 	"jd-fxl/model"
 	"jd-fxl/repositories/repoComm"
 	"jd-fxl/repositories/repoInterface"
-	"gorm.io/gorm"
 )
 
 type PermissionsRepoGorm struct {
@@ -15,7 +15,7 @@ func NewPermissionsRepo() repoInterface.PermissionsRepo {
 	return &PermissionsRepoGorm{repoComm.NewRepoGorm()}
 }
 
-//截断表
+// 截断表
 func (permRepo PermissionsRepoGorm) TruncateTable() {
 	permRepo.Orm.Exec("truncate table " + new(model.Permissions).TableName())
 }
@@ -109,9 +109,9 @@ func (permRepo PermissionsRepoGorm) GetListAsMenu(idents []string) []model.Permi
 					Args: []interface{}{
 						func(tx *gorm.DB) *gorm.DB {
 							if idents == nil { //不限制权限idents
-								return tx
+								return tx.Order("sort")
 							}
-							return tx.Where("ident in ?", idents)
+							return tx.Order("sort").Where("ident in ?", idents)
 						},
 					},
 				},

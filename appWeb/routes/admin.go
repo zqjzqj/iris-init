@@ -3,10 +3,11 @@ package routes
 import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"jd-fxl/appWeb/controller"
+	"jd-fxl/appWeb/controller/admin"
 	"jd-fxl/appWeb/middleware"
 	"jd-fxl/config"
 	"jd-fxl/services"
+	"net/http"
 )
 
 func RegisterRoutes(app *iris.Application) {
@@ -23,19 +24,25 @@ func RegisterRoutes(app *iris.Application) {
 
 	//子按钮 子页面按钮点击跳转新的页面
 	//b.Handle(http.MethodPost, "delete", "PostDelete").SetName("用户组@用户列表:子页面:子页面")
-	mvc.Configure(app.Party("/"), func(application *mvc.Application) {
-		application.Register(middleware.RegisterAdmin).Handle(&controller.LoginController{})
+	party := app.Party("/") //可以定义子域名 .Subdomain("admin")
+	party.OnErrorCode(iris.StatusNotFound, func(ctx iris.Context) {
+		if !ctx.IsAjax() /*&& !strings.HasPrefix(ctx.Request().URL.Path, "/api/")*/ {
+			ctx.Redirect("/err?Msg=页面未找到", http.StatusFound)
+		}
+	})
+	mvc.Configure(party, func(application *mvc.Application) {
+		application.Register(middleware.RegisterAdmin).Handle(&admin.LoginController{})
 
 		application.Party("/", middleware.AdminLogin, middleware.AdminPermission).
-			Register(middleware.RegisterAdmin).Handle(&controller.SiteController{})
+			Register(middleware.RegisterAdmin).Handle(&admin.SiteController{})
 
-		application.Party("/areas", middleware.AdminLogin, middleware.AdminPermission).Handle(&controller.AreaController{})
+		application.Party("/areas", middleware.AdminLogin, middleware.AdminPermission).Handle(&admin.AreaController{})
 
 		application.Party("/admin", middleware.AdminLogin, middleware.AdminPermission).
-			Register(middleware.RegisterAdmin).Handle(&controller.AdminController{})
+			Register(middleware.RegisterAdmin).Handle(&admin.AdminController{})
 
 		application.Party("/roles", middleware.AdminLogin, middleware.AdminPermission).
-			Register(middleware.RegisterAdmin).Handle(&controller.RolesController{})
+			Register(middleware.RegisterAdmin).Handle(&admin.RolesController{})
 
 	})
 

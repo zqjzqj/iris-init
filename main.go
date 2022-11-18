@@ -91,11 +91,6 @@ func main() {
 
 func ListenWeb(appWeb *iris.Application) error {
 	appWeb.Use(recover2.New(), logger.New())
-	appWeb.OnErrorCode(iris.StatusNotFound, func(ctx iris.Context) {
-		if !ctx.IsAjax() /*&& !strings.HasPrefix(ctx.Request().URL.Path, "/api/")*/ {
-			ctx.Redirect("/err?Msg=页面未找到", http.StatusFound)
-		}
-	})
 	//使用session
 	sess := sessions.New(sessions.Config{
 		Cookie: "jd-fxl",

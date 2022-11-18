@@ -1,4 +1,4 @@
-package controller
+package admin
 
 import (
 	"github.com/kataras/iris/v12"
@@ -14,11 +14,16 @@ type AdminController struct {
 }
 
 func (adm AdminController) BeforeActivation(b mvc.BeforeActivation) {
-	b.Handle(http.MethodGet, "list", "GetList").SetName("账号管理@用户列表")
-	b.Handle(http.MethodGet, "item", "GetItem").SetName("账号管理@用户列表:查看账号")
-	b.Handle(http.MethodPost, "edit", "PostEdit").SetName("账号管理@用户列表:编辑账号")
-	b.Handle(http.MethodPost, "delete", "PostDelete").SetName("账号管理@用户列表:删除账号")
+	b.Handle(http.MethodGet, "list", "GetList").SetName("账号管理@账号列表")
+	b.Handle(http.MethodGet, "item", "GetItem").SetName("账号管理@账号列表:查看账号")
+	b.Handle(http.MethodPost, "edit", "PostEdit").SetName("账号管理@账号列表:编辑账号")
+	b.Handle(http.MethodPost, "delete", "PostDelete").SetName("账号管理@账号列表:删除账号")
 
+}
+
+func (adm AdminController) GetPerms() appWeb.ResponseFormat {
+	services.NewAdminService().RefreshPermissions(&adm.Admin, false)
+	return appWeb.NewSuccessResponse("", adm.Admin.Permissions)
 }
 
 func (adm AdminController) GetSelf(ctx iris.Context) mvc.Result {
@@ -39,7 +44,7 @@ func (adm AdminController) PostSelf(ctx iris.Context) appWeb.ResponseFormat {
 	return appWeb.NewSuccessResponse("", _adm.ShowMap())
 }
 
-//获取数据列表
+// 获取数据列表
 func (adm AdminController) GetList(ctx iris.Context) mvc.Result {
 	list, page := services.NewAdminService().ListPage(ctx)
 	return appWeb.ResponseDataViewForm("admin/list.html", appWeb.DataView{
@@ -50,7 +55,7 @@ func (adm AdminController) GetList(ctx iris.Context) mvc.Result {
 	}, ctx)
 }
 
-//获取一条详细数据
+// 获取一条详细数据
 func (adm AdminController) GetItem(ctx iris.Context) mvc.Result {
 	return appWeb.ResponseDataViewForm("admin/item.html", appWeb.DataView{
 		Data: map[string]interface{}{
@@ -79,7 +84,7 @@ func (adm AdminController) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
 	return appWeb.NewSuccessResponse("", nil)
 }
 
-//注销登录
+// 注销登录
 func (adm AdminController) GetLogout() appWeb.ResponseFormat {
 	err := services.NewAdminService().Logout(&adm.Admin)
 	if err != nil {

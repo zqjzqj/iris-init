@@ -1,15 +1,15 @@
 package services
 
 import (
+	"database/sql"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/core/router"
 	"jd-fxl/global"
 	"jd-fxl/model"
 	"jd-fxl/repositories"
 	"jd-fxl/repositories/repoComm"
 	"jd-fxl/repositories/repoInterface"
 	"jd-fxl/sErr"
-	"database/sql"
-	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/core/router"
 	"strings"
 	"time"
 )
@@ -43,7 +43,7 @@ func (admServ AdminService) LoginByPwd(username, pwd string) (model.Admin, error
 	return adm, err
 }
 
-//初始化adm账号 在初次运行迁移的时候调用
+// 初始化adm账号 在初次运行迁移的时候调用
 func (admServ AdminService) InitAdminAccount() (model.Admin, error) {
 	pwd, salt := global.GeneratePassword("123456")
 	admin := model.Admin{
@@ -85,8 +85,8 @@ func (admServ AdminService) ListPage(ctx iris.Context) ([]map[string]interface{}
 	return admServ.ShowMapList(adm), pager
 }
 
-//获取一条数据根据ctx
-//这里条件为ID 传入ctx是方便后续修改参数条件
+// 获取一条数据根据ctx
+// 这里条件为ID 传入ctx是方便后续修改参数条件
 func (admServ AdminService) GetItem(ctx iris.Context, _select ...string) model.Admin {
 	return admServ.repo.GetByID(ctx.URLParamUint64("ID"), _select...)
 }
@@ -95,7 +95,7 @@ func (admServ AdminService) GetByID(id uint64, _select ...string) model.Admin {
 	return admServ.repo.GetByID(id, _select...)
 }
 
-//通过请求ctx编辑/新增一条数据
+// 通过请求ctx编辑/新增一条数据
 func (admServ AdminService) EditByCtx(ctx iris.Context, admID uint64) (model.Admin, error) {
 	admValidator := AdminValidator{}
 	err := ctx.ReadBody(&admValidator)
@@ -127,7 +127,7 @@ func (admServ AdminService) DeleteByCtx(ctx iris.Context) error {
 	return err
 }
 
-//只刷新拥有角色的名称
+// 只刷新拥有角色的名称
 func (admServ AdminService) RefreshRolesName(adm *model.Admin) {
 	if adm.IsRootRole() {
 		adm.RolesName = []string{model.RoleAdminName}
@@ -147,7 +147,8 @@ func (admServ AdminService) RefreshRolesName(adm *model.Admin) {
 	}
 }
 
-//刷新拥有角色的权限和名称
+// 刷新拥有角色的权限和名称
+// 超级管理员权限会返回nil 其他的没有权限则是空数组
 func (admServ AdminService) RefreshPermissions(adm *model.Admin, force bool) {
 	if !force {
 		if adm.Permissions != nil && adm.RolesName != nil {
@@ -256,7 +257,7 @@ func (admServ AdminService) ShowMapList(adm []model.Admin) []map[string]interfac
 	return _adm
 }
 
-//验证参数 并返回到一个新的adm model
+// 验证参数 并返回到一个新的adm model
 func (admServ AdminService) GetAdmByValidate(aValidator AdminValidator) (model.Admin, error) {
 	err := aValidator.Validate()
 	if err != nil {

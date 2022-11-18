@@ -415,7 +415,6 @@ layui.use(['form', 'laydate'], function(){
     $("[data-action=checkboxChecked]").each(function(k, v){
         var dataVal = $(v).attr("data-value")
         _dataVal = dataVal.split(",")
-        console.log(_dataVal)
         $(v).find("input:checkbox").each(function(k, _v){
             var _val = $(_v).val()
             if (_val !== "" && $.inArray(_val, _dataVal) !== -1) {

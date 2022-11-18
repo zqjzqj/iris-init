@@ -49,10 +49,22 @@
                             <td>{{item.CreatedAt}}</td>
                             <td>{{item.UpdatedAt}}</td>
                             <td>
-                                <button data-action="open" href="/roles/item?ID={{item.ID}}" data-title="编辑角色" class="layui-btn layui-btn-primary layui-btn-sm">
+                                <button data-perms data-perm-val="GET@/roles/item"
+                                        data-action="open" href="/roles/item?ID={{item.ID}}&form-disabled=1"
+                                        data-title="详情"
+                                        class="layui-btn layui-btn-primary layui-btn-sm">
+                                    详情
+                                </button>
+                                <button
+                                        data-perms data-perm-val="POST@/roles/edit"
+                                        data-action="open"
+                                        href="/roles/item?ID={{item.ID}}"
+                                        data-title="编辑角色" class="layui-btn layui-btn-primary layui-btn-sm">
                                     编辑
                                 </button>
-                                <button data-action="del" href="/roles/delete" data-id="{{item.ID}}" class="layui-btn layui-btn-primary layui-btn-sm">
+                                <button
+                                        data-perms data-perm-val="POST@/roles/delete"
+                                        data-action="del" href="/roles/delete" data-id="{{item.ID}}" class="layui-btn layui-btn-primary layui-btn-sm">
                                     删除
                                 </button>
                             </td>

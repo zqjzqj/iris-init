@@ -21,4 +21,23 @@ $(function(){
     listSearch.find("input").each(function(k, v){
         $(v).val(getURLString($(v).attr("name")))
     })
+    if (getURLString("form-disabled") === "1" ) {
+        $("input").attr("disabled", "disabled")
+        $("textarea").attr("disabled", "disabled")
+        $("select").attr("disabled", "disabled")
+        $(".layui-footer .layui-btn").hide()
+    }
+    var perms =  $("[data-perms]")
+    if (perms.length > 0) {
+        $.get("/admin/perms", {}, function(resp){
+            if (resp.Code === 0 && resp.Data == null) {
+                return
+            }
+            perms.each(function(k, v){
+                if ($.inArray($(v).attr("data-perm-val"), resp.Data) === - 1) {
+                    $(v).hide()
+                }
+            })
+        }, "json")
+    }
 })

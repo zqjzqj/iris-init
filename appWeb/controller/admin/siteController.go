@@ -1,4 +1,4 @@
-package controller
+package admin
 
 import (
 	"github.com/kataras/iris/v12"
