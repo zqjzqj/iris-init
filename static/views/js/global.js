@@ -27,7 +27,7 @@ $(function(){
         $("select").attr("disabled", "disabled")
         $(".layui-footer .layui-btn").hide()
     }
-    var perms =  $("[data-perms]")
+    var perms =  $("[data-perm]")
     if (perms.length > 0) {
         $.get("/admin/perms", {}, function(resp){
             if (resp.Code === 0 && resp.Data == null) {
