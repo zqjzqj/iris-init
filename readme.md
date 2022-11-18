@@ -10,7 +10,7 @@
 - 3.启动程序go run main.go
 ---
 
-支持参数
+### 支持参数
  * -config 指定配置文件位置 默认./config 【注：参数值不要带.yml】
  * -migrate (run, rollback) 运行或回滚迁移 
  * -mRollbackId 当 -migrate=rollback时 需要指定回滚版本号
