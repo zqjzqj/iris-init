@@ -11,7 +11,7 @@ import (
 )
 
 func RegisterRoutes(app *iris.Application) {
-	tmpl := iris.Django("./views", ".html")
+	tmpl := iris.Django("./views/admin", ".html")
 	if !config.EnvIsPro() {
 		tmpl = tmpl.Reload(true)
 	}
