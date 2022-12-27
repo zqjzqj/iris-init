@@ -24,5 +24,5 @@ func main() {
 	if err != nil {
 		logs.Fatal(err)
 	}
-	logs.PrintlnSuccess("OK..")
+	logs.PrintlnSuccess("OK...")
 }
