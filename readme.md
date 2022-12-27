@@ -18,9 +18,10 @@
 
 <h3>开发命令</h3>
 
--     用于创建 services, repositories, repoInterface
+-     用于创建 services, repositories, repoInterface, migrate
 
-      alias为model缩写，空则默认为model首字母小写, -appRoot为项目代码root目录，空则默认为当前目录
+      -alias为model缩写，空则默认为model首字母小写, -appRoot为项目代码root目录，空则默认为当前目录
+      -migrate为迁移models, 使用'-'分割多个models 会生成对应的迁移文件
     
 -     go run .\cmd\generateServTpl.go -model=Xxx -alias=xxx -appRoot=xxxx
       

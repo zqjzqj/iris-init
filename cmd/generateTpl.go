@@ -4,8 +4,10 @@ import (
 	"flag"
 	"iris-init/cmd/servTemplate"
 	"iris-init/logs"
+	"strings"
 )
 
+var migrate = flag.String("migrate", "", "迁移models '-'多个逗号分割")
 var model = flag.String("model", "", "model名")
 var alias = flag.String("alias", "", "alias")
 var appRoot = flag.String("appRoot", "", "appRoot项目路径，默认为当前目录") //rollback
@@ -16,6 +18,18 @@ func init() {
 }
 
 func main() {
+	if *migrate != "" {
+		models := strings.Split(*migrate, "-")
+		migrateTpl := servTemplate.NewMigrateTpl(models)
+		err := migrateTpl.GenerateFile()
+		if err != nil {
+			logs.Fatal(err)
+		}
+		logs.PrintlnSuccess("Migrate OK...")
+		if *model == "" {
+			return
+		}
+	}
 	servTpl := servTemplate.NewServTpl(*model, *alias)
 	if *appRoot != "" {
 		servTpl.SetAppPath(*appRoot)
@@ -24,5 +38,5 @@ func main() {
 	if err != nil {
 		logs.Fatal(err)
 	}
-	logs.PrintlnSuccess("OK...")
+	logs.PrintlnSuccess("Services OK...")
 }
