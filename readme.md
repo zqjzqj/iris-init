@@ -24,4 +24,5 @@
       -migrate为迁移models, 使用'-'分割多个models 会生成对应的迁移文件
     
 -     go run .\cmd\generateServTpl.go -model=Xxx -alias=xxx -appRoot=xxxx
+-     go run .\cmd\generateServTpl.go -migrate=Xxx1-Xxx2-Xxx3
       
