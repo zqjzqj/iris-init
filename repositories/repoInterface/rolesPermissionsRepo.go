@@ -1,6 +1,6 @@
 package repoInterface
 
-import "jd-fxl/model"
+import "iris-init/model"
 
 type RolesPermissionsRepo interface {
 	RepoInterface

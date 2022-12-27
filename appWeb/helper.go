@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"jd-fxl/global"
-	"jd-fxl/model"
+	"iris-init/global"
+	"iris-init/model"
 	"net/url"
 	"strings"
 )

@@ -1,9 +1,9 @@
 package global
 
 import (
-	"jd-fxl/config"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
+	"iris-init/config"
 )
 
 const (

@@ -1,8 +1,8 @@
 package migrates
 
 import (
-	"jd-fxl/logs"
 	"github.com/go-gormigrate/gormigrate/v2"
+	"iris-init/logs"
 )
 
 type MigrateInterface interface {

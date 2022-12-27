@@ -2,8 +2,8 @@ package model
 
 import (
 	"fmt"
-	"jd-fxl/global"
-	"jd-fxl/model/mField"
+	"iris-init/global"
+	"iris-init/model/mField"
 )
 
 const (

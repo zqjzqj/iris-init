@@ -1,13 +1,13 @@
 package services
 
 import (
-	"jd-fxl/global"
-	"jd-fxl/model"
-	"jd-fxl/repositories"
-	"jd-fxl/repositories/repoComm"
-	"jd-fxl/repositories/repoInterface"
-	"jd-fxl/sErr"
 	"github.com/kataras/iris/v12"
+	"iris-init/global"
+	"iris-init/model"
+	"iris-init/repositories"
+	"iris-init/repositories/repoComm"
+	"iris-init/repositories/repoInterface"
+	"iris-init/sErr"
 )
 
 func NewRolesService() RolesService {

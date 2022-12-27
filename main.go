@@ -8,12 +8,12 @@ import (
 	recover2 "github.com/kataras/iris/v12/middleware/recover"
 	"github.com/kataras/iris/v12/sessions"
 	"github.com/zqjzqj/pRuntime"
-	"jd-fxl/appWeb/routes"
-	"jd-fxl/config"
-	"jd-fxl/cron"
-	"jd-fxl/global"
-	"jd-fxl/logs"
-	"jd-fxl/migrates"
+	"iris-init/appWeb/routes"
+	"iris-init/config"
+	"iris-init/cron"
+	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/migrates"
 	"log"
 	"net/http"
 	"os"
@@ -55,7 +55,7 @@ func main() {
 	if config.RunBackground() {
 		if runtime.GOOS != "windows" {
 			//设置一下pid文件
-			pRuntime.SetPidFile("./jd-fxl.pid")
+			pRuntime.SetPidFile("./iris-init.pid")
 			pRuntime.RunBackground()
 		} else {
 			logs.PrintlnWarning("windows不支持后台运行模式")
@@ -93,7 +93,7 @@ func ListenWeb(appWeb *iris.Application) error {
 	appWeb.Use(recover2.New(), logger.New())
 	//使用session
 	sess := sessions.New(sessions.Config{
-		Cookie: "jd-fxl",
+		Cookie: "iris-init",
 	})
 	appWeb.Use(sess.Handler())
 	//注册路由

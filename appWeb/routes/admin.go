@@ -3,10 +3,10 @@ package routes
 import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"jd-fxl/appWeb/controller/admin"
-	"jd-fxl/appWeb/middleware"
-	"jd-fxl/config"
-	"jd-fxl/services"
+	"iris-init/appWeb/controller/admin"
+	"iris-init/appWeb/middleware"
+	"iris-init/config"
+	"iris-init/services"
 	"net/http"
 )
 

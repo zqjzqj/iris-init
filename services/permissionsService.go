@@ -1,12 +1,12 @@
 package services
 
 import (
-	"jd-fxl/global"
-	"jd-fxl/logs"
-	"jd-fxl/model"
-	"jd-fxl/repositories"
-	"jd-fxl/repositories/repoInterface"
 	"github.com/kataras/iris/v12"
+	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/model"
+	"iris-init/repositories"
+	"iris-init/repositories/repoInterface"
 	"strings"
 )
 

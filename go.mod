@@ -1,4 +1,4 @@
-module jd-fxl
+module iris-init
 
 go 1.19
 

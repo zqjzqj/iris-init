@@ -15,3 +15,12 @@
  * -migrate (run, rollback) 运行或回滚迁移 
  * -mRollbackId 当 -migrate=rollback时 需要指定回滚版本号
     
+
+<h3>开发命令</h3>
+
+-     用于创建 services, repositories, repoInterface
+
+      alias为model缩写，空则默认为model首字母小写, -appRoot为项目代码root目录，空则默认为当前目录
+    
+-     go run .\cmd\generateServTpl.go -model=Xxx -alias=xxx -appRoot=xxxx
+      

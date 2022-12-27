@@ -1,10 +1,10 @@
 package repositories
 
 import (
-	"jd-fxl/model"
-	"jd-fxl/repositories/repoComm"
-	"jd-fxl/repositories/repoInterface"
 	"gorm.io/gorm"
+	"iris-init/model"
+	"iris-init/repositories/repoComm"
+	"iris-init/repositories/repoInterface"
 )
 
 type RolesPermissionsRepoGorm struct {

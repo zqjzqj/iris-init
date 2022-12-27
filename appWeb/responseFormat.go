@@ -1,6 +1,6 @@
 package appWeb
 
-import "jd-fxl/global"
+import "iris-init/global"
 
 const (
 	ResponseSuccessCode  = 0

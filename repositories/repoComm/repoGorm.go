@@ -1,8 +1,8 @@
 package repoComm
 
 import (
-	"jd-fxl/orm"
 	"gorm.io/gorm"
+	"iris-init/orm"
 )
 
 type RepoGorm struct {

@@ -3,9 +3,9 @@ package admin
 import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"jd-fxl/appWeb"
-	"jd-fxl/model"
-	"jd-fxl/services"
+	"iris-init/appWeb"
+	"iris-init/model"
+	"iris-init/services"
 	"net/http"
 )
 

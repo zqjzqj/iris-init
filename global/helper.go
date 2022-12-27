@@ -1,7 +1,6 @@
 package global
 
 import (
-	"jd-fxl/sErr"
 	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
@@ -9,6 +8,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	idvalidator "github.com/guanguans/id-validator"
+	"iris-init/sErr"
 	"math/rand"
 	"os"
 	"regexp"
@@ -31,6 +31,19 @@ type ShuffleType interface {
 	map[string]interface{} | NumberIntType | string | interface{}
 }
 
+// StringFirstLower 字符串首字母小写
+func StringFirstLower(s string) string {
+	if s == "" {
+		return ""
+	}
+	return strings.ToLower(s[:1]) + s[1:]
+}
+func StringFirstUpper(s string) string {
+	if s == "" {
+		return ""
+	}
+	return strings.ToUpper(s[:1]) + s[1:]
+}
 func GeneratePassword(pwd string) (password, salt string) {
 	salt = RandStringRunes(10)
 	return PwdPlaintext2CipherText(pwd, salt), salt

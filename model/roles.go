@@ -1,8 +1,8 @@
 package model
 
 import (
-	"jd-fxl/global"
-	"jd-fxl/model/mField"
+	"iris-init/global"
+	"iris-init/model/mField"
 	"time"
 )
 

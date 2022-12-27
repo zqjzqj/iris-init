@@ -1,10 +1,10 @@
 package services
 
 import (
-	"jd-fxl/model"
-	"jd-fxl/repositories"
-	"jd-fxl/repositories/repoInterface"
-	"jd-fxl/sErr"
+	"iris-init/model"
+	"iris-init/repositories"
+	"iris-init/repositories/repoInterface"
+	"iris-init/sErr"
 )
 
 func NewAreaService() AreaService {

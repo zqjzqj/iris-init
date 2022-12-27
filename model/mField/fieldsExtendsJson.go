@@ -1,9 +1,9 @@
 package mField
 
 import (
-	"jd-fxl/global"
 	"encoding/json"
 	"github.com/tidwall/gjson"
+	"iris-init/global"
 )
 
 type FieldsExtendsJsonType struct {

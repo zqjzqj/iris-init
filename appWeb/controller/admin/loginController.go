@@ -4,10 +4,10 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"github.com/kataras/iris/v12/sessions"
-	"jd-fxl/appWeb"
-	"jd-fxl/global"
-	"jd-fxl/model"
-	"jd-fxl/services"
+	"iris-init/appWeb"
+	"iris-init/global"
+	"iris-init/model"
+	"iris-init/services"
 )
 
 type LoginController struct {

@@ -1,8 +1,8 @@
 package repoInterface
 
 import (
-	"jd-fxl/model"
-	"jd-fxl/repositories/repoComm"
+	"iris-init/model"
+	"iris-init/repositories/repoComm"
 )
 
 type PermissionsRepo interface {

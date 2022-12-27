@@ -1,7 +1,7 @@
 package model
 
 import (
-	"jd-fxl/model/mField"
+	"iris-init/model/mField"
 )
 
 type RolesPermissions struct {

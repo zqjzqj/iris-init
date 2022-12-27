@@ -1,6 +1,6 @@
 package model
 
-import "jd-fxl/model/mField"
+import "iris-init/model/mField"
 
 type Area struct {
 	mField.FieldsPk

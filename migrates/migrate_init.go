@@ -1,13 +1,13 @@
 package migrates
 
 import (
-	"jd-fxl/logs"
-	"jd-fxl/model"
-	"jd-fxl/orm"
-	"jd-fxl/services"
 	"fmt"
 	"github.com/go-gormigrate/gormigrate/v2"
 	"gorm.io/gorm"
+	"iris-init/logs"
+	"iris-init/model"
+	"iris-init/orm"
+	"iris-init/services"
 	"strings"
 )
 

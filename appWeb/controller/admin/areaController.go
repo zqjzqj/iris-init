@@ -2,8 +2,8 @@ package admin
 
 import (
 	"github.com/kataras/iris/v12"
-	"jd-fxl/appWeb"
-	"jd-fxl/services"
+	"iris-init/appWeb"
+	"iris-init/services"
 )
 
 type AreaController struct {

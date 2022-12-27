@@ -3,6 +3,7 @@ package logs
 import (
 	"github.com/gookit/color"
 	"log"
+	"os"
 	"time"
 )
 
@@ -57,5 +58,6 @@ func PrintErr(v ...interface{}) {
 }
 
 func Fatal(v ...interface{}) {
-	log.Fatal(v...)
+	PrintErr(v...)
+	os.Exit(1)
 }
