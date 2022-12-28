@@ -7,10 +7,11 @@ import (
 	"strings"
 )
 
-var migrate = flag.String("migrate", "", "迁移models '-'多个逗号分割")
+var migrate = flag.String("migrate", "", "迁移models ','多个逗号分割")
 var model = flag.String("model", "", "model名")
 var alias = flag.String("alias", "", "alias")
 var appRoot = flag.String("appRoot", "", "appRoot项目路径，默认为当前目录") //rollback
+var ctrDir = flag.String("ctrDir", "", "控制器生成的子目录，默认为空")        //rollback
 
 func init() {
 	flag.Parse()
@@ -19,7 +20,7 @@ func init() {
 
 func main() {
 	if *migrate != "" {
-		models := strings.Split(*migrate, "-")
+		models := strings.Split(*migrate, ",")
 		migrateTpl := servTemplate.NewMigrateTpl(models)
 		err := migrateTpl.GenerateFile()
 		if err != nil {
@@ -30,13 +31,10 @@ func main() {
 			return
 		}
 	}
-	servTpl := servTemplate.NewServTpl(*model, *alias)
+	servTpl := servTemplate.NewServTpl(*model, *alias, *ctrDir)
 	if *appRoot != "" {
 		servTpl.SetAppPath(*appRoot)
 	}
-	err := servTpl.GenerateFile()
-	if err != nil {
-		logs.Fatal(err)
-	}
+	_ = servTpl.GenerateFile(true)
 	logs.PrintlnSuccess("Services OK...")
 }
