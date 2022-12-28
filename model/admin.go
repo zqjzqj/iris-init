@@ -95,7 +95,7 @@ func (adm Admin) ShowMap() map[string]interface{} {
 		r["LastLoginTime"] = time.Unix(adm.LastLoginTime, 0).Format(global.DateTimeFormatStr)
 	}
 	if adm.Avatar == "" {
-		r["Avatar"] = "https://dn-qiniu-avatar.qbox.me/avatar/"
+		r["Avatar"] = global.DefaultAvatar
 	}
 	return r
 }
