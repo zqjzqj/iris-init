@@ -24,7 +24,7 @@ func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.M
 	pager := global.NewPager(ctx)
 	pager.SetTotal({{.Alias}}Serv.repo.GetTotalCount(where))
 	if pager.Total == 0 {
-		return []map[string]interface{}{}, pager
+		return []model.{{.Model}}{}, pager
 	}
 	where.SelectParams = repoComm.SelectFrom{
 		Offset:  pager.Offset,
