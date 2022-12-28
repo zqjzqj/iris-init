@@ -4,7 +4,7 @@
 -     后台基于layuiadmin嵌套，如不需要可自行修改
 -     如需修改go mod 名称 全局替换 'iris-init'即可
 
-- [后台 layuiadmin 模板下载地址](https://github.com/Run2948/layuiAdmin)
+- [后台 layuiadmin 模板下载地址](https://github.com/zqjzqj/layuiAdmin.git)
 
 <h1>安装流程</h1>
 
