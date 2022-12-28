@@ -36,5 +36,5 @@ func main() {
 		servTpl.SetAppPath(*appRoot)
 	}
 	_ = servTpl.GenerateFile(true)
-	logs.PrintlnSuccess("Services OK...")
+	logs.PrintlnSuccess("GenerateFile OK...")
 }
