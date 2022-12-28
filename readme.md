@@ -1,3 +1,10 @@
+<h1>简介</h1>
+
+-     golang iris 框架的一套基础项目架构，只实现了基础的后台账户管理登录，权限管理
+-     后台基于layuiadmin嵌套，如不需要可自行修改
+
+- [后台模板下载地址](https://github.com/Run2948/layuiAdmin)
+
 <h1>安装流程</h1>
 
 ### 正式数据请编译后替代[go run main.go]运行
