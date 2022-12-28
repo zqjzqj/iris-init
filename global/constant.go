@@ -16,7 +16,7 @@ const (
 	SexWoman   = 2
 	SexUnknown = 0
 
-	DefaultAvatar = "https://tcr-4w06clvb-1303139375.cos.ap-beijing.myqcloud.com/gzzkResources/2d9f1886d9b1f5de774d48baa519d132.png"
+	DefaultAvatar = "https://avatars.githubusercontent.com/u/16177551?s=48&v=4"
 )
 
 var SexDescMap = map[uint8]string{
