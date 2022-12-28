@@ -18,7 +18,7 @@ type {{.Model}}Service struct {
 	repo repoInterface.{{.Model}}Repo
 }
 
-func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]{{.Model}}, *global.Pager) {
+func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.Model}}, *global.Pager) {
 	where := repoInterface.{{.Model}}SearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
