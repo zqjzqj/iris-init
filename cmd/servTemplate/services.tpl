@@ -18,7 +18,7 @@ type {{.Model}}Service struct {
 	repo repoInterface.{{.Model}}Repo
 }
 
-func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]map[string]interface{}, *global.Pager) {
+func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]{{.Model}}, *global.Pager) {
 	where := repoInterface.{{.Model}}SearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
@@ -37,8 +37,7 @@ func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]map[string
             },
 		},
 	}
-	{{.Alias}} := {{.Alias}}Serv.repo.GetList(where)
-	return {{.Alias}}Serv.ShowMapList({{.Alias}}), pager
+	return {{.Alias}}Serv.repo.GetList(where), pager
 }
 
 // 获取一条数据根据ctx

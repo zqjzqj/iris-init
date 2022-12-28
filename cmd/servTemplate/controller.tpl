@@ -19,7 +19,9 @@ func ({{.Alias}}Ctr {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivatio
 }
 
 func ({{.Alias}}Ctr {{.Model}}Controller) GetList(ctx iris.Context) appWeb.ResponseFormat {
-    return appWeb.NewPagerResponse(services.New{{.Model}}Service().ListPage(ctx))
+    {{.Alias}}Serv := services.New{{.Model}}Service()
+    {{.Alias}}, pager := {{.Alias}}Serv.ListPage(ctx)
+    return appWeb.NewPagerResponse({{.Alias}}Serv.ShowMapList({{.Alias}}), pager)
 }
 
 func ({{.Alias}}Ctr {{.Model}}Controller) GetItem(ctx iris.Context) appWeb.ResponseFormat {
