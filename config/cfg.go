@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/spf13/viper"
 	"github.com/tidwall/gjson"
 	"gorm.io/gorm/logger"
@@ -83,7 +82,6 @@ func LoadConfigJson(p string) error {
 	logs.PrintlnInfo("reload config.....")
 	defer logs.PrintlnSuccess("reload config success!")
 	paths, fileName := filepath.Split(p)
-	fmt.Println(fileName)
 	viper.SetConfigName(fileName)
 	viper.AddConfigPath(paths)
 	viper.SetConfigType("yaml")
