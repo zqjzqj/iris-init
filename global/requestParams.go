@@ -3,7 +3,6 @@ package global
 import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
-	"iris-init/config"
 )
 
 const (
@@ -57,9 +56,6 @@ func GetReqToken(ctx iris.Context) string {
 			var ok bool
 			token, ok = t.(string)
 			if !ok || token == "" {
-				if config.EnvIsDev() {
-					return "75cc1835d19e081e930ce705b2d25cc0"
-				}
 				return ""
 			}
 		}
