@@ -13,7 +13,7 @@ type AdminController struct {
 	Admin model.Admin
 }
 
-func (adm AdminController) BeforeActivation(b mvc.BeforeActivation) {
+func (admCtrl AdminController) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(http.MethodGet, "list", "GetList").SetName("账号管理@账号列表")
 	b.Handle(http.MethodGet, "item", "GetItem").SetName("账号管理@账号列表:查看账号")
 	b.Handle(http.MethodPost, "edit", "PostEdit").SetName("账号管理@账号列表:编辑账号")
@@ -21,23 +21,24 @@ func (adm AdminController) BeforeActivation(b mvc.BeforeActivation) {
 
 }
 
-func (adm AdminController) GetPerms() appWeb.ResponseFormat {
-	services.NewAdminService().RefreshPermissions(&adm.Admin, false)
-	return appWeb.NewSuccessResponse("", adm.Admin.Permissions)
+func (admCtrl AdminController) GetPerms() appWeb.ResponseFormat {
+	services.NewAdminService().RefreshPermissions(&admCtrl.Admin, false)
+	return appWeb.NewSuccessResponse("", admCtrl.Admin.Permissions)
 }
 
-func (adm AdminController) GetSelf(ctx iris.Context) mvc.Result {
+func (admCtrl AdminController) GetSelf(ctx iris.Context) mvc.Result {
+	roleServ := services.NewRolesService()
 	return appWeb.ResponseDataViewForm("admin/item.html", appWeb.DataView{
 		Data: map[string]interface{}{
-			"Adm":   adm.Admin.ShowMap(),
-			"Roles": services.NewRolesService().List(ctx),
+			"Adm":   admCtrl.Admin.ShowMap(),
+			"Roles": roleServ.ShowMapList(roleServ.List(ctx)),
 			"Self":  "1",
 		},
 	}, ctx)
 }
 
-func (adm AdminController) PostSelf(ctx iris.Context) appWeb.ResponseFormat {
-	_adm, err := services.NewAdminService().EditByCtx(ctx, adm.Admin.ID)
+func (admCtrl AdminController) PostSelf(ctx iris.Context) appWeb.ResponseFormat {
+	_adm, err := services.NewAdminService().EditByCtx(ctx, admCtrl.Admin.ID)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}
@@ -45,27 +46,29 @@ func (adm AdminController) PostSelf(ctx iris.Context) appWeb.ResponseFormat {
 }
 
 // 获取数据列表
-func (adm AdminController) GetList(ctx iris.Context) mvc.Result {
-	list, page := services.NewAdminService().ListPage(ctx)
+func (admCtrl AdminController) GetList(ctx iris.Context) mvc.Result {
+	admServ := services.NewAdminService()
+	adm, page := admServ.ListPage(ctx)
 	return appWeb.ResponseDataViewForm("admin/list.html", appWeb.DataView{
 		Pager: page,
 		Data: map[string]interface{}{
-			"List": list,
+			"List": admServ.ShowMapList(adm),
 		},
 	}, ctx)
 }
 
 // 获取一条详细数据
-func (adm AdminController) GetItem(ctx iris.Context) mvc.Result {
+func (admCtrl AdminController) GetItem(ctx iris.Context) mvc.Result {
+	roleServ := services.NewRolesService()
 	return appWeb.ResponseDataViewForm("admin/item.html", appWeb.DataView{
 		Data: map[string]interface{}{
 			"Adm":   services.NewAdminService().GetItem(ctx).ShowMap(),
-			"Roles": services.NewRolesService().List(ctx),
+			"Roles": roleServ.ShowMapList(roleServ.List(ctx)),
 		},
 	}, ctx)
 }
 
-func (adm AdminController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
+func (admCtrl AdminController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
 	_adm, err := services.NewAdminService().EditByCtx(ctx, 0)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
@@ -73,8 +76,8 @@ func (adm AdminController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
 	return appWeb.NewSuccessResponse("", _adm.ShowMap())
 }
 
-func (adm AdminController) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
-	if uint64(ctx.PostValueInt64Default("ID", 0)) == adm.Admin.ID {
+func (admCtrl AdminController) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
+	if uint64(ctx.PostValueInt64Default("ID", 0)) == admCtrl.Admin.ID {
 		return appWeb.NewFailResponse("不能删除当前用户", nil)
 	}
 	err := services.NewAdminService().DeleteByCtx(ctx)
@@ -85,8 +88,8 @@ func (adm AdminController) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
 }
 
 // 注销登录
-func (adm AdminController) GetLogout() appWeb.ResponseFormat {
-	err := services.NewAdminService().Logout(&adm.Admin)
+func (admCtrl AdminController) GetLogout() appWeb.ResponseFormat {
+	err := services.NewAdminService().Logout(&admCtrl.Admin)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}

@@ -23,9 +23,10 @@ func (roles RolesController) BeforeActivation(b mvc.BeforeActivation) {
 }
 
 func (roles RolesController) GetList(ctx iris.Context) mvc.Result {
+	roleServ := services.NewRolesService()
 	return appWeb.ResponseDataViewForm("roles/list.html", appWeb.DataView{
 		Data: map[string]interface{}{
-			"List": services.NewRolesService().List(ctx),
+			"List": roleServ.ShowMapList(roleServ.List(ctx)),
 		},
 	}, ctx)
 }

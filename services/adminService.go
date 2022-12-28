@@ -64,13 +64,13 @@ func (admServ AdminService) InitAdminAccount() (model.Admin, error) {
 	return admin, err
 }
 
-func (admServ AdminService) ListPage(ctx iris.Context) ([]map[string]interface{}, *global.Pager) {
+func (admServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global.Pager) {
 	where := repoInterface.AdmSearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
 	pager.SetTotal(admServ.repo.GetTotalCount(where))
 	if pager.Total == 0 {
-		return []map[string]interface{}{}, pager
+		return []model.Admin{}, pager
 	}
 	where.SelectParams = repoComm.SelectFrom{
 		Offset:  pager.Offset,
@@ -81,8 +81,7 @@ func (admServ AdminService) ListPage(ctx iris.Context) ([]map[string]interface{}
 			Desc:   false,
 		}},
 	}
-	adm := admServ.repo.GetList(where)
-	return admServ.ShowMapList(adm), pager
+	return admServ.repo.GetList(where), pager
 }
 
 // 获取一条数据根据ctx

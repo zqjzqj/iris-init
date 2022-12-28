@@ -10,7 +10,7 @@ import (
 
 type {{.Model}}Controller struct {}
 
-func ({{.Alias}}Ctr {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivation) {
+func ({{.Alias}}Ctrl {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(http.MethodGet, "list", "GetList")
 	b.Handle(http.MethodGet, "item", "GetItem")
 	b.Handle(http.MethodPost, "edit", "PostEdit")
@@ -18,19 +18,19 @@ func ({{.Alias}}Ctr {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivatio
 
 }
 
-func ({{.Alias}}Ctr {{.Model}}Controller) GetList(ctx iris.Context) appWeb.ResponseFormat {
+func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) appWeb.ResponseFormat {
     {{.Alias}}Serv := services.New{{.Model}}Service()
     {{.Alias}}, pager := {{.Alias}}Serv.ListPage(ctx)
     return appWeb.NewPagerResponse({{.Alias}}Serv.ShowMapList({{.Alias}}), pager)
 }
 
-func ({{.Alias}}Ctr {{.Model}}Controller) GetItem(ctx iris.Context) appWeb.ResponseFormat {
+func ({{.Alias}}Ctrl {{.Model}}Controller) GetItem(ctx iris.Context) appWeb.ResponseFormat {
 	{{.Alias}}Serv := services.New{{.Model}}Service()
 	{{.Alias}} := {{.Alias}}Serv.GetItem(ctx)
 	return appWeb.NewSuccessResponse("", {{.Alias}}.ShowMap())
 }
 
-func ({{.Alias}}Ctr {{.Model}}Controller) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
+func ({{.Alias}}Ctrl {{.Model}}Controller) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
 	{{.Alias}}, err := services.New{{.Model}}Service().EditByCtx(ctx)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
@@ -38,7 +38,7 @@ func ({{.Alias}}Ctr {{.Model}}Controller) PostEdit(ctx iris.Context) appWeb.Resp
 	return appWeb.NewSuccessResponse("", {{.Alias}}.ShowMap())
 }
 
-func ({{.Alias}}Ctr {{.Model}}Controller) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
+func ({{.Alias}}Ctrl {{.Model}}Controller) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
 	err := services.New{{.Model}}Service().DeleteByCtx(ctx)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)

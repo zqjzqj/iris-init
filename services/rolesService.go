@@ -29,7 +29,7 @@ func (roleServ RolesService) RefreshPermission(role *model.Roles, force bool) {
 	role.PermIdents = repositories.NewRolesPermissionsRepo().GetPermissionsByRoles(role.ID)
 }
 
-func (roleServ RolesService) List(ctx iris.Context) []map[string]interface{} {
+func (roleServ RolesService) List(ctx iris.Context) []model.Roles {
 	where := repoInterface.RolesSearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	where.SelectParams = repoComm.SelectFrom{
@@ -38,7 +38,7 @@ func (roleServ RolesService) List(ctx iris.Context) []map[string]interface{} {
 			Desc:   true,
 		}},
 	}
-	return roleServ.ShowMapList(roleServ.repo.GetList(where))
+	return roleServ.repo.GetList(where)
 }
 
 func (roleServ RolesService) ShowMapList(roles []model.Roles) []map[string]interface{} {
