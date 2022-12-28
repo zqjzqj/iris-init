@@ -34,6 +34,6 @@
 
       -migrate为迁移models, 使用','(英文逗号)分割多个models 会生成对应的迁移文件 如 migrate="Model1,Model2,Model3" 【注:使用','分割需要加双引号】
     
--     go run .\cmd\generateServTpl.go -model=Xxx -ctrDir=admin -alias=xxx -appRoot=xxxx
--     go run .\cmd\generateServTpl.go -migrate=Xxx1-Xxx2-Xxx3
+-     go run .\cmd\generateTpl.go -model=Xxx -ctrDir=admin -alias=xxx -appRoot=xxxx
+-     go run .\cmd\generateTpl.go -migrate=Xxx1-Xxx2-Xxx3
       
