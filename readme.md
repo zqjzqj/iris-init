@@ -3,6 +3,7 @@
 -     golang iris mvc 框架的一套基础项目架构，只实现了基础的后台账户管理登录，权限管理
 -     后台基于layuiadmin嵌套，如不需要可自行修改
 -     如需修改go mod 名称 全局替换 'iris-init'即可
+-     多个分组 如 api,admin 请在路由文件中使用子域名模式 [app.Party("/").Subdomain("api")] [app.Party("/").Subdomain("admin")]
 
 - [后台 layuiadmin 模板下载地址](https://github.com/zqjzqj/layuiAdmin.git)
 
