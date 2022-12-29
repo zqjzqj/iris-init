@@ -14,8 +14,8 @@ type LoginController struct {
 	Adm model.Admin
 }
 
-func (login LoginController) GetLogin(ctx iris.Context) mvc.Result {
-	if login.Adm.ID > 0 {
+func (loginCtrl LoginController) GetLogin(ctx iris.Context) mvc.Result {
+	if loginCtrl.Adm.ID > 0 {
 		ctx.Redirect("/")
 		return mvc.Response{}
 	}
@@ -24,7 +24,7 @@ func (login LoginController) GetLogin(ctx iris.Context) mvc.Result {
 	}, ctx)
 }
 
-func (login LoginController) PostLogin(ctx iris.Context) appWeb.ResponseFormat {
+func (loginCtrl LoginController) PostLogin(ctx iris.Context) appWeb.ResponseFormat {
 	admServ := services.NewAdminService()
 	adm, err := admServ.LoginByPwd(ctx.PostValueTrim("Username"), ctx.PostValueTrim("Password"))
 	if err != nil {

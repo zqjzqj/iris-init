@@ -14,7 +14,7 @@ type RolesController struct {
 	Admin model.Admin
 }
 
-func (roles RolesController) BeforeActivation(b mvc.BeforeActivation) {
+func (rolesCtrl RolesController) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(http.MethodGet, "list", "GetList").SetName("账号管理@角色管理")
 	b.Handle(http.MethodGet, "item", "GetItem").SetName("账号管理@角色管理:查看角色")
 	b.Handle(http.MethodPost, "edit", "PostEdit").SetName("账号管理@角色管理:编辑角色")
@@ -22,7 +22,7 @@ func (roles RolesController) BeforeActivation(b mvc.BeforeActivation) {
 
 }
 
-func (roles RolesController) GetList(ctx iris.Context) mvc.Result {
+func (rolesCtrl RolesController) GetList(ctx iris.Context) mvc.Result {
 	roleServ := services.NewRolesService()
 	return appWeb.ResponseDataViewForm("roles/list.html", appWeb.DataView{
 		Data: map[string]interface{}{
@@ -31,7 +31,7 @@ func (roles RolesController) GetList(ctx iris.Context) mvc.Result {
 	}, ctx)
 }
 
-func (roles RolesController) GetItem(ctx iris.Context) mvc.Result {
+func (rolesCtrl RolesController) GetItem(ctx iris.Context) mvc.Result {
 	rolesServ := services.NewRolesService()
 	role := rolesServ.GetItem(ctx)
 	rolesServ.RefreshPermission(&role, true)
@@ -45,7 +45,7 @@ func (roles RolesController) GetItem(ctx iris.Context) mvc.Result {
 	}, ctx)
 }
 
-func (roles RolesController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
+func (rolesCtrl RolesController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
 	role, err := services.NewRolesService().EditByCtx(ctx)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
@@ -53,7 +53,7 @@ func (roles RolesController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
 	return appWeb.NewSuccessResponse("", role.ShowMap())
 }
 
-func (roles RolesController) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
+func (rolesCtrl RolesController) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
 	err := services.NewRolesService().DeleteByCtx(ctx)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)

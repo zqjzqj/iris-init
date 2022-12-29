@@ -9,6 +9,6 @@ import (
 type AreaController struct {
 }
 
-func (area AreaController) GetList(ctx iris.Context) appWeb.ResponseFormat {
+func (areaCtrl AreaController) GetList(ctx iris.Context) appWeb.ResponseFormat {
 	return appWeb.NewSuccessResponse("", services.NewAreaService().GetListByPID(uint(ctx.URLParamUint64("PID"))))
 }
