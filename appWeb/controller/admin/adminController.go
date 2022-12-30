@@ -18,7 +18,6 @@ func (admCtrl AdminController) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(http.MethodGet, "item", "GetItem").SetName("账号管理@账号列表:查看账号")
 	b.Handle(http.MethodPost, "edit", "PostEdit").SetName("账号管理@账号列表:编辑账号")
 	b.Handle(http.MethodPost, "delete", "PostDelete").SetName("账号管理@账号列表:删除账号")
-
 }
 
 func (admCtrl AdminController) GetPerms() appWeb.ResponseFormat {
