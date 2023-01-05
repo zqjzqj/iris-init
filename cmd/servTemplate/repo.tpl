@@ -25,6 +25,11 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) Save({{.Alias}} *model.{{.Model}}, _sel
 	return repoComm.SaveModel({{.Alias}}Repo.Orm, {{.Alias}}, _select...)
 }
 
+func ({{.Alias}}Repo {{.Model}}RepoGorm) SaveOmit({{.Alias}} *model.{{.Model}}, _omit ...string) error {
+	return repoComm.SaveModelOmit({{.Alias}}Repo.Orm, {{.Alias}}, _omit...)
+}
+
+
 func ({{.Alias}}Repo {{.Model}}RepoGorm) Delete(query string, args ...interface{}) (rowsAffected int64, err error) {
 	tx := {{.Alias}}Repo.Orm.Where(query, args...).Delete(model.{{.Model}}{})
 	return tx.RowsAffected, tx.Error

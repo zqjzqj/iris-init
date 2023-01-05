@@ -18,13 +18,27 @@ func SaveModel(_orm, _model any, _select ...string) error {
 	return nil
 }
 
+func SaveModelOmit(_orm, _model any, _omit ...string) error {
+	switch tx := _orm.(type) {
+	case *gorm.DB:
+		if len(_omit) > 0 {
+			_omit = append(_omit, clause.Associations)
+			return tx.Omit(_omit...).Save(_model).Error
+		}
+		return tx.Omit(clause.Associations).Save(_model).Error
+	default:
+		panic("不支持该orm类型..")
+	}
+	return nil
+}
+
 type OrderByParams struct {
 	Column  string
 	Desc    bool
 	Reorder bool
 }
 
-//用于关联预加载
+// 用于关联预加载
 type PreloadParams struct {
 	Query string
 	Args  []interface{}

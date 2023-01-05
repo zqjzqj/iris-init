@@ -11,6 +11,7 @@ type {{.Model}}Repo interface {
 	GetList(where {{.Model}}SearchWhere) []model.{{.Model}}
 	Delete(query string, args ...interface{}) (rowsAffected int64, err error)
 	Save(_model *model.{{.Model}}, _select ...string) error
+	SaveOmit(_model *model.{{.Model}}, _omit ...string) error
 	GetByID(id uint64, _select ...string) model.{{.Model}}
 	GetIDByWhere(query string, args ...interface{}) []uint64
 }
