@@ -150,7 +150,7 @@ func loadDbCfg() error {
 		}
 	}
 	if orm.GetMysqlDef() == nil {
-		iDB, ok := orm.GetMysql("c_customer")
+		iDB, ok := orm.GetMysql("iris-init")
 		if !ok {
 			return sErr.New("not default database")
 		}
