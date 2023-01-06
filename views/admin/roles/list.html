@@ -62,11 +62,13 @@
                                         data-title="编辑角色" class="layui-btn layui-btn-primary layui-btn-sm">
                                     编辑
                                 </button>
+                                {% if !item.IsSysRole %}
                                 <button
                                         data-perm data-perm-val="POST@/roles/delete"
                                         data-action="del" href="/roles/delete" data-id="{{item.ID}}" class="layui-btn layui-btn-primary layui-btn-sm">
                                     删除
                                 </button>
+                                {%endif%}
                             </td>
                         </tr>
                         {% endfor %}
