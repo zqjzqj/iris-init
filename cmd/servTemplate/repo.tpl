@@ -29,17 +29,21 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) SaveOmit({{.Alias}} *model.{{.Model}}, 
 	return repoComm.SaveModelOmit({{.Alias}}Repo.Orm, {{.Alias}}, _omit...)
 }
 
+func ({{.Alias}}Repo {{.Model}}RepoGorm) Delete({{.Alias}} model.{{.Model}}) (rowsAffected int64, err error) {
+    tx := {{.Alias}}Repo.Orm.Delete({{.Alias}})
+	return tx.RowsAffected, tx.Error
+}
 
-func ({{.Alias}}Repo {{.Model}}RepoGorm) Delete(query string, args ...interface{}) (rowsAffected int64, err error) {
+func ({{.Alias}}Repo {{.Model}}RepoGorm) DeleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
 	tx := {{.Alias}}Repo.Orm.Where(query, args...).Delete(model.{{.Model}}{})
 	return tx.RowsAffected, tx.Error
 }
 
 func ({{.Alias}}Repo {{.Model}}RepoGorm) DeleteByID(id ...uint64) (rowsAffected int64, err error) {
 	if len(id) == 1 {
-		return {{.Alias}}Repo.Delete("id", id[0])
+		return {{.Alias}}Repo.DeleteByWhere("id", id[0])
 	}
-	return {{.Alias}}Repo.Delete("id in ?", id)
+	return {{.Alias}}Repo.DeleteByWhere("id in ?", id)
 }
 
 
