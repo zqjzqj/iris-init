@@ -10,7 +10,6 @@ import (
 	"iris-init/repositories/repoComm"
 	"iris-init/repositories/repoInterface"
 	"iris-init/sErr"
-	"strings"
 	"time"
 )
 
@@ -39,7 +38,7 @@ func (admServ AdminService) LoginByPwd(username, pwd string) (model.Admin, error
 	err := admServ.LoginSuccess(&adm)
 
 	//刷新一下权限
-	admServ.RefreshPermissions(&adm, true)
+	admServ.RefreshPermissions(&adm, true, false)
 	return adm, err
 }
 
@@ -113,73 +112,94 @@ func (admServ AdminService) EditByValidator(admValidator AdminValidator) (model.
 	if err != nil {
 		return adm, err
 	}
-	err = admServ.repo.Save(&adm)
+	err = admServ.Save(&adm)
 	return adm, err
 }
 
+func (admServ AdminService) Save(admin *model.Admin, _select ...string) error {
+	//其他类型的管理员需要save一下角色
+	rAdmRepo := repositories.NewRolesAdmRepo()
+	return admServ.repo.Transaction(func() error {
+		err := admServ.repo.Save(admin, _select...)
+		if err != nil {
+			return err
+		}
+		return rAdmRepo.SaveByAdm(*admin)
+	}, rAdmRepo)
+}
+
 func (admServ AdminService) DeleteByCtx(ctx iris.Context) error {
-	admId := ctx.PostValueInt64Default("ID", 0)
+	admId := uint64(ctx.PostValueInt64Default("ID", 0))
 	if admId == model.AdminRootId {
 		return sErr.New("不能删除默认账户")
 	}
-	_, err := admServ.repo.Delete("id", admId)
-	return err
-}
-
-// 只刷新拥有角色的名称
-func (admServ AdminService) RefreshRolesName(adm *model.Admin) {
-	if adm.IsRootRole() {
-		adm.RolesName = []string{model.RoleAdminName}
-		return
+	_, err := admServ.repo.DeleteByID(admId)
+	if err != nil {
+		return err
 	}
-	rolesId := strings.Split(adm.RolesId, ",")
-	if len(rolesId) == 0 {
-		adm.RolesName = []string{}
-		return
-	}
-	rolesIdUint64 := global.StrArrToUintArr(rolesId)
-	roleRepo := repositories.NewRolesRepo()
-	roles := roleRepo.GetRolesByID(rolesIdUint64...)
-	adm.RolesName = make([]string, 0, len(roles))
-	for _, rr := range roles {
-		adm.RolesName = append(adm.RolesName, rr.Name)
-	}
+	_, _ = repositories.NewRolesAdmRepo().DeleteByAdmID(admId)
+	return nil
 }
 
 // 刷新拥有角色的权限和名称
 // 超级管理员权限会返回nil 其他的没有权限则是空数组
-func (admServ AdminService) RefreshPermissions(adm *model.Admin, force bool) {
+// onlyName == true时 不会从db去刷新实际权限 所以 只在需要获取角色名称时使用
+func (admServ AdminService) RefreshPermissions(adm *model.Admin, force, onlyRolesName bool) {
 	if !force {
 		if adm.Permissions != nil && adm.RolesName != nil {
 			return
 		}
 	}
-	if adm.IsRootRole() {
-		adm.Permissions = nil
+	roleIDSlices := adm.RefreshRoleIDSlices()
+	if len(roleIDSlices) == 0 {
+		adm.Permissions = []string{}
+		adm.RolesName = []string{}
+		return
+	}
+
+	//仅仅只有超级管理员的情况
+	if len(roleIDSlices) == 1 && roleIDSlices[0] == model.RoleAdmin {
+		adm.Permissions = []string{model.RoleAdmin}
 		adm.RolesName = []string{model.RoleAdminName}
 		return
 	}
-	rolesId := strings.Split(adm.RolesId, ",")
-	if len(rolesId) == 0 {
-		adm.Permissions = []string{}
-		adm.RolesName = []string{}
-		return
-	}
-	rolesIdUint64 := global.StrArrToUintArr(rolesId)
+	rolesIdUint64 := global.StrArrToUintArr(roleIDSlices)
 	roleRepo := repositories.NewRolesRepo()
 	roles := roleRepo.GetRolesByID(rolesIdUint64...)
+
 	if len(roles) == 0 {
-		adm.Permissions = []string{}
-		adm.RolesName = []string{}
-		adm.RolesId = ""
-		_ = admServ.repo.Save(adm, "RolesId")
+		//这里因为超级管理员是没有实际数据库ID的 是通过程序内部校验 所以多一步判断
+		if adm.IsRootRole() {
+			//去掉多余的权限ID
+			adm.Permissions = []string{model.RoleAdmin}
+			adm.RolesName = []string{model.RoleAdminName}
+			adm.SetRoleID([]string{model.RoleAdmin})
+			_ = admServ.Save(adm, "RolesId")
+		} else {
+			adm.Permissions = []string{}
+			adm.RolesName = []string{}
+		}
+		return
+	}
+
+	adm.RolesName = make([]string, 0, len(roles)+1)
+	if adm.IsRootRole() {
+		adm.Permissions = []string{model.RoleAdmin}
+		adm.RolesName = append(adm.RolesName, model.RoleAdminName)
+		for _, rr := range roles {
+			adm.RolesName = append(adm.RolesName, rr.Name)
+		}
 		return
 	}
 	rolesIdUint64 = rolesIdUint64[:0]
-	adm.RolesName = make([]string, 0, len(roles))
 	for _, rr := range roles {
 		adm.RolesName = append(adm.RolesName, rr.Name)
 		rolesIdUint64 = append(rolesIdUint64, rr.ID)
+	}
+
+	//这里不进行db查询了
+	if onlyRolesName {
+		return
 	}
 	rolePermRepo := repositories.NewRolesPermissionsRepo()
 	adm.Permissions = rolePermRepo.GetPermissionsByRoles(rolesIdUint64...)
@@ -236,7 +256,7 @@ func (admServ AdminService) HasPermission(adm model.Admin, permIdent string) boo
 	if adm.IsRootRole() {
 		return true
 	}
-	admServ.RefreshPermissions(&adm, false)
+	admServ.RefreshPermissions(&adm, false, false)
 	if len(adm.Permissions) == 0 {
 		return false
 	}
@@ -250,7 +270,7 @@ func (admServ AdminService) ShowMapList(adm []model.Admin) []map[string]interfac
 	_adm := []map[string]interface{}{}
 	for _, v := range adm {
 		//刷新一下角色名称
-		admServ.RefreshRolesName(&v)
+		admServ.RefreshPermissions(&v, false, false)
 		_adm = append(_adm, v.ShowMap())
 	}
 	return _adm
@@ -300,24 +320,15 @@ func (admServ AdminService) GetAdmByValidate(aValidator AdminValidator) (model.A
 			adm.Status = global.IsYes
 		} else {
 			adm.Status = global.IsNo
+			adm.TokenStatus = global.IsNo
 		}
-		//超管不予其他角色重合
-		for k := range aValidator.RolesId {
-			if aValidator.RolesId[k] == model.RoleAdmin {
-				aValidator.RolesId = []string{"*"}
-				break
-			}
-		}
-		adm.RolesId = strings.Join(aValidator.RolesId, ",")
+		adm.SetRoleID(aValidator.RolesId)
 	}
 
 	//这里默认的系统超级管理员 不能被修改角色权限
-	if adm.ID == model.AdminRootId {
+	if adm.IsRootAccount() {
 		if !adm.IsRootRole() {
-			if adm.RolesId != "" {
-				return adm, sErr.New("系统默认管理账户权限不能被修改")
-			}
-			adm.RolesId = model.RoleAdmin
+			return adm, sErr.New("系统默认管理账户权限不能被修改")
 		}
 		if !adm.IsStatusYes() {
 			return adm, sErr.New("系统默认管理账户不能被禁用")

@@ -6,9 +6,10 @@ import (
 )
 
 type AdminRepo interface {
-	RepoInterface
+	repoComm.RepoInterface
 	GetTotalCount(where AdmSearchWhere) int64
 	Delete(query string, args ...interface{}) (rowsAffected int64, err error)
+	DeleteByID(id ...uint64) (rowsAffected int64, err error)
 	GetList(where AdmSearchWhere) []model.Admin
 	Save(adm *model.Admin, _select ...string) error
 	GetByID(id uint64, _select ...string) model.Admin

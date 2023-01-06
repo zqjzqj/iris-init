@@ -19,10 +19,16 @@ func NewPermissionService() PermissionService {
 }
 
 func (permServ PermissionService) GetPremAsMenu(idents []string) []model.Permissions {
+	if len(idents) == 1 && idents[0] == model.RoleAdmin {
+		idents = nil
+	}
 	return permServ.repo.GetListAsMenu(idents)
 }
 
 func (permServ PermissionService) GetPermTree(ident ...string) []map[string]interface{} {
+	if len(ident) == 1 && ident[0] == model.RoleAdmin {
+		ident = nil
+	}
 	perms := permServ.repo.GetListPreloadChildren_2()
 	return permServ.ShowPermTreeMap(perms, ident...)
 }

@@ -13,7 +13,7 @@ type SiteController struct {
 }
 
 func (siteCtrl SiteController) Get(ctx iris.Context) mvc.Result {
-	services.NewAdminService().RefreshPermissions(&siteCtrl.Adm, false)
+	services.NewAdminService().RefreshPermissions(&siteCtrl.Adm, false, false)
 	menus := services.NewPermissionService().GetPremAsMenu(siteCtrl.Adm.Permissions)
 	return appWeb.ResponseDataViewForm("site/index.html", appWeb.DataView{
 		Data: map[string]interface{}{

@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/kataras/iris/v12"
 	"iris-init/global"
+	"iris-init/logs"
 	"iris-init/model"
 	"iris-init/repositories"
 	"iris-init/repositories/repoComm"
@@ -63,13 +64,52 @@ func (roleServ RolesService) EditByValidator(roleValidator RolesValidator) (mode
 	if err != nil {
 		return role, err
 	}
-	err = roleServ.repo.Save(&role)
+	err = roleServ.Save(&role)
 	return role, err
 }
 
+func (roleServ RolesService) Save(role *model.Roles, _select ...string) error {
+	if len(role.PermIdents) == 0 {
+		return roleServ.repo.Save(role)
+	}
+	rPermRepo := repositories.NewRolesPermissionsRepo()
+	return roleServ.repo.Transaction(func() error {
+		err := roleServ.repo.Save(role, _select...)
+		if err != nil {
+			return err
+		}
+		return rPermRepo.SaveByRole(*role)
+	}, rPermRepo)
+}
+
+func (roleServ RolesService) Delete(role model.Roles) error {
+	if role.ID == 0 {
+		return nil
+	}
+	rPermRepo := repositories.NewRolesPermissionsRepo()
+	roleAdmRepo := repositories.NewRolesAdmRepo()
+	return roleServ.repo.Transaction(func() error {
+		for _, v := range model.GetSysRoles() {
+			if v.ID == role.ID {
+				return sErr.NewFmt("不允许删除内置角色%s", v.Name)
+			}
+		}
+		role.PermIdents = nil
+		_err := rPermRepo.SaveByRole(role)
+		if _err != nil {
+			return _err
+		}
+		_, _err = roleAdmRepo.DeleteByRoleID(role.ID)
+		if _err != nil {
+			return _err
+		}
+		_, _err = roleServ.repo.DeleteByID(role.ID)
+		return nil
+	}, rPermRepo, roleAdmRepo)
+}
+
 func (roleServ RolesService) DeleteByCtx(ctx iris.Context) error {
-	_, err := roleServ.repo.Delete("id", ctx.PostValueInt64Default("ID", 0))
-	return err
+	return roleServ.Delete(roleServ.repo.GetByID(uint64(ctx.PostValueInt64Default("ID", 0))))
 }
 
 func (roleServ RolesService) GetRoleByValidate(roleValidator RolesValidator) (model.Roles, error) {
@@ -89,7 +129,36 @@ func (roleServ RolesService) GetRoleByValidate(roleValidator RolesValidator) (mo
 	role.Name = roleValidator.Name
 	role.Remark = roleValidator.Remark
 	role.PermIdents = roleValidator.Idents
+	//这里判断如果是内置角色 则将内置权限压入数组 防止权限丢失
+	sysRoles := model.GetSysRoles()
+	for _, v := range sysRoles {
+		if v.ID == role.ID {
+			if role.PermIdents == nil {
+				role.PermIdents = make([]string, 0, len(sysRoles)*4)
+			}
+			//这里在save的时候会自动去过滤role.PermIdents中的重复权限 所以直接append即可
+			role.PermIdents = append(role.PermIdents, v.PermIdents...)
+		}
+	}
 	return role, nil
+}
+
+// 在cmd/updateSysRoles.go中调用
+func (roleServ RolesService) UpdateSysRole() {
+	for _, v := range model.GetSysRoles() {
+		_v := roleServ.repo.GetByID(v.ID)
+		if _v.ID > 0 {
+			logs.PrintlnInfo("update role ", _v.Name)
+			if _v.PermIdents == nil {
+				_v.PermIdents = make([]string, 0, len(v.PermIdents))
+			}
+			_v.PermIdents = append(_v.PermIdents, v.PermIdents...)
+			_ = roleServ.Save(&_v)
+		} else {
+			logs.PrintlnInfo("create role ", v.Name)
+			_ = roleServ.Save(&v)
+		}
+	}
 }
 
 type RolesValidator struct {

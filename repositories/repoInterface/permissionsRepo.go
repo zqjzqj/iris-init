@@ -6,7 +6,7 @@ import (
 )
 
 type PermissionsRepo interface {
-	RepoInterface
+	repoComm.RepoInterface
 	Save(perm *model.Permissions, _select ...string) error
 	GetByIdent(ident string, _select ...string) model.Permissions
 	GetByID(id uint64, _select ...string) model.Permissions

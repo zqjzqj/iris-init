@@ -30,7 +30,7 @@ $(function(){
     var perms =  $("[data-perm]")
     if (perms.length > 0) {
         $.get("/admin/perms", {}, function(resp){
-            if (resp.Code === 0 && resp.Data == null) {
+            if (resp.Data.length === 1 && resp.Data[0] === "*") {
                 return
             }
             perms.each(function(k, v){

@@ -35,6 +35,14 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) Delete(query string, args ...interface{
 	return tx.RowsAffected, tx.Error
 }
 
+func ({{.Alias}}Repo {{.Model}}RepoGorm) DeleteByID(id ...uint64) (rowsAffected int64, err error) {
+	if len(id) == 1 {
+		return {{.Alias}}Repo.Delete("id", id[0])
+	}
+	return {{.Alias}}Repo.Delete("id in ?", id)
+}
+
+
 func ({{.Alias}}Repo {{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{{.Model}}SearchWhere, tx0 *gorm.DB) *gorm.DB {
 	var tx *gorm.DB
 	if tx0 == nil {

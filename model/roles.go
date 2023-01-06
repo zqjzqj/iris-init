@@ -28,8 +28,23 @@ func (role Roles) ShowMap() map[string]interface{} {
 		"ID":         role.ID,
 		"Name":       role.Name,
 		"Remark":     role.Remark,
+		"IsSysRole":  role.IsSysRole(),
 		"CreatedAt":  time.Unix(role.CreatedAt, 0).Format(global.DateTimeFormatStr),
 		"UpdatedAt":  time.Unix(role.UpdatedAt, 0).Format(global.DateTimeFormatStr),
 		"PermIdents": role.PermIdents,
 	}
+}
+
+func (role Roles) IsSysRole() bool {
+	for _, v := range GetSysRoles() {
+		if v.ID == role.ID {
+			return true
+		}
+	}
+	return false
+}
+
+// 返回系统内置角色
+func GetSysRoles() []Roles {
+	return nil
 }

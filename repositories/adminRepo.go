@@ -22,20 +22,14 @@ func (admRepo AdminRepoGorm) GetIDByWhere(query string, args ...interface{}) []u
 }
 
 func (admRepo AdminRepoGorm) Save(admin *model.Admin, _select ...string) error {
-	//其他类型的管理员需要save一下角色
-	if admin.RolesId != model.RoleAdmin {
-		return admRepo.Orm.Transaction(func(tx *gorm.DB) error {
-			err := repoComm.SaveModel(tx, admin, _select...)
-			if err != nil {
-				return err
-			}
-			rAdmRepo := NewRolesAdmRepo()
-			rAdmRepo.SetOrm(tx)
-			defer rAdmRepo.ResetOrm()
-			return rAdmRepo.SaveByAdm(*admin)
-		})
-	}
 	return repoComm.SaveModel(admRepo.Orm, admin, _select...)
+}
+
+func (admRepo AdminRepoGorm) DeleteByID(id ...uint64) (rowsAffected int64, err error) {
+	if len(id) == 1 {
+		return admRepo.Delete("id", id[0])
+	}
+	return admRepo.Delete("id in ?", id)
 }
 
 func (admRepo AdminRepoGorm) Delete(query string, args ...interface{}) (rowsAffected int64, err error) {
@@ -59,7 +53,7 @@ func (admRepo AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdmSearchWhere
 	return tx
 }
 
-//返回数据总数
+// 返回数据总数
 func (admRepo AdminRepoGorm) GetTotalCount(where repoInterface.AdmSearchWhere) int64 {
 	tx := admRepo.GetSearchWhereTx(where, nil)
 	var r int64

@@ -70,9 +70,16 @@ func ({{.Alias}}Serv {{.Model}}Service) EditByValidator({{.Alias}}Validator {{.M
 }
 
 func ({{.Alias}}Serv {{.Model}}Service) DeleteByCtx(ctx iris.Context) error {
-	id := ctx.PostValueInt64Default("ID", 0)
-	_, err := {{.Alias}}Serv.repo.Delete("id", id)
+	_, err := {{.Alias}}Serv.repo.Delete({{.Alias}}Serv.repo.GetByID(uint64(ctx.PostValueInt64Default("ID", 0))))
 	return err
+}
+
+func ({{.Alias}}Serv {{.Model}}Service) Delete({{.Alias}} model.{{.Model}}) error {
+	if {{.Alias}}.ID == 0 {
+		return nil
+	}
+	_, err := {{.Alias}}Serv.repo.DeleteByID({{.Alias}}.ID)
+    return err
 }
 
 func ({{.Alias}}Serv {{.Model}}Service) ShowMapList({{.Alias}} []model.{{.Model}}) []map[string]interface{} {

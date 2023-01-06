@@ -18,26 +18,29 @@ var AdmStatusDescMap = map[uint8]string{
 }
 
 type Admin struct {
-	mField.FieldsPk              `mapstructure:",squash"`
-	Username                     string         `gorm:"size:50;not null;comment:用户名/手机号码;index:idx_username,unique"`
-	Phone                        sql.NullString `gorm:"size:15;default:null;index:idx_phone,unique"`
-	QQ                           string         `gorm:"size:20;default:'';comment:qq号码"`
-	Status                       uint8          `gorm:"default:1;comment:0禁用 1正常;index:idx_status" `
-	RealName                     string         `gorm:"size:20;comment:姓名;default:'';index:idx_name" mapstructure:"real_name"`
-	Avatar                       string         `gorm:"type:text;comment:头像"`
-	Sex                          uint8          `gorm:"comment:性别;comment:1男性，2女性,0或其他值为未知;default:0"`
-	Password                     string         `gorm:"type:char(32);default:'';comment:密码md5"`
-	Salt                         string         `gorm:"type:varchar(32);default:'';comment:盐"`
-	Token                        sql.NullString `gorm:"size:32;index:idx_token,unique';comment:用户登陆token"`
-	TokenStatus                  uint8          `gorm:"default:0;comment:0禁用 1正常" mapstructure:"token_status"`
-	LastLoginTime                int64          `gorm:"type:int(11) unsigned;comment:最近一次登陆时间;default:0" mapstructure:"last_login_time"`
-	RolesId                      string         `gorm:"type:text;comment:角色id ','分割" mapstructure:"roles_id"`
-	Desc                         string         `gorm:"type:text;comment:描述简介"`
+	mField.FieldsPk `mapstructure:",squash"`
+	Username        string         `gorm:"size:50;not null;comment:用户名/手机号码;index:idx_username,unique"`
+	Phone           sql.NullString `gorm:"size:15;default:null;index:idx_phone,unique"`
+	QQ              string         `gorm:"size:20;default:'';comment:qq号码"`
+	Status          uint8          `gorm:"default:1;comment:0禁用 1正常;index:idx_status" `
+	RealName        string         `gorm:"size:20;comment:姓名;default:'';index:idx_name" mapstructure:"real_name"`
+	Avatar          string         `gorm:"type:text;comment:头像"`
+	Sex             uint8          `gorm:"comment:性别;comment:1男性，2女性,0或其他值为未知;default:0"`
+	Password        string         `gorm:"type:char(32);default:'';comment:密码md5"`
+	Salt            string         `gorm:"type:varchar(32);default:'';comment:盐"`
+	Token           sql.NullString `gorm:"size:32;index:idx_token,unique';comment:用户登陆token"`
+	TokenStatus     uint8          `gorm:"default:0;comment:0禁用 1正常" mapstructure:"token_status"`
+	LastLoginTime   int64          `gorm:"type:int(11) unsigned;comment:最近一次登陆时间;default:0" mapstructure:"last_login_time"`
+
+	//为防止其他异常 使用SetRoleID进行修改
+	RolesId                      string `gorm:"type:text;comment:角色id ','分割" mapstructure:"roles_id"`
+	Desc                         string `gorm:"type:text;comment:描述简介"`
 	mField.FieldsTimeUnixModel   `mapstructure:",squash"`
 	mField.FieldsExtendsJsonType `mapstructure:",squash"`
 
-	Permissions []string `gorm:"-"`
-	RolesName   []string `gorm:"-"`
+	rolesIDSlices []string `gorm:"-"`
+	Permissions   []string `gorm:"-"`
+	RolesName     []string `gorm:"-"`
 }
 
 func (adm Admin) TableName() string {
@@ -52,8 +55,28 @@ func (adm Admin) IsRootAccount() bool {
 	return adm.ID == AdminRootId
 }
 
-func (adm Admin) IsRootRole() bool {
-	return adm.RolesId == RoleAdmin
+func (adm *Admin) SetRoleID(roleID []string) {
+	adm.rolesIDSlices = global.RemoveDuplicateElement(roleID)
+	adm.RolesId = strings.Join(adm.rolesIDSlices, ",")
+}
+
+func (adm Admin) GetRoleIDSlices() []string {
+	return adm.rolesIDSlices
+}
+
+func (adm *Admin) RefreshRoleIDSlices() []string {
+	if adm.RolesId == "" {
+		return nil
+	}
+	adm.rolesIDSlices = strings.Split(adm.RolesId, ",")
+	return adm.rolesIDSlices
+}
+
+func (adm *Admin) IsRootRole() bool {
+	if adm.rolesIDSlices == nil {
+		adm.RefreshRoleIDSlices()
+	}
+	return global.InSlice(RoleAdmin, adm.rolesIDSlices)
 }
 
 func (adm Admin) CheckPwd(pwd string) bool {

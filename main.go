@@ -16,6 +16,7 @@ import (
 	"iris-init/migrates"
 	"log"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"runtime"
 )

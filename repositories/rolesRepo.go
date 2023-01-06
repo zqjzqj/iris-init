@@ -16,41 +16,19 @@ func NewRolesRepo() repoInterface.RolesRepo {
 }
 
 func (rolesRepo RolesRepoGorm) Save(role *model.Roles, _select ...string) error {
-	if len(role.PermIdents) == 0 {
-		return repoComm.SaveModel(rolesRepo.Orm, role, _select...)
+	return repoComm.SaveModel(rolesRepo.Orm, role, _select...)
+}
+
+func (rolesRepo RolesRepoGorm) DeleteByID(id ...uint64) (rowsAffected int64, err error) {
+	if len(id) == 1 {
+		return rolesRepo.Delete("id", id[0])
 	}
-	return rolesRepo.Orm.Transaction(func(tx *gorm.DB) error {
-		err := repoComm.SaveModel(tx, role, _select...)
-		if err != nil {
-			return err
-		}
-		rPermRepo := NewRolesPermissionsRepo()
-		rPermRepo.SetOrm(tx)
-		defer rolesRepo.ResetOrm()
-		return rPermRepo.SaveByRole(*role)
-	})
+	return rolesRepo.Delete("id in ?", id)
 }
 
 func (rolesRepo RolesRepoGorm) Delete(query string, args ...interface{}) (rowsAffected int64, err error) {
-	role := rolesRepo.GetByWhere(query, args...)
-	if role.ID == 0 {
-		return 0, nil
-	}
-	err = rolesRepo.Orm.Transaction(func(tx *gorm.DB) error {
-		rPermRepo := NewRolesPermissionsRepo()
-		rPermRepo.SetOrm(tx)
-		defer rolesRepo.ResetOrm()
-
-		role.PermIdents = nil
-		_err := rPermRepo.SaveByRole(role)
-		if _err != nil {
-			return _err
-		}
-		r := tx.Delete(&role)
-		rowsAffected = r.RowsAffected
-		return r.Error
-	})
-	return rowsAffected, err
+	r := rolesRepo.Orm.Where(query, args...).Delete(model.Roles{})
+	return r.RowsAffected, r.Error
 }
 
 func (rolesRepo RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearchWhere, tx0 *gorm.DB) *gorm.DB {

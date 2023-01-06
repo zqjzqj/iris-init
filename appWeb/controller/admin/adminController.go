@@ -21,7 +21,7 @@ func (admCtrl AdminController) BeforeActivation(b mvc.BeforeActivation) {
 }
 
 func (admCtrl AdminController) GetPerms() appWeb.ResponseFormat {
-	services.NewAdminService().RefreshPermissions(&admCtrl.Admin, false)
+	services.NewAdminService().RefreshPermissions(&admCtrl.Admin, false, false)
 	return appWeb.NewSuccessResponse("", admCtrl.Admin.Permissions)
 }
 
