@@ -22,6 +22,9 @@ type ServTpl struct {
 	servPath             string
 	controllerPath       string
 	controllerDir        string
+	ViewDir              string
+	viewListTplPath      string
+	viewItemTplPath      string
 }
 
 func NewServTpl(_model, alias, ctrDir string) ServTpl {
@@ -34,12 +37,21 @@ func NewServTpl(_model, alias, ctrDir string) ServTpl {
 	return st
 }
 
+func (servTpl *ServTpl) SetViewDir(viewDir string) {
+	if viewDir != "admin" {
+		panic("无效的view参数，暂只支持admin")
+	}
+	servTpl.ViewDir = viewDir
+}
+
 func (servTpl *ServTpl) SetAppPath(AppRoot string) {
 	servTpl.AppRoot = AppRoot
 	servTpl.servTplPath = fmt.Sprintf("%s/cmd/servTemplate/services.tpl", servTpl.AppRoot)
 	servTpl.repoTplPath = fmt.Sprintf("%s/cmd/servTemplate/repo.tpl", servTpl.AppRoot)
 	servTpl.repoInterfaceTplPath = fmt.Sprintf("%s/cmd/servTemplate/repoInterface.tpl", servTpl.AppRoot)
 	servTpl.controllerTplPath = fmt.Sprintf("%s/cmd/servTemplate/controller.tpl", servTpl.AppRoot)
+	servTpl.viewListTplPath = fmt.Sprintf("%s/cmd/servTemplate/viewList.tpl", servTpl.AppRoot)
+	servTpl.viewItemTplPath = fmt.Sprintf("%s/cmd/servTemplate/viewItem.tpl", servTpl.AppRoot)
 	servTpl.RefreshModel()
 }
 
@@ -101,6 +113,16 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 			logs.PrintlnWarning(fmt.Sprintf("controller err %v", err))
 		}
 	}
+	if servTpl.ViewDir != "" {
+		err = servTpl.GenerateView()
+		if err != nil {
+			if !ignoreErr {
+				return fmt.Errorf("view err %v", err)
+			} else {
+				logs.PrintlnWarning(fmt.Sprintf("view err %v", err))
+			}
+		}
+	}
 	return nil
 }
 
@@ -123,6 +145,28 @@ func (servTpl ServTpl) GenerateController() error {
 	}
 	return servTpl.generateFile(servTpl.controllerTplPath, servTpl.controllerPath, map[string]any{
 		"Package": _package,
+		"View":    servTpl.ViewDir,
+	})
+}
+
+func (servTpl ServTpl) GenerateView() error {
+	viewRoot := fmt.Sprintf("%s/views/%s/%s", servTpl.AppRoot, servTpl.ViewDir, servTpl.Alias)
+	if !global.FileExists(viewRoot) {
+		err := os.Mkdir(viewRoot, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+	viewList := fmt.Sprintf("%s/list.html", viewRoot)
+	viewItem := fmt.Sprintf("%s/item.html", viewRoot)
+	err := servTpl.generateFile(servTpl.viewListTplPath, viewList, map[string]any{
+		"View": servTpl.ViewDir,
+	})
+	if err != nil {
+		return err
+	}
+	return servTpl.generateFile(servTpl.viewItemTplPath, viewItem, map[string]any{
+		"View": servTpl.ViewDir,
 	})
 }
 

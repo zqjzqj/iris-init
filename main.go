@@ -104,7 +104,7 @@ func ListenWeb(appWeb *iris.Application) error {
 	for _, r := range appWeb.GetRoutes() {
 		if r.Method != "OPTIONS" {
 			logs.PrintlnInfo(
-				fmt.Sprintf("[%s] http://127.0.0.1:%d%s   [%s]", r.Method, port, r.Path, r.Name),
+				fmt.Sprintf("[%s] http://localhost:%d%s   [%s]", r.Method, port, r.Path, r.Name),
 			)
 		}
 	}
