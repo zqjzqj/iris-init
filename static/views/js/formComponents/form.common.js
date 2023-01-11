@@ -24,6 +24,18 @@ layui.use(['form', 'laydate'], function(){
 
     })
 
+    $("[data-action=tips]").hover(function(){
+        layer.tips($(this).attr("data-content"), $(this), {
+            tips: [1, '#3595CC'],
+            time: 0,
+        });
+    }, function(){
+        layer.tips($(this).attr("data-content"), $(this), {
+            tips: [1, '#3595CC'],
+            time: 1,
+        });
+    })
+
     //ifrIndex ifr层index
     $("[data-action=form]").submit(function() {
         var funcCallback = $(this).attr("data-callback");
@@ -415,6 +427,7 @@ layui.use(['form', 'laydate'], function(){
     $("[data-action=checkboxChecked]").each(function(k, v){
         var dataVal = $(v).attr("data-value")
         _dataVal = dataVal.split(",")
+        console.log(_dataVal)
         $(v).find("input:checkbox").each(function(k, _v){
             var _val = $(_v).val()
             if (_val !== "" && $.inArray(_val, _dataVal) !== -1) {

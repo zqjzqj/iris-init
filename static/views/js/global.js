@@ -21,23 +21,18 @@ $(function(){
     listSearch.find("input").each(function(k, v){
         $(v).val(getURLString($(v).attr("name")))
     })
-    if (getURLString("form-disabled") === "1" ) {
-        $("input").attr("disabled", "disabled")
-        $("textarea").attr("disabled", "disabled")
-        $("select").attr("disabled", "disabled")
-        $(".layui-footer .layui-btn").hide()
-    }
-    var perms =  $("[data-perm]")
-    if (perms.length > 0) {
-        $.get("/admin/perms", {}, function(resp){
-            if (resp.Data.length === 1 && resp.Data[0] === "*") {
-                return
-            }
-            perms.each(function(k, v){
-                if ($.inArray($(v).attr("data-perm-val"), resp.Data) === - 1) {
-                    $(v).hide()
-                }
-            })
-        }, "json")
-    }
+
+    var actionSlice = $("[data-action=slice]")
+    actionSlice.each(function(k, v){
+        var content = $(v).text()
+        var maxLen = $(v).attr("data-length")
+        if (maxLen < strLen(content)) {
+            $(v).text(cutStr(content, maxLen))
+
+            $(v).attr("data-action", 'tips')
+            $(v).attr("data-content", content)
+        } else {
+            $(v).text(content)
+        }
+    })
 })
