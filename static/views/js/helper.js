@@ -14,6 +14,11 @@ function changeURLArg(url,arg,arg_val){
         }
     }
 }
+
+function trim(str){ //删除左右两端的空格
+    return str.replace(/(^\s*)|(\s*$)/g, "" );
+}
+
 function cutStr(str, len) {
     var str_length = 0;
     var str_len = 0;

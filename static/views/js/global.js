@@ -24,7 +24,7 @@ $(function(){
 
     var actionSlice = $("[data-action=slice]")
     actionSlice.each(function(k, v){
-        var content = $(v).text()
+        var content = trim($(v).text())
         var maxLen = $(v).attr("data-length")
         if (maxLen < content.length) {
             $(v).text(cutStr(content, maxLen))
