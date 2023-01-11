@@ -26,13 +26,20 @@ $(function(){
     actionSlice.each(function(k, v){
         var content = $(v).text()
         var maxLen = $(v).attr("data-length")
-        if (maxLen < strLen(content)) {
+        if (maxLen < content.length) {
             $(v).text(cutStr(content, maxLen))
-
             $(v).attr("data-action", 'tips')
             $(v).attr("data-content", content)
         } else {
             $(v).text(content)
         }
+        $(v).css("cursor", "pointer")
+        $(v).dblclick(function(){
+            layer.alert(content, {
+                skin: 'layui-layer-molv', //样式类名
+                closeBtn: 0,
+                title:"文本详情"
+            });
+        });
     })
 })
