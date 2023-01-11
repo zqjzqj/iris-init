@@ -22,10 +22,6 @@ function cutStr(str, len) {
     for (var i = 0; i < str_len; i++) {
         a = str.charAt(i);
         str_length++;
-        if (escape(a).length > 4) {
-            //中文字符的长度经编码之后大于4
-            str_length++;
-        }
         str_cut = str_cut.concat(a);
         if (str_length >= len) {
             str_cut = str_cut.concat("...");
