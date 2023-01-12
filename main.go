@@ -6,7 +6,6 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 	recover2 "github.com/kataras/iris/v12/middleware/recover"
-	"github.com/kataras/iris/v12/sessions"
 	"github.com/zqjzqj/pRuntime"
 	"iris-init/appWeb/routes"
 	"iris-init/config"
@@ -92,11 +91,6 @@ func main() {
 
 func ListenWeb(appWeb *iris.Application) error {
 	appWeb.Use(recover2.New(), logger.New())
-	//使用session
-	sess := sessions.New(sessions.Config{
-		Cookie: "iris-init",
-	})
-	appWeb.Use(sess.Handler())
 	//注册路由
 	routes.RegisterRoutes(appWeb)
 	port := config.GetWebCfg().GetPort()
