@@ -139,8 +139,11 @@ func (servTpl ServTpl) GenerateService() error {
 }
 
 func (servTpl ServTpl) GenerateController() error {
+	if servTpl.controllerDir == "" {
+		return nil
+	}
 	_package := servTpl.controllerDir
-	if _package == "" {
+	if _package == "/" {
 		_package = "controller"
 	}
 	return servTpl.generateFile(servTpl.controllerTplPath, servTpl.controllerPath, map[string]any{
