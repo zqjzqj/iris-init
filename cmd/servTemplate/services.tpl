@@ -33,7 +33,7 @@ func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.M
 		OrderBy: []repoComm.OrderByParams{
             {
                 Column: "ID",
-                Desc:   false,
+                Desc:   true,
             },
 		},
 	}
