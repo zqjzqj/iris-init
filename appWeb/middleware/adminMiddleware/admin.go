@@ -1,4 +1,4 @@
-package middleware
+package adminMiddleware
 
 import (
 	"github.com/kataras/iris/v12"

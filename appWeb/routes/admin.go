@@ -4,7 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"iris-init/appWeb/controller/admin"
-	"iris-init/appWeb/middleware"
+	"iris-init/appWeb/middleware/adminMiddleware"
 	"iris-init/config"
 	"iris-init/services"
 	"net/http"
@@ -30,18 +30,18 @@ func RegisterRoutes(app *iris.Application) {
 		}
 	})
 	mvc.Configure(party, func(application *mvc.Application) {
-		application.Register(middleware.RegisterAdmin).Handle(&admin.LoginController{})
+		application.Register(adminMiddleware.RegisterAdmin).Handle(&admin.LoginController{})
 
-		application.Party("/", middleware.AdminLogin, middleware.AdminPermission).
-			Register(middleware.RegisterAdmin).Handle(&admin.SiteController{})
+		application.Party("/", adminMiddleware.AdminLogin, adminMiddleware.AdminPermission).
+			Register(adminMiddleware.RegisterAdmin).Handle(&admin.SiteController{})
 
-		application.Party("/areas", middleware.AdminLogin, middleware.AdminPermission).Handle(&admin.AreaController{})
+		application.Party("/areas", adminMiddleware.AdminLogin, adminMiddleware.AdminPermission).Handle(&admin.AreaController{})
 
-		application.Party("/admin", middleware.AdminLogin, middleware.AdminPermission).
-			Register(middleware.RegisterAdmin).Handle(&admin.AdminController{})
+		application.Party("/admin", adminMiddleware.AdminLogin, adminMiddleware.AdminPermission).
+			Register(adminMiddleware.RegisterAdmin).Handle(&admin.AdminController{})
 
-		application.Party("/roles", middleware.AdminLogin, middleware.AdminPermission).
-			Register(middleware.RegisterAdmin).Handle(&admin.RolesController{})
+		application.Party("/roles", adminMiddleware.AdminLogin, adminMiddleware.AdminPermission).
+			Register(adminMiddleware.RegisterAdmin).Handle(&admin.RolesController{})
 
 	})
 
