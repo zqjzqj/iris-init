@@ -51,7 +51,7 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) GetItem(ctx iris.Context) appWeb.Resp
 func ({{.Alias}}Ctrl {{.Model}}Controller) GetItemView(ctx iris.Context) mvc.Result {
 	return appWeb.ResponseDataViewForm("{{.Alias}}/item.html", appWeb.DataView{
 		Data: map[string]interface{}{
-			"item": services.New{{.Model}}Service().GetItem(ctx).ShowMap(),
+			"Item": services.New{{.Model}}Service().GetItem(ctx).ShowMap(),
 		},
 	}, ctx)
 }
