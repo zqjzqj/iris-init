@@ -11,6 +11,13 @@ $(function(){
         window.location.href = url
     })
 
+    if (getURLString("form-disabled") === "1" ) {
+        $("input").attr("disabled", "disabled")
+        $("textarea").attr("disabled", "disabled")
+        $("select").attr("disabled", "disabled")
+        $(".layui-footer .layui-btn").hide()
+    }
+
     $(".layui-laypage-skip .layui-laypage-btn").click(function(){
         var url = window.location.href;
         url = changeURLArg(url, "Page", parseInt($(".layui-laypage-skip .layui-input").val()))
