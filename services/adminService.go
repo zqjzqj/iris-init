@@ -347,14 +347,14 @@ func (admServ AdminService) GetAdmByValidate(aValidator AdminValidator) (model.A
 
 type AdminValidator struct {
 	ID       uint64
-	Username string `json:"Name" validate:"required" label:"账户名"`
-	Phone    string `json:"Phone" validate:"required" label:"手机号码"`
-	QQ       string `json:"QQ" label:"QQ号" validate:"max=20"`
-	Status   uint8  `json:"Status" label:"状态"`
-	RealName string `json:"RealName" validate:"required" label:"真实姓名"`
-	Avatar   string `json:"Avatar" label:"头像"`
-	Password string `json:"Password" label:"密码"`
-	Sex      uint8  `label:"性别"`
+	Username string `validate:"required" label:"账户名"`
+	Phone    string `validate:"required" label:"手机号码"`
+	QQ       string `label:"QQ号" validate:"max=20"`
+	Status   uint8  `validate:"oneof=0 1" label:"状态"`
+	RealName string `validate:"required" label:"真实姓名"`
+	Avatar   string `label:"头像"`
+	Password string `label:"密码"`
+	Sex      uint8  `validate:"oneof=0 1 2" label:"性别"`
 	Desc     string `label:"简介"`
 	RolesId  []string
 	Self     string //用于请求的时候在控制器区分一下是否是编辑当前用户的资料
