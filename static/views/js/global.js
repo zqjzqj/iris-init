@@ -22,6 +22,20 @@ $(function(){
         $(v).val(getURLString($(v).attr("name")))
     })
 
+    var perms =  $("[data-perm]")
+    if (perms.length > 0) {
+        $.get("/admin/perms", {}, function(resp){
+            if (resp.Code === 0 && resp.Data == null) {
+                return
+            }
+            perms.each(function(k, v){
+                if ($.inArray($(v).attr("data-perm-val"), resp.Data) === - 1) {
+                    $(v).hide()
+                }
+            })
+        }, "json")
+    }
+
     var actionSlice = $("[data-action=slice]")
     actionSlice.each(function(k, v){
         var content = trim($(v).text())
