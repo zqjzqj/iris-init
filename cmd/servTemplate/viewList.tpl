@@ -44,7 +44,7 @@
                             <td>{{print "{{item.CreatedAt}}"}}</td>
                             <td>{{print "{{item.UpdatedAt}}"}}</td>
                             <td>
-                                <button data-perm data-perm-val="GET@/{{.Alias}}/item"
+                                <button data-perm data-perm-val="GET@/{{.Alias}}/item-view.html"
                                         data-action="open" href="/{{.Alias}}/item-view.html?ID={{print "{{item.ID}}"}}&form-disabled=1"
                                         data-title="详情"
                                         class="layui-btn layui-btn-primary layui-btn-sm">
