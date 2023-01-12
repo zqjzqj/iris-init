@@ -79,7 +79,7 @@ func CheckPermissionByRouteFunc(r *router.Route) func(ctx iris.Context) {
 	return func(c iris.Context) {
 		RegisterAdmin(c)
 		if !services.NewAdminService().CheckPermissionByRoute(r, c) {
-			c.StopWithJSON(http.StatusOK, appWeb.NewNotAuthResponse("", nil))
+			_ = c.StopWithJSON(http.StatusOK, appWeb.NewNotAuthResponse("", nil))
 			return
 		}
 		c.Next()
@@ -88,7 +88,7 @@ func CheckPermissionByRouteFunc(r *router.Route) func(ctx iris.Context) {
 
 func NotAuthHandle(ctx iris.Context) {
 	if ctx.IsAjax() {
-		ctx.StopWithJSON(http.StatusOK, appWeb.NewNotAuthResponse("", nil))
+		_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotAuthResponse("", nil))
 	} else {
 		ctx.Redirect("/err?Msg=无权访问")
 	}
@@ -97,7 +97,7 @@ func NotAuthHandle(ctx iris.Context) {
 
 func NotLoginHandle(ctx iris.Context) {
 	if ctx.IsAjax() {
-		ctx.StopWithJSON(http.StatusOK, appWeb.NewNotLoginResponse("", map[string]string{
+		_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotLoginResponse("", map[string]string{
 			appWeb.AjaxLocationKey: "/login",
 		}))
 	} else {
