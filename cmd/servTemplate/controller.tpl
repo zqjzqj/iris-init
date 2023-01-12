@@ -11,15 +11,15 @@ import (
 type {{.Model}}Controller struct {}
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivation) {
-	b.Handle(http.MethodGet, "list", "GetList")
-	b.Handle(http.MethodGet, "item", "GetItem")
-	b.Handle(http.MethodPost, "edit", "PostEdit")
-	b.Handle(http.MethodPost, "delete", "PostDelete")
-
 	{{- if .View}}
 	b.Handle(http.MethodGet, "list-view.html", "GetListView")
 	b.Handle(http.MethodGet, "item-view.html", "GetItemView")
 	{{- end }}
+
+	b.Handle(http.MethodGet, "list", "GetList")
+	b.Handle(http.MethodGet, "item", "GetItem")
+	b.Handle(http.MethodPost, "edit", "PostEdit")
+	b.Handle(http.MethodPost, "delete", "PostDelete")
 }
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) appWeb.ResponseFormat {
