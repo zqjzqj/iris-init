@@ -165,15 +165,8 @@ func (servTpl ServTpl) GenerateRepo() error {
 }
 
 func (servTpl ServTpl) GenerateService() error {
-	_r := make([]Field, 0, len(servTpl.ModelField))
-	for _, v := range servTpl.ModelField {
-		if v.Name == "CreatedAt" || v.Name == "UpdatedAt" {
-			continue
-		}
-		_r = append(_r, v)
-	}
 	return servTpl.generateFile(servTpl.servTplPath, servTpl.servPath, map[string]any{
-		"ModelField": _r,
+		"ModelField": servTpl.ModelField,
 	})
 }
 

@@ -34,6 +34,9 @@
       -ctrDir为控制器生成的子目录 如 -ctrDir=admin 则 控制器会生成在controller/admin下, -ctrDir=/则生成在controller下 如果为空则不生成控制器
 
       -migrate为迁移models, 使用','(英文逗号)分割多个models 会生成对应的迁移文件 如 migrate="Model1,Model2,Model3" 【注:使用','分割需要加双引号】
+
+      -createModel创建model并生成model反射map的命令
+      -TableName 创建model的表名, 与createModel关联使用 为空则使用model的蛇形作为表名
     
       -view 生成视图 只支持admin 如 -view=admin
 -     go run .\cmd\generateTpl.go -model=Xxx -ctrDir=admin -alias=xxx -appRoot=xxxx

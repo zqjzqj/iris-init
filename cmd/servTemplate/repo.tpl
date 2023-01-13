@@ -56,7 +56,7 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{{
 	}
    {{- range .ModelField}}
    //需要额外调整
-   	if true {
+   	if false {
         tx.Where("{{.Name}}", where.{{.Name}})
    	}
    {{- end}}

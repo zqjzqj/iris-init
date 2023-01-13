@@ -11,10 +11,10 @@ import (
 type {{.Model}}Controller struct {}
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivation) {
-	b.Handle(http.MethodGet, "list", "GetList")
-	b.Handle(http.MethodGet, "item", "GetItem")
-	b.Handle(http.MethodPost, "edit", "PostEdit")
-	b.Handle(http.MethodPost, "delete", "PostDelete")
+	b.Handle(http.MethodGet, "list", "GetList").SetName("{{.Model}}@{{.Model}}")
+	b.Handle(http.MethodGet, "item", "GetItem").SetName("{{.Model}}@{{.Model}}:{{.Model}}详情")
+	b.Handle(http.MethodPost, "edit", "PostEdit").SetName("{{.Model}}@{{.Model}}:{{.Model}}编辑")
+	b.Handle(http.MethodPost, "delete", "PostDelete").SetName("{{.Model}}@{{.Model}}:{{.Model}}删除")
 }
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) any {
@@ -23,13 +23,13 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) any {
     {{- if .View}}
     if ctx.URLParamBoolDefault("API", false) {
         return appWeb.NewPagerResponse(map[string]interface{}{
-            "List": organizerServ.ShowMapList(organizer),
+            "List": {{.Alias}}Serv.ShowMapList({{.Alias}}),
         }, pager)
     }
     return appWeb.ResponseDataViewForm("{{.Alias}}/list.html", appWeb.DataView{
         Pager: pager,
         Data: map[string]interface{}{
-            "List": organizerServ.ShowMapList(organizer),
+            "List": {{.Alias}}Serv.ShowMapList({{.Alias}}),
         },
     }, ctx)
     {{- else}}
