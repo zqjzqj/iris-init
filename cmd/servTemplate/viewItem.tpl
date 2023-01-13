@@ -8,7 +8,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">{{.Label}}</label>
                     <div class="layui-input-block">
-                        <input type="text" name="{{.Name}}" value="{{printf "{{Data.Item"}}.{{.Name}}{{print "}}"}}" autocomplete="off" placeholder="ID" class="layui-input">
+                        <input type="text" name="{{.Name}}" value="{{printf "{{Data.Item"}}.{{.Name}}{{print "}}"}}" autocomplete="off" placeholder="{{.Label}}" class="layui-input">
                     </div>
                 </div>
                 {{- end}}
