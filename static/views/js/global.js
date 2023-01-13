@@ -68,6 +68,13 @@ $(function(){
     })
 
     var actionSort = $("[data-action=sort]")
+    actionSort.each(function(k, v){
+        var _field = $(v).attr("data-field")
+        _sort = getURLString(_field)
+        if (_sort !== "") {
+            $(v).attr("lay-sort", _sort)
+        }
+    })
     actionSort.click(function(){
         var _sort = $(this).attr("lay-sort")
         var _field = $(this).attr("data-field")
