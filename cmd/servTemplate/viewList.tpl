@@ -52,7 +52,7 @@
                                 </button>
                                 <button data-perm data-perm-val="POST@/{{.Alias}}/edit"
                                         data-action="open" href="/{{.Alias}}/item?ID={{print "{{item.ID}}"}}"
-                                        data-title="编辑账户"
+                                        data-title="编辑"
                                         class="layui-btn layui-btn-primary layui-btn-sm">
                                     编辑
                                 </button>
