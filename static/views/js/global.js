@@ -66,4 +66,18 @@ $(function(){
             });
         });
     })
+
+    var actionSort = $("[data-action=sort]")
+    actionSort.click(function(){
+        var _sort = $(this).attr("lay-sort")
+        var _field = $(this).attr("data-field")
+        if (_sort === "" || _sort === undefined) {
+            _sort = "asc"
+        } else if (_sort === "asc") {
+            _sort = "desc"
+        } else {
+            _sort = ""
+        }
+        window.location.href = changeURLArg(window.location.href, _field, _sort)
+    })
 })
