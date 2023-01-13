@@ -18,7 +18,7 @@
                     </div>
 
                     <div style="padding-bottom: 10px;">
-                        <button data-action="open" href="/{{.Alias}}/item-view.html" data-title="添加" class="layui-btn layuiadmin-btn-list" >
+                        <button data-action="open" href="/{{.Alias}}/item" data-title="添加" class="layui-btn layuiadmin-btn-list" >
                             添加
                         </button>
                     </div>
@@ -44,14 +44,14 @@
                             <td>{{print "{{item.CreatedAt}}"}}</td>
                             <td>{{print "{{item.UpdatedAt}}"}}</td>
                             <td>
-                                <button data-perm data-perm-val="GET@/{{.Alias}}/item-view.html"
-                                        data-action="open" href="/{{.Alias}}/item-view.html?ID={{print "{{item.ID}}"}}&form-disabled=1"
+                                <button data-perm data-perm-val="GET@/{{.Alias}}/item"
+                                        data-action="open" href="/{{.Alias}}/item?ID={{print "{{item.ID}}"}}&form-disabled=1"
                                         data-title="详情"
                                         class="layui-btn layui-btn-primary layui-btn-sm">
                                     详情
                                 </button>
                                 <button data-perm data-perm-val="POST@/{{.Alias}}/edit"
-                                        data-action="open" href="/{{.Alias}}/item-view.html?ID={{print "{{item.ID}}"}}"
+                                        data-action="open" href="/{{.Alias}}/item?ID={{print "{{item.ID}}"}}"
                                         data-title="编辑账户"
                                         class="layui-btn layui-btn-primary layui-btn-sm">
                                     编辑

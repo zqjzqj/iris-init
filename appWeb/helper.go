@@ -30,7 +30,7 @@ func ResponseErrView(msg string, ctx iris.Context) mvc.Result {
 	if msg == "" {
 		msg = "好像出错了呢"
 	}
-	return ResponseDataView("/err/err.html", DataView{
+	return ResponseDataView("err/err.html", DataView{
 		Data: map[string]interface{}{
 			"Msg": msg,
 		},

@@ -11,52 +11,52 @@ import (
 type {{.Model}}Controller struct {}
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivation) {
-	{{- if .View}}
-	b.Handle(http.MethodGet, "list-view.html", "GetListView")
-	b.Handle(http.MethodGet, "item-view.html", "GetItemView")
-	{{- end }}
-
 	b.Handle(http.MethodGet, "list", "GetList")
 	b.Handle(http.MethodGet, "item", "GetItem")
 	b.Handle(http.MethodPost, "edit", "PostEdit")
 	b.Handle(http.MethodPost, "delete", "PostDelete")
 }
 
-func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) appWeb.ResponseFormat {
+func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) any {
     {{.Alias}}Serv := services.New{{.Model}}Service()
     {{.Alias}}, pager := {{.Alias}}Serv.ListPage(ctx)
+    {{- if .View}}
+    if ctx.URLParamBoolDefault("API", false) {
+        return appWeb.NewPagerResponse(map[string]interface{}{
+            "List": organizerServ.ShowMapList(organizer),
+        }, pager)
+    }
+    return appWeb.ResponseDataViewForm("{{.Alias}}/list.html", appWeb.DataView{
+        Pager: pager,
+        Data: map[string]interface{}{
+            "List": organizerServ.ShowMapList(organizer),
+        },
+    }, ctx)
+    {{- else}}
     return appWeb.NewPagerResponse({{.Alias}}Serv.ShowMapList({{.Alias}}), pager)
-}
-{{- if .View}}
-
-func ({{.Alias}}Ctrl {{.Model}}Controller) GetListView(ctx iris.Context) mvc.Result {
-	{{.Alias}}Serv := services.New{{.Model}}Service()
-	{{.Alias}}, pager := {{.Alias}}Serv.ListPage(ctx)
-	return appWeb.ResponseDataViewForm("{{.Alias}}/list.html", appWeb.DataView{
-		Pager: pager,
-		Data: map[string]interface{}{
-			"List": {{.Alias}}Serv.ShowMapList({{.Alias}}),
-		},
-	}, ctx)
+    {{- end}}
 }
 
-{{- end }}
-func ({{.Alias}}Ctrl {{.Model}}Controller) GetItem(ctx iris.Context) appWeb.ResponseFormat {
+func ({{.Alias}}Ctrl {{.Model}}Controller) GetItem(ctx iris.Context) any {
 	{{.Alias}}Serv := services.New{{.Model}}Service()
 	{{.Alias}} := {{.Alias}}Serv.GetItem(ctx)
-	return appWeb.NewSuccessResponse("", {{.Alias}}.ShowMap())
+	{{- if .View}}
+    if ctx.URLParamBoolDefault("API", false) {
+        return appWeb.NewSuccessResponse("", map[string]interface{}{
+            "Item": {{.Alias}}.ShowMap(),
+        })
+    }
+    return appWeb.ResponseDataViewForm("{{.Alias}}/item.html", appWeb.DataView{
+        Data: map[string]interface{}{
+            "Item": {{.Alias}}.ShowMap(),
+        },
+    }, ctx)
+    {{- else}}
+    return appWeb.NewSuccessResponse("", map[string]interface{}{
+        "Item": {{.Alias}}.ShowMap(),
+    })
+    {{- end}}
 }
-{{- if .View}}
-
-func ({{.Alias}}Ctrl {{.Model}}Controller) GetItemView(ctx iris.Context) mvc.Result {
-	return appWeb.ResponseDataViewForm("{{.Alias}}/item.html", appWeb.DataView{
-		Data: map[string]interface{}{
-			"Item": services.New{{.Model}}Service().GetItem(ctx).ShowMap(),
-		},
-	}, ctx)
-}
-
-{{- end }}
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
 	{{.Alias}}, err := services.New{{.Model}}Service().EditByCtx(ctx)
