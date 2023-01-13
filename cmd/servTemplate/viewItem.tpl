@@ -4,24 +4,14 @@
     <div class="layui-card">
         <div class="layui-card-body" style="padding: 15px;">
             <form class="layui-form" action="/{{.Alias}}/edit" method="post" data-action="form" data-ifr-index="0" lay-filter="component-form-group">
+                {{- range .ModelField}}
                 <div class="layui-form-item">
-                    <label class="layui-form-label">ID</label>
+                    <label class="layui-form-label">{{.Label}}</label>
                     <div class="layui-input-block">
-                        <input type="text" name="ID" value="{{printf "{{Data.Item.ID}}"}}" disabled autocomplete="off" placeholder="ID" class="layui-input">
+                        <input type="text" name="{{.Name}}" value="{{printf "{{Data.Item"}}.{{.Name}}{{print "}}"}}" autocomplete="off" placeholder="ID" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">创建时间</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="CreatedAt" value="{{printf "{{Data.Item.CreatedAt}}"}}" disabled autocomplete="off" placeholder="创建时间" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">更新时间</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="UpdatedAt" value="{{printf "{{Data.Item.UpdatedAt}}"}}" disabled autocomplete="off" placeholder="更新时间" class="layui-input">
-                    </div>
-                </div>
+                {{- end}}
                 <div class="layui-form-item layui-layout-admin">
                     <div class="layui-input-block">
                         <div class="layui-footer" style="left: 0;">

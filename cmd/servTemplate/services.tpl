@@ -105,12 +105,16 @@ func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Valida
 		{{.Alias}} = model.{{.Model}}{}
 	}
 	//完成其他的赋值逻辑处理...
-
+    {{- range .ModelField}}
+    {{$.Alias}}.{{.Name}} = {{$.Alias}}Validator.{{.Name}}
+    {{- end}}
 	return {{.Alias}}, nil
 }
 
 type {{.Model}}Validator struct {
-	ID       uint64
+	{{- range .ModelField}}
+	{{.Name}}   {{.Type}} `label:"{{.Label}}"`
+	{{- end}}
 }
 
 func ({{.Alias}}Validator {{.Model}}Validator) Validate() error {

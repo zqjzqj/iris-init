@@ -19,6 +19,8 @@ type {{.Model}}Repo interface {
 }
 
 type {{.Model}}SearchWhere struct {
-    ID           uint64
+    {{- range .ModelField}}
+    {{.Name}}   {{.Type}}
+    {{- end}}
 	SelectParams repoComm.SelectFrom
 }

@@ -7,8 +7,8 @@ import (
 )
 
 type {{.Model}} struct {
-	mField.FieldsPk            `mapstructure:",squash"`
-	mField.FieldsTimeUnixModel `mapstructure:",squash"`
+	mField.FieldsPk        
+	mField.FieldsTimeUnixModel
 }
 
 func ({{.Alias}} {{.Model}}) TableName() string {

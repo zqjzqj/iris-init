@@ -31,18 +31,18 @@
                         </colgroup>
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>创建时间</th>
-                            <th>修改时间</th>
+                            {{- range .ModelField}}
+                            <th>{{.Label}}</th>
+                            {{- end}}
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for item in Data.List %}
                         <tr>
-                            <td>{{print "{{item.ID}}"}}</td>
-                            <td>{{print "{{item.CreatedAt}}"}}</td>
-                            <td>{{print "{{item.UpdatedAt}}"}}</td>
+                            {{- range .ModelField}}
+                            <td>{{print "{{item"}}.{{.Name}}{{print "}}"}}</td>
+                            {{- end}}
                             <td>
                                 <button data-perm data-perm-val="GET@/{{.Alias}}/item"
                                         data-action="open" href="/{{.Alias}}/item?ID={{print "{{item.ID}}"}}&form-disabled=1"

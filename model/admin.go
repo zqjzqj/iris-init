@@ -19,7 +19,7 @@ var AdmStatusDescMap = map[uint8]string{
 
 type Admin struct {
 	mField.FieldsPk `mapstructure:",squash"`
-	Username        string         `gorm:"size:50;not null;comment:用户名/手机号码;index:idx_username,unique"`
+	Username        string         `gorm:"size:50;not null;comment:用户名/手机号码;index:idx_username,unique" label:"用户名"`
 	Phone           sql.NullString `gorm:"size:15;default:null;index:idx_phone,unique"`
 	QQ              string         `gorm:"size:20;default:'';comment:qq号码"`
 	Status          uint8          `gorm:"default:1;comment:0禁用 1正常;index:idx_status" `

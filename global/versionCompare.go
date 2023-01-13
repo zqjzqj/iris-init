@@ -30,7 +30,7 @@ func Version2Number(v string, long int) int {
 	return r
 }
 
-//A与B比较 A大 return VersionBig A小 return VersionSmall 相等 return VersionEqual
+// A与B比较 A大 return VersionBig A小 return VersionSmall 相等 return VersionEqual
 func CompareStrVer(verA, verB string) int {
 	verStrArrA := spliteStrByNet(verA)
 	verStrArrB := spliteStrByNet(verB)

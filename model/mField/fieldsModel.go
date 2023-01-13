@@ -6,11 +6,11 @@ import (
 )
 
 type FieldsPk struct {
-	ID uint64 `gorm:"primarykey" mapstructure:"id"`
+	ID uint64 `gorm:"primarykey" label:"ID"`
 }
 
 type FieldsPkUUidBinary struct {
-	ID []byte `gorm:"primarykey;type:binary(16)" mapstructure:"id"`
+	ID []byte `gorm:"primarykey;type:binary(16)" label:"ID"`
 }
 
 func (pk *FieldsPkUUidBinary) BeforeCreate(tx *gorm.DB) (err error) {
@@ -18,7 +18,7 @@ func (pk *FieldsPkUUidBinary) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (pk *FieldsPkUUidBinary) GetIDString() string {
+func (pk FieldsPkUUidBinary) GetIDString() string {
 	_uuid := uuid.New()
 	_ = _uuid.UnmarshalBinary(pk.ID)
 	return _uuid.String()

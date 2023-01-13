@@ -25,8 +25,8 @@ func (s *PrefixedLogger) Log(msg string) {
 	}
 }
 
-//这个包用来统一的日志输出处理
-//目前只做简单两个方法 后续根据具体需要在这里增加日志操作
+// 这个包用来统一的日志输出处理
+// 目前只做简单两个方法 后续根据具体需要在这里增加日志操作
 func Println(v ...interface{}) {
 	if IsPrintLog {
 		log.Println(v...)
