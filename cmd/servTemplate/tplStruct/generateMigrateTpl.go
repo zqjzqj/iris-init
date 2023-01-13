@@ -1,4 +1,4 @@
-package servTemplate
+package tplStruct
 
 import (
 	"fmt"

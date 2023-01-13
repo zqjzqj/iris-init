@@ -2,13 +2,15 @@ package main
 
 import (
 	"flag"
-	"iris-init/cmd/servTemplate"
+	"iris-init/cmd/servTemplate/tplStruct"
 	"iris-init/logs"
 	"strings"
 )
 
 var migrate = flag.String("migrate", "", "迁移models ','多个逗号分割")
 var model = flag.String("model", "", "model名")
+var createModel = flag.String("createModel", "", "创建model")
+var tableName = flag.String("tableName", "", "创建model的表名, 与createModel关联使用 为空则使用model的蛇形作为表名")
 var view = flag.String("view", "", "创建view 默认空 不创建")
 var alias = flag.String("alias", "", "alias")
 var appRoot = flag.String("appRoot", "", "appRoot项目路径，默认为当前目录") //rollback
@@ -20,9 +22,18 @@ func init() {
 }
 
 func main() {
+	if *createModel != "" {
+		modelTpl := tplStruct.NewModelTpl(*createModel, *tableName)
+		err := modelTpl.GenerateFile()
+		if err != nil {
+			logs.Fatal(err)
+		}
+		logs.PrintlnSuccess("create model ok...")
+		return
+	}
 	if *migrate != "" {
 		models := strings.Split(*migrate, ",")
-		migrateTpl := servTemplate.NewMigrateTpl(models)
+		migrateTpl := tplStruct.NewMigrateTpl(models)
 		err := migrateTpl.GenerateFile()
 		if err != nil {
 			logs.Fatal(err)
@@ -32,7 +43,7 @@ func main() {
 			return
 		}
 	}
-	servTpl := servTemplate.NewServTpl(*model, *alias, *ctrDir)
+	servTpl := tplStruct.NewServTpl(*model, *alias, *ctrDir)
 	if *appRoot != "" {
 		servTpl.SetAppPath(*appRoot)
 	}

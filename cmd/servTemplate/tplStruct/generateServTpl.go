@@ -1,4 +1,4 @@
-package servTemplate
+package tplStruct
 
 import (
 	"fmt"
@@ -88,6 +88,8 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("repoInterface err %v", err))
 		}
+	} else {
+		logs.PrintlnSuccess("create repoInterface success")
 	}
 	err = servTpl.GenerateRepo()
 	if err != nil {
@@ -96,6 +98,8 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("repo err %v", err))
 		}
+	} else {
+		logs.PrintlnSuccess("create repo success")
 	}
 	err = servTpl.GenerateService()
 	if err != nil {
@@ -104,6 +108,8 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("service err %v", err))
 		}
+	} else {
+		logs.PrintlnSuccess("create service success")
 	}
 	err = servTpl.GenerateController()
 	if err != nil {
@@ -112,6 +118,8 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("controller err %v", err))
 		}
+	} else {
+		logs.PrintlnSuccess("create controller success")
 	}
 	if servTpl.ViewDir != "" {
 		err = servTpl.GenerateView()
@@ -121,6 +129,8 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 			} else {
 				logs.PrintlnWarning(fmt.Sprintf("view err %v", err))
 			}
+		} else {
+			logs.PrintlnSuccess("create view success")
 		}
 	}
 	return nil
