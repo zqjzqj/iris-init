@@ -10,16 +10,22 @@ import (
 	"strings"
 )
 
+type ResourcePkg interface {
+	GetJs() []string
+	GetCss() []string
+}
+
 type DataView struct {
-	Data       map[string]interface{}
-	Logo       string
-	FooterLogo string
-	Pager      *global.Pager
-	Title      string
-	PageCss    []string
-	PageJs     []string
-	PageUrl    *url.URL
-	ShorFooter bool
+	Data        map[string]interface{}
+	Logo        string
+	FooterLogo  string
+	Pager       *global.Pager
+	Title       string
+	PageCss     []string
+	PageJs      []string
+	PageUrl     *url.URL
+	ShorFooter  bool
+	ResourcePkg []ResourcePkg
 }
 
 func ResponseView(view mvc.View) mvc.Result {
@@ -42,6 +48,13 @@ func ResponseDataView(view string, dataView DataView, ctx iris.Context) mvc.Resu
 		dataView.Data = make(map[string]interface{})
 	}
 	dataView.Title = "系统登录"
+	//引入资源
+	if len(dataView.ResourcePkg) > 0 {
+		for _, rPkg := range dataView.ResourcePkg {
+			dataView.PageCss = append(dataView.PageCss, rPkg.GetCss()...)
+			dataView.PageCss = append(dataView.PageJs, rPkg.GetJs()...)
+		}
+	}
 	for k := range dataView.PageCss {
 		if !strings.HasPrefix(dataView.PageCss[k], "/static") &&
 			!strings.HasPrefix(dataView.PageCss[k], "http") {
