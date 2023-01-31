@@ -11,6 +11,12 @@ $(function(){
         window.location.href = url
     })
 
+    $(".layui-laypage-skip .layui-laypage-btn").click(function(){
+        var url = window.location.href;
+        url = changeURLArg(url, "Page", parseInt($(".layui-laypage-skip .layui-input").val()))
+        window.location.href = url
+    })
+
     if (getURLString("form-disabled") === "1" ) {
         $("input").attr("disabled", "disabled")
         $("textarea").attr("disabled", "disabled")
@@ -18,17 +24,14 @@ $(function(){
         $(".layui-footer .layui-btn").hide()
     }
 
-    $(".layui-laypage-skip .layui-laypage-btn").click(function(){
-        var url = window.location.href;
-        url = changeURLArg(url, "Page", parseInt($(".layui-laypage-skip .layui-input").val()))
-        window.location.href = url
-    })
-
     var listSearch = $(".list-search")
     listSearch.find("input").each(function(k, v){
         $(v).val(getURLString($(v).attr("name")))
     })
-
+    listSearch.find("select").each(function(k, v){
+        var value = getURLString($(v).attr("name"))
+        $(v).find("option[value="+value+"]").attr("selected",true);
+    })
     var perms =  $("[data-perm]")
     if (perms.length > 0) {
         $.get("/admin/perms", {}, function(resp){
@@ -66,7 +69,6 @@ $(function(){
             });
         });
     })
-
     var actionSort = $("[data-action=sort]")
     actionSort.each(function(k, v){
         var _field = $(v).attr("data-field")
