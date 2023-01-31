@@ -52,7 +52,7 @@ func ResponseDataView(view string, dataView DataView, ctx iris.Context) mvc.Resu
 	if len(dataView.ResourcePkg) > 0 {
 		for _, rPkg := range dataView.ResourcePkg {
 			dataView.PageCss = append(dataView.PageCss, rPkg.GetCss()...)
-			dataView.PageCss = append(dataView.PageJs, rPkg.GetJs()...)
+			dataView.PageJs = append(dataView.PageJs, rPkg.GetJs()...)
 		}
 	}
 	for k := range dataView.PageCss {
