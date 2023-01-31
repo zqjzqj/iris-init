@@ -101,7 +101,3 @@ func ResponseDataViewForm(view string, dataView DataView, ctx iris.Context) mvc.
 
 	return ResponseDataView(view, dataView, ctx)
 }
-
-func IsApiReq(ctx iris.Context) bool {
-	return ctx.URLParamBoolDefault("API", false)
-}

@@ -10,6 +10,10 @@ const (
 	ReqTokenHeaderName = "X-Token"
 )
 
+func IsApiReq(ctx iris.Context) bool {
+	return ctx.URLParamBoolDefault("API", false)
+}
+
 func DelCtxUrlParams(ctx iris.Context, keys ...string) {
 	req := ctx.Request()
 	query := req.URL.Query()
