@@ -11,6 +11,7 @@ require (
 	github.com/guanguans/id-validator v1.2.8
 	github.com/kataras/iris/v12 v12.2.0-beta7
 	github.com/robfig/cron/v3 v3.0.1
+	github.com/rs/cors v1.8.3
 	github.com/spf13/viper v1.14.0
 	github.com/tidwall/gjson v1.14.4
 	github.com/zqjzqj/pRuntime v1.0.0

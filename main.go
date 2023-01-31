@@ -6,6 +6,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 	recover2 "github.com/kataras/iris/v12/middleware/recover"
+	"github.com/rs/cors"
 	"github.com/zqjzqj/pRuntime"
 	"iris-init/appWeb/routes"
 	"iris-init/config"
@@ -90,6 +91,15 @@ func main() {
 }
 
 func ListenWeb(appWeb *iris.Application) error {
+	cOption := cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+	}
+	if config.EnvIsDev() {
+		cOption.Debug = true
+	}
+	c := cors.New(cOption)
+	appWeb.WrapRouter(c.ServeHTTP)
 	appWeb.Use(recover2.New(), logger.New())
 	//注册路由
 	routes.RegisterRoutes(appWeb)
