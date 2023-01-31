@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	ReqTokenName       = "token"
+	ReqTokenName       = "Token"
 	ReqTokenHeaderName = "X-Token"
 )
 
