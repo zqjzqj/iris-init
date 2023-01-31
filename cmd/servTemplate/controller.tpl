@@ -21,7 +21,7 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) any {
     {{.Alias}}Serv := services.New{{.Model}}Service()
     {{.Alias}}, pager := {{.Alias}}Serv.ListPage(ctx)
     {{- if .View}}
-    if ctx.URLParamBoolDefault("API", false) {
+    if appWeb.IsApiReq(ctx) {
         return appWeb.NewPagerResponse(map[string]interface{}{
             "List": {{.Alias}}Serv.ShowMapList({{.Alias}}),
         }, pager)
@@ -41,7 +41,7 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) GetItem(ctx iris.Context) any {
 	{{.Alias}}Serv := services.New{{.Model}}Service()
 	{{.Alias}} := {{.Alias}}Serv.GetItem(ctx)
 	{{- if .View}}
-    if ctx.URLParamBoolDefault("API", false) {
+    if appWeb.IsApiReq(ctx) {
         return appWeb.NewSuccessResponse("", map[string]interface{}{
             "Item": {{.Alias}}.ShowMap(),
         })
