@@ -47,6 +47,9 @@ func ({{.Alias}}Serv {{.Model}}Service) GetItem(ctx iris.Context, _select ...str
 }
 
 func ({{.Alias}}Serv {{.Model}}Service) GetByID(id uint64, _select ...string) model.{{.Model}} {
+    if id == 0 {
+		return model.{{.Model}}{}
+	}
 	return {{.Alias}}Serv.repo.GetByID(id, _select...)
 }
 
