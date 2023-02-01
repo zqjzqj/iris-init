@@ -58,8 +58,6 @@ type ValidatorV9Interface interface {
 }
 
 func ScanValidatorByRequestPost(ctx iris.Context, v ValidatorV9Interface) error {
-	if err := ctx.ReadBody(v); err != nil {
-		return err
-	}
+	_ = ctx.ReadBody(v)
 	return nil
 }

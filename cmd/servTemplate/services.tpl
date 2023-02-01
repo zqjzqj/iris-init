@@ -56,7 +56,7 @@ func ({{.Alias}}Serv {{.Model}}Service) GetByID(id uint64, _select ...string) mo
 // 通过请求ctx编辑/新增一条数据
 func ({{.Alias}}Serv {{.Model}}Service) EditByCtx(ctx iris.Context) (model.{{.Model}}, error) {
 	{{.Alias}}Validator := {{.Model}}Validator{}
-	err := ctx.ReadBody(&{{.Alias}}Validator)
+	err := global.ScanValidatorByRequestPost(ctx, &{{.Alias}}Validator)
 	if err != nil {
 		return model.{{.Model}}{}, err
 	}
