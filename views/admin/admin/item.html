@@ -19,7 +19,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">头像</label>
                     <!--多文件使用 Files传递[]string{}-->
-                    {% include "../partials/upload.html" with More=false ID="Avatar" Name="Avatar" File=Data.Adm.Avatar %}
+                    {% include "../partials/upload.html" with More=false ID="Avatar" Name="Avatar" Accept="images" File=Data.Adm.Avatar %}
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">真实姓名</label>
