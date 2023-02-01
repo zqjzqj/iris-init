@@ -463,6 +463,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
     $("[data-action=upload-multiple]").each(function(k ,v){
         var id = $(v).attr("id")
         var inputName = $(v).attr("data-input-name")
+        var accept = $(v).attr("data-accept") || "file"
         var fileName = $(v).attr("data-file-name") || "File"
         var ListView = $('#list-view-'+id)
         var dataMore = $(v).attr("data-more")
@@ -477,7 +478,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
         uploadListIns = layui.upload.render({
             elem: '#'+id
             ,url: _uploadUrl
-            ,accept: 'file'
+            ,accept: accept
             ,multiple: more
             ,auto: false
             ,field: fileName

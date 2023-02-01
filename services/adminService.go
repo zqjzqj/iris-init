@@ -96,7 +96,7 @@ func (admServ AdminService) GetByID(id uint64, _select ...string) model.Admin {
 // 通过请求ctx编辑/新增一条数据
 func (admServ AdminService) EditByCtx(ctx iris.Context, admID uint64) (model.Admin, error) {
 	admValidator := AdminValidator{}
-	err := ctx.ReadBody(&admValidator)
+	err := global.ScanValidatorByRequestPost(ctx, &admValidator)
 	if err != nil {
 		return model.Admin{}, err
 	}

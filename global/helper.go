@@ -31,6 +31,15 @@ type ShuffleType interface {
 	map[string]interface{} | NumberIntType | string | interface{}
 }
 
+func GetFileSuffix(filename string) string {
+	_suffix := strings.Split(filename, ".")
+	_suffixLen := len(_suffix)
+	if _suffixLen > 1 {
+		return "." + _suffix[_suffixLen-1]
+	}
+	return ""
+}
+
 // StringFirstLower 字符串首字母小写
 func StringFirstLower(s string) string {
 	if s == "" {
