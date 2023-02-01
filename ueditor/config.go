@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"iris-init/ueditor/ueditorCommon"
+	"os"
 	"strings"
 )
 
@@ -91,7 +91,7 @@ func loadConfigFromFile(filePath string) (err error) {
 		return
 	}
 
-	cnfJson, err := ioutil.ReadFile(filePath)
+	cnfJson, err := os.ReadFile(filePath)
 	if err != nil {
 		return
 	}

@@ -130,7 +130,7 @@ func (serv Service) uploadFile(r *http.Request, fieldName string, params Uploade
 	if err != nil {
 		return
 	}
-
+	defer func() { _ = file.Close() }()
 	fileInfo = ResFileInfoWithState{}
 
 	_ = serv.uploader.SetParams(params)
