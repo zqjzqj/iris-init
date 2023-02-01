@@ -1,6 +1,6 @@
 package ueditorCommon
 
-const StaticRoot = "/static/uploads/ueditor/uploads"
+const StaticRoot = "/static/uploads/ueditor"
 
 const UeditorCfg = `{
   "imageActionName": "uploadimage",
