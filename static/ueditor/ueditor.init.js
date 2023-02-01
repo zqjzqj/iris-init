@@ -4,9 +4,11 @@ $(function(){
         if (initialFrameHeight === "" || initialFrameHeight === 0 || initialFrameHeight === undefined) {
             initialFrameHeight = 400
         }
+        var serverUrl = $(v).attr("data-server-url") || "/upload/ueditor"
         UE.getEditor($(v).attr("id"), {
             initialFrameHeight:initialFrameHeight,
             initialFrameWidth:'100%',
+            serverUrl:serverUrl,
         });
     })
 })
