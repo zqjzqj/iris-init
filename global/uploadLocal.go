@@ -1,11 +1,13 @@
 package global
 
 import (
+	"bytes"
 	"github.com/google/uuid"
 	"github.com/kataras/iris/v12"
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -43,13 +45,24 @@ func UploadLocalByCtx(ctx iris.Context, field, path, filename string) (filePath 
 	return filename, nil
 }
 
+func UploadLocalByBytes(_byte []byte, filename string) error {
+	return UploadLocalByReader(bytes.NewReader(_byte), filename)
+}
+
 func UploadLocalByReader(file io.Reader, filename string) error {
-	saveFile, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0666)
+	fileDir := filepath.Dir(filename)
+	if !FileExists(fileDir) {
+		// 文件夹不存在，创建
+		if err := os.MkdirAll(fileDir, 0766); err != nil {
+			return err
+		}
+	}
+	dstFile, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = saveFile.Close() }()
-	_, err = io.Copy(saveFile, file)
+	defer func() { _ = dstFile.Close() }()
+	_, err = io.Copy(dstFile, file)
 	if err != nil {
 		return err
 	}
