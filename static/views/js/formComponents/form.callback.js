@@ -110,10 +110,13 @@ function reloadParentLayerIframe(url) {
     for (i = 0; i < layerIfr.length; i++ ) {
         if (layerIndex == $(layerIfr[i]).attr("times") ) {
             if (i > 0) {
-                console.log("p000")
                 _ifr = $(layerIfr[i-1]).find("iframe")
                 if (url === undefined || url=== "") {
-                    _ifr.attr("src", _ifr.attr("src"))
+                    _url = _ifr[0].contentWindow.location.href
+                    if (_url === undefined || _url === "") {
+                        _url = _ifr.attr("src")
+                    }
+                    _ifr.attr("src", _url)
                 } else {
                     _ifr.attr("src", url)
                 }
@@ -124,7 +127,10 @@ function reloadParentLayerIframe(url) {
 
 function reloadLayuiShowFrame(url) {
     if (url === "" || url === undefined) {
-        url = top.$("#LAY_app_body .layui-show iframe").attr('src')
+        url = top.$("#LAY_app_body .layui-show iframe")[0].contentWindow.location.href
+        if (url === "" || url === undefined) {
+            url = top.$("#LAY_app_body .layui-show iframe").attr('src')
+        }
     }
     top.$("#LAY_app_body .layui-show iframe").attr('src', url)
 }
