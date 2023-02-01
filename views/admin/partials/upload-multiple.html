@@ -1,0 +1,46 @@
+<div class="layui-input-block">
+    <div class="layui-upload">
+        <button type="button"
+                class="layui-btn layui-btn-normal"
+                id="{{ID}}"
+                data-more="{{More}}"
+                data-input-name="{{Name}}"
+                data-file-name="{{FileName}}"
+                data-action="upload-multiple">
+            选择多文件
+        </button>
+        <div class="layui-upload-list">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>文件</th>
+                    <th>大小</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="list-view-{{ID}}" data-action="upload-multiple-tbody">
+                    {% for item in Files %}
+                    <tr>
+                       <td>
+                           <a href="<img src='{{item}}'>" class="_filename" data-action="open" data-title="文件查看" data-type="1" data-width="auto" data-height="95%">
+                               <img width="80" height="80" src="{{item}}">
+                           </a>
+                           <input type="hidden" name="{{Name}}" value="{{item}}">
+                       </td>
+                        <td class="file-size">0kb</td>
+                        <td style="color: #00a0e9">已知文件</td>
+                        <td>
+                            <button class="layui-btn layui-btn-mini disabled layui-hide"></button>
+                            <button class="layui-btn layui-btn-mini layui-btn-danger upload-delete">删除</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {%if More%}
+        <button type="button" class="layui-btn" id="upFile-{{ID}}">开始上传</button>
+        {%endif%}
+    </div>
+</div>
