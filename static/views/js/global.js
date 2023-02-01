@@ -30,7 +30,7 @@ $(function(){
     })
     listSearch.find("select").each(function(k, v){
         var value = getURLString($(v).attr("name"))
-        $(v).find("option[value="+value+"]").attr("selected",true);
+        $(v).find("option[value='"+value+"']").attr("selected",true);
     })
     var perms =  $("[data-perm]")
     if (perms.length > 0) {
