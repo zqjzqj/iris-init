@@ -21,7 +21,7 @@ func NewService(uploaderObj UploaderInterface, listObj ListInterface, rootPath s
 	if uploaderObj == nil {
 		// 没有注入uploader接口，则使用默认的方法
 		uploaderObj = &Uploader{
-			Storage: &storage.LocalFile{},
+			Storage: storage.LocalFile{},
 		}
 	}
 	_ = uploaderObj.SetRootPath(rootPath)
