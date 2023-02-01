@@ -69,6 +69,7 @@ $(function(){
             });
         });
     })
+
     var actionSort = $("[data-action=sort]")
     actionSort.each(function(k, v){
         var _field = $(v).attr("data-field")

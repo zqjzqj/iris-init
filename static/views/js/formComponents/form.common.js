@@ -1,6 +1,6 @@
 var ReqStatusSuccess = 0
 var ReqStatusErr = 1
-layui.use(['form', 'laydate'], function(){
+layui.use(['form', 'laydate', 'upload'], function(){
     $("[data-action=upload]").change(function(){
         file = this.files[0]
         _this = $(this)
@@ -21,7 +21,6 @@ layui.use(['form', 'laydate'], function(){
                 loadingClose()
             })
         }
-
     })
 
     $("[data-action=tips]").hover(function(){
@@ -180,9 +179,10 @@ layui.use(['form', 'laydate'], function(){
 
         return false;
     });
+
     $("[data-action=open]").on("click", function () {
-        var width = $(this).attr('data-width') || "80%"
-        var height = $(this).attr('data-height') || "90%"
+        var width = $(this).attr('data-width') || "85%"
+        var height = $(this).attr('data-height') || "95%"
         var title = $(this).attr('data-title');
         var type = $(this).attr('data-type') || 2;
         var before = $(this).attr("data-before") || null;
@@ -427,7 +427,6 @@ layui.use(['form', 'laydate'], function(){
     $("[data-action=checkboxChecked]").each(function(k, v){
         var dataVal = $(v).attr("data-value")
         _dataVal = dataVal.split(",")
-        console.log(_dataVal)
         $(v).find("input:checkbox").each(function(k, _v){
             var _val = $(_v).val()
             if (_val !== "" && $.inArray(_val, _dataVal) !== -1) {
@@ -439,4 +438,147 @@ layui.use(['form', 'laydate'], function(){
             }
         })
     })
+
+    $("[data-action=upload-multiple-tbody]").find("._filename").each(function(k, v){
+        var _this = $(this)
+        _this.parent().parent().find('.upload-delete').on('click', function(){
+            console.log($(this))
+            $(this).parent().parent().remove();
+            return false
+        })
+        var _url = $(v).find("img")[0].src
+        fetch(_url).then(function(res){
+            return res.blob()
+        }).then(function(data){
+            if (data.type.indexOf("image") === -1) {
+                _this.find("img").remove()
+                _this.html("<span style='color: #00a0e9'>点击下载附件</span>")
+                _this.attr("href", _url)
+                _this.attr("target", "_blank")
+                _this.unbind("click")
+            }
+            _this.parent('td').next('.file-size').text((data.size/1014).toFixed(1) + "kb")
+        })
+    })
+    $("[data-action=upload-multiple]").each(function(k ,v){
+        var id = $(v).attr("id")
+        var inputName = $(v).attr("data-input-name")
+        var fileName = $(v).attr("data-file-name") || "File"
+        var ListView = $('#list-view-'+id)
+        var dataMore = $(v).attr("data-more")
+        var more = false
+        if (dataMore === "true"  || dataMore === "True"  || dataMore === true) {
+            more = true
+        }
+        _uploadUrl = $(v).attr("upload-url")
+        if (_uploadUrl === "" || _uploadUrl === undefined) {
+            _uploadUrl = "/upload"
+        }
+        uploadListIns = layui.upload.render({
+            elem: '#'+id
+            ,url: _uploadUrl
+            ,accept: 'file'
+            ,multiple: more
+            ,auto: false
+            ,field: fileName
+            ,bindAction: '#upFile-'+id
+            ,choose: function(obj){
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function(index, file, result){
+                    var _td0 = file.name
+                    if (file.type.indexOf("image") !== -1) {
+                        _td0 =  '<a href="javascript:void(0);" id="upload-view-img-'+index+'">' +
+                                '<img width="80" height="80" src=""> '+ file.name +'' +
+                                '</a>'
+                    }
+                    var tr = $(['<tr id="upload-'+ index +'">'
+                        ,'<td>'+_td0+'</td>'
+                        ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+                        ,'<td>等待上传</td>'
+                        ,'<td>'
+                        ,'<button class="layui-btn layui-btn-mini upload-reload layui-hide">重传</button>'
+                        ,'<button class="layui-btn layui-btn-mini layui-btn-danger upload-delete">删除</button>'
+                        ,'</td>'
+                        ,'</tr>'].join(''));
+
+                    //单个重传
+                    tr.find('.upload-reload').on('click', function(){
+                        obj.upload(index, file);
+                        return false
+                    });
+
+                    //删除
+                    tr.find('.upload-delete').on('click', function(){
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+                    if (!more) {
+                        ListView.empty()
+                    }
+                    ListView.append(tr);
+                    if (file.type.indexOf("image") !== -1) {
+                        var reader = new FileReader();
+                        reader.readAsDataURL(file)
+                        reader.onload = function(e){
+                            var urlData = this.result;
+                            var _upAImg = $('#upload-view-img-'+index)
+                            _upAImg.find("img").attr("src", urlData)
+                            _upAImg.attr("href", "<img src='"+urlData+"'>")
+                            _upAImg.on('click', function(){
+                                layer.open({
+                                    type: 1,
+                                    shade: 0.3,
+                                    title: "查看图片",
+                                    shadeClose: false,
+                                    maxmin: true, //开启最大化最小化按钮
+                                    area: ['auto', '95%'],
+                                    closeBtn:1,
+                                    content: "<img src='"+urlData+"'>",
+                                })
+                                return false;
+                            })
+                        }
+                    }
+                    if (!more) {
+                        obj.upload(index, file);
+                    }
+                });
+            }
+            ,before: function(){
+                var i = 0
+                for (k in this.files) {
+                    i++
+                }
+                if (i === 0) {
+                    return
+                }
+                loadingShow()
+            }
+            ,done: function(res, index, upload){
+                loadingClose()
+                if(res.Code === 0){ //上传成功
+                    var tr = ListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    $('#upload-view-img-'+index).append("<input type='hidden' name='"+inputName+"' value='"+res.Data.Url+"'>")
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+                this.error(index, upload);
+            }
+            ,error: function(index, upload){
+                loadingClose()
+                var tr = ListView.find('tr#upload-'+ index)
+                    ,tds = tr.children();
+                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                if (more) {
+                    tds.eq(3).find('.test-upload-demo-reload').removeClass('layui-hide'); //显示重传
+                } else {
+                    delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+            }
+        });
+    })
+
 })
