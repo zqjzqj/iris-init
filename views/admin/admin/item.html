@@ -71,7 +71,7 @@
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">简介</label>
                     <div class="layui-input-block">
-                        <textarea name="Desc" placeholder="请输入内容" class="layui-textarea">{{Data.Adm.Desc}}</textarea>
+                        <script data-ueditor id="Desc" name="Desc" type="text/plain">{{Data.Adm.Desc|safe}}</script>
                     </div>
                 </div>
                 <div class="layui-form-item layui-layout-admin">

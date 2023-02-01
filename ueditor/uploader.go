@@ -90,7 +90,7 @@ func (up *Uploader) SetRootPath(path string) error {
 *
 上传文件
 */
-func (up *Uploader) UpFile(file multipart.File, fileHeader *multipart.FileHeader) (fileInfo ResFileInfo, err error) {
+func (up Uploader) UpFile(file multipart.File, fileHeader *multipart.FileHeader) (fileInfo ResFileInfo, err error) {
 	if file == nil || fileHeader == nil {
 		// 上传文件为空
 		err = errors.New(ueditorCommon.UPLOAD_FILE_IS_EMPTY)
@@ -132,7 +132,7 @@ func (up *Uploader) UpFile(file multipart.File, fileHeader *multipart.FileHeader
 *
 上传base64数据文件
 */
-func (up *Uploader) UpBase64(fileName, base64data string) (fileInfo ResFileInfo, err error) {
+func (up Uploader) UpBase64(fileName, base64data string) (fileInfo ResFileInfo, err error) {
 
 	imgData, err := base64.StdEncoding.DecodeString(base64data)
 	if err != nil {
@@ -175,7 +175,7 @@ func (up *Uploader) UpBase64(fileName, base64data string) (fileInfo ResFileInfo,
 *
 拉取远程文件并保存
 */
-func (up *Uploader) SaveRemote(remoteUrl string) (fileInfo ResFileInfo, err error) {
+func (up Uploader) SaveRemote(remoteUrl string) (fileInfo ResFileInfo, err error) {
 	urlObj, err := url.Parse(remoteUrl)
 	if err != nil {
 		err = errors.New(ueditorCommon.INVALID_URL)
@@ -251,7 +251,7 @@ func (up *Uploader) SaveRemote(remoteUrl string) (fileInfo ResFileInfo, err erro
 *
 根据原始文件名生成新文件名
 */
-func (up *Uploader) getFullName(oriName string) string {
+func (up Uploader) getFullName(oriName string) string {
 	timeNow := time.Now()
 	timeNowFormat := time.Now().Format("2006_01_02_15_04_05")
 	timeArr := strings.Split(timeNowFormat, "_")
@@ -289,7 +289,7 @@ func (up *Uploader) getFullName(oriName string) string {
 	return format + ext
 }
 
-func (up *Uploader) getFilePath(fullName string) string {
+func (up Uploader) getFilePath(fullName string) string {
 	return filepath.Join(up.RootPath, fullName)
 }
 
@@ -297,7 +297,7 @@ func (up *Uploader) getFilePath(fullName string) string {
 *
 校验文件大小
 */
-func (up *Uploader) checkSize(fileSize int64) (err error) {
+func (up Uploader) checkSize(fileSize int64) (err error) {
 	if fileSize > int64(up.params.MaxSize) {
 		err = errors.New(ueditorCommon.ERROR_SIZE_EXCEED)
 		return
@@ -309,7 +309,7 @@ func (up *Uploader) checkSize(fileSize int64) (err error) {
 *
 校验文件类型
 */
-func (up *Uploader) checkType(fileType string) (err error) {
+func (up Uploader) checkType(fileType string) (err error) {
 	isvalid := false
 	for _, fileTypeValid := range up.params.AllowFiles {
 		if strings.ToLower(fileType) == fileTypeValid {
@@ -330,7 +330,7 @@ func (up *Uploader) checkType(fileType string) (err error) {
 *
 设置文件存储对象
 */
-func (up *Uploader) SetStorage(storageObj storage.BaseInterface) (err error) {
+func (up Uploader) SetStorage(storageObj storage.BaseInterface) (err error) {
 	up.Storage = storageObj
 	return
 }

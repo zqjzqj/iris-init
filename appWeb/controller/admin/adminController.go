@@ -4,6 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"iris-init/appWeb"
+	"iris-init/appWeb/resourcePkg"
 	"iris-init/model"
 	"iris-init/services"
 	"net/http"
@@ -33,6 +34,7 @@ func (admCtrl AdminController) GetSelf(ctx iris.Context) mvc.Result {
 			"Roles": roleServ.ShowMapList(roleServ.List(ctx)),
 			"Self":  "1",
 		},
+		ResourcePkg: []appWeb.ResourcePkg{resourcePkg.Ueditor{}},
 	}, ctx)
 }
 
@@ -64,6 +66,7 @@ func (admCtrl AdminController) GetItem(ctx iris.Context) mvc.Result {
 			"Adm":   services.NewAdminService().GetItem(ctx).ShowMap(),
 			"Roles": roleServ.ShowMapList(roleServ.List(ctx)),
 		},
+		ResourcePkg: []appWeb.ResourcePkg{resourcePkg.Ueditor{}},
 	}, ctx)
 }
 
