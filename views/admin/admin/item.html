@@ -18,9 +18,9 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">头像</label>
-                    <!--多文件使用 Files传递[]string{}-->
-                    <!--<script data-ueditor id="Contact" name="Contact" type="text/plain">Ueditor</script>-->
+                    <div class="layui-input-block">
                     {% include "../partials/upload.html" with More=false ID="Avatar" Name="Avatar" Accept="images" File=Data.Adm.Avatar %}
+                    </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">真实姓名</label>

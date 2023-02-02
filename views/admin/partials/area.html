@@ -1,26 +1,24 @@
-<div class="layui-input-block">
-  <div class="layui-inline">
-    <select name="{{ProvinceName}}" class="province"
-            lay-filter="province"
-            data-city-class="{{CityClass}}"
-            data-region-class="{{RegionClass}}"
-            data-city-id="{{CityID}}"
-            data-region-id="{{RegionID}}"
-    >
-      <option value="">请选择省</option>
-      {% for item in Provinces %}
-      <option value="{{item.ID}}" {%if item.ID == ProvinceID%}selected{%endif%}>{{item.Name}}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="layui-inline">
-    <select name="{{CityName}}" lay-filter="{%if CityClass%}{{CityClass}}{%else%}city{%endif%}" class="{%if CityClass%}{{CityClass}}{%else%}city{%endif%}">
-      <option value="">请选择市</option>
-    </select>
-  </div>
-  <div class="layui-inline">
-    <select name="{{RegionName}}" lay-filter="{%if RegionClass%}{{RegionClass}}{%else%}region{%endif%}" class="{%if RegionClass%}{{RegionClass}}{%else%}region{%endif%}">
-      <option value="">请选择县/区</option>
-    </select>
-  </div>
+<div class="layui-inline">
+  <select name="{{ProvinceName}}" class="province"
+          lay-filter="province"
+          data-city-class="{{CityClass}}"
+          data-region-class="{{RegionClass}}"
+          data-city-id="{{CityID}}"
+          data-region-id="{{RegionID}}"
+  >
+    <option value="">请选择省</option>
+    {% for item in Provinces %}
+    <option value="{{item.ID}}" {%if item.ID == ProvinceID%}selected{%endif%}>{{item.Name}}</option>
+    {% endfor %}
+  </select>
+</div>
+<div class="layui-inline">
+  <select name="{{CityName}}" lay-filter="{%if CityClass%}{{CityClass}}{%else%}city{%endif%}" class="{%if CityClass%}{{CityClass}}{%else%}city{%endif%}">
+    <option value="">请选择市</option>
+  </select>
+</div>
+<div class="layui-inline">
+  <select name="{{RegionName}}" lay-filter="{%if RegionClass%}{{RegionClass}}{%else%}region{%endif%}" class="{%if RegionClass%}{{RegionClass}}{%else%}region{%endif%}">
+    <option value="">请选择县/区</option>
+  </select>
 </div>
