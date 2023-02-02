@@ -21,6 +21,7 @@ $(function(){
         $("input").attr("disabled", "disabled")
         $("textarea").attr("disabled", "disabled")
         $("select").attr("disabled", "disabled")
+        $("button").attr("disabled", "disabled")
         $(".layui-footer .layui-btn").hide()
     }
 
