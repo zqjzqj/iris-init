@@ -92,7 +92,7 @@ func ({{.Alias}}Serv {{.Model}}Service) ShowMapList({{.Alias}} []model.{{.Model}
 	return _{{.Alias}}
 }
 
-// 验证参数 并返回到一个新的adm model
+// 验证参数 并返回到一个新的{{.Model}} model
 func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Validator {{.Model}}Validator) (model.{{.Model}}, error) {
 	err := {{.Alias}}Validator.Validate()
 	if err != nil {
