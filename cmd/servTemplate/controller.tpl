@@ -15,9 +15,9 @@ type {{.Model}}Controller struct {}
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(http.MethodGet, "list", "GetList").SetName("{{.Model}}@{{.Model}}List")
-    b.Handle(http.MethodGet, "item", "GetItem").SetName("{{.Model}}@{{.Model}}:详情")
-    b.Handle(http.MethodPost, "edit", "PostEdit").SetName("{{.Model}}@{{.Model}}:编辑")
-    b.Handle(http.MethodPost, "delete", "PostDelete").SetName("{{.Model}}@{{.Model}}:删除")
+    b.Handle(http.MethodGet, "item", "GetItem").SetName("{{.Model}}@{{.Model}}List:详情")
+    b.Handle(http.MethodPost, "edit", "PostEdit").SetName("{{.Model}}@{{.Model}}List:编辑")
+    b.Handle(http.MethodPost, "delete", "PostDelete").SetName("{{.Model}}@{{.Model}}List:删除")
 }
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) any {
