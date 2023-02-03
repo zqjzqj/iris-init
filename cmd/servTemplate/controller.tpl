@@ -7,7 +7,7 @@ import (
     "iris-init/services"
     {{- if .View}}
     "iris-init/global"
-    {{- else}}
+    {{- end}}
     "net/http"
 )
 
