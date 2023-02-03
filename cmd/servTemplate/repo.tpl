@@ -90,3 +90,10 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByID(id uint64, _select ...string) m
 	tx.First(&{{.Alias}})
 	return {{.Alias}}
 }
+
+func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByWhere(where repoComm.SelectFrom) model.{{.Model}} {
+	tx := {{.Alias}}Repo.Orm.Model(model.{{.Model}}{})
+	{{.Alias}} := model.{{.Model}}{}
+	where.SetTxGorm(tx).Find(&{{.Alias}})
+	return {{.Alias}}
+}
