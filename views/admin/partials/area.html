@@ -5,6 +5,7 @@
           data-region-class="{{RegionClass}}"
           data-city-id="{{CityID}}"
           data-region-id="{{RegionID}}"
+          lay-search
   >
     <option value="">请选择省</option>
     {% for item in Provinces %}
@@ -13,12 +14,12 @@
   </select>
 </div>
 <div class="layui-inline">
-  <select name="{{CityName}}" lay-filter="{%if CityClass%}{{CityClass}}{%else%}city{%endif%}" class="{%if CityClass%}{{CityClass}}{%else%}city{%endif%}">
+  <select name="{{CityName}}" lay-search lay-filter="{%if CityClass%}{{CityClass}}{%else%}city{%endif%}" class="{%if CityClass%}{{CityClass}}{%else%}city{%endif%}">
     <option value="">请选择市</option>
   </select>
 </div>
 <div class="layui-inline">
-  <select name="{{RegionName}}" lay-filter="{%if RegionClass%}{{RegionClass}}{%else%}region{%endif%}" class="{%if RegionClass%}{{RegionClass}}{%else%}region{%endif%}">
+  <select name="{{RegionName}}" lay-search lay-filter="{%if RegionClass%}{{RegionClass}}{%else%}region{%endif%}" class="{%if RegionClass%}{{RegionClass}}{%else%}region{%endif%}">
     <option value="">请选择县/区</option>
   </select>
 </div>
