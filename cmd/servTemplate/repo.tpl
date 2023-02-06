@@ -15,6 +15,21 @@ func New{{.Model}}Repo() repoInterface.{{.Model}}Repo {
 	return &{{.Model}}RepoGorm{repoComm.NewRepoGorm()}
 }
 
+//该方法需要自己去完善 GetSearchWhereTx方法内部
+func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByWhere(where repoInterface.{{.Model}}SearchWhere) model.{{.Model}} {
+	{{.Alias}} := model.{{.Model}}{}
+	_ = {{.Alias}}Repo.GetSearchWhereTx(where, nil).First(&{{.Alias}})
+	return {{.Alias}}
+}
+
+//该方法需要自己去完善 GetSearchWhereTx方法内部
+func ({{.Alias}}Repo {{.Model}}RepoGorm) GetIDByWhere(where repoInterface.{{.Model}}SearchWhere) []uint64 {
+	var id []uint64
+	tx := {{.Alias}}Repo.GetSearchWhereTx(where, nil)
+	tx.Select("id").Model(model.{{.Model}}{}).Scan(&id)
+	return id
+}
+
 func ({{.Alias}}Repo {{.Model}}RepoGorm) Save({{.Alias}} *model.{{.Model}}, _select ...string) error {
 	return repoComm.SaveModel({{.Alias}}Repo.Orm, {{.Alias}}, _select...)
 }
@@ -37,9 +52,9 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) deleteByWhere(query string, args ...int
 
 func ({{.Alias}}Repo {{.Model}}RepoGorm) DeleteByID(id ...uint64) (rowsAffected int64, err error) {
 	if len(id) == 1 {
-		return {{.Alias}}Repo.DeleteByWhere("id", id[0])
+		return {{.Alias}}Repo.deleteByWhere("id", id[0])
 	}
-	return {{.Alias}}Repo.DeleteByWhere("id in ?", id)
+	return {{.Alias}}Repo.deleteByWhere("id in ?", id)
 }
 
 
@@ -84,12 +99,5 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByID(id uint64, _select ...string) m
 		tx = tx.Select(_select)
 	}
 	tx.First(&{{.Alias}})
-	return {{.Alias}}
-}
-
-func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByWhere(where repoComm.SelectFrom) model.{{.Model}} {
-	tx := {{.Alias}}Repo.Orm.Model(model.{{.Model}}{})
-	{{.Alias}} := model.{{.Model}}{}
-	where.SetTxGorm(tx).Find(&{{.Alias}})
 	return {{.Alias}}
 }
