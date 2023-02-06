@@ -15,12 +15,6 @@ func New{{.Model}}Repo() repoInterface.{{.Model}}Repo {
 	return &{{.Model}}RepoGorm{repoComm.NewRepoGorm()}
 }
 
-func ({{.Alias}}Repo {{.Model}}RepoGorm) GetIDByWhere(query string, args ...interface{}) []uint64 {
-	var id []uint64
-	{{.Alias}}Repo.Orm.Where(query, args...).Select("id").Model(model.{{.Model}}{}).Scan(&id)
-	return id
-}
-
 func ({{.Alias}}Repo {{.Model}}RepoGorm) Save({{.Alias}} *model.{{.Model}}, _select ...string) error {
 	return repoComm.SaveModel({{.Alias}}Repo.Orm, {{.Alias}}, _select...)
 }
@@ -36,7 +30,7 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) Delete({{.Alias}} model.{{.Model}}) (ro
 }
 
 //为了避免更换源之后的一些麻烦 该方法不建议在仓库结构{{.Model}}RepoGorm以外使用
-func ({{.Alias}}Repo {{.Model}}RepoGorm) DeleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
+func ({{.Alias}}Repo {{.Model}}RepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
 	tx := {{.Alias}}Repo.Orm.Where(query, args...).Delete(model.{{.Model}}{})
 	return tx.RowsAffected, tx.Error
 }

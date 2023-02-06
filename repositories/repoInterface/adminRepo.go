@@ -17,7 +17,6 @@ type AdminRepo interface {
 	GetByToken(token string, _select ...string) model.Admin
 	GetByUsername(username string, _select ...string) model.Admin
 	GetByRealName(realName string, _select ...string) model.Admin
-	GetIDByWhere(query string, args ...interface{}) []uint64
 }
 
 type AdmSearchWhere struct {

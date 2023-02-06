@@ -15,12 +15,6 @@ func NewAdminRepo() repoInterface.AdminRepo {
 	return &AdminRepoGorm{repoComm.NewRepoGorm()}
 }
 
-func (admRepo AdminRepoGorm) GetIDByWhere(query string, args ...interface{}) []uint64 {
-	var id []uint64
-	admRepo.Orm.Where(query, args...).Select("id").Model(model.Admin{}).Scan(&id)
-	return id
-}
-
 func (admRepo AdminRepoGorm) Save(admin *model.Admin, _select ...string) error {
 	return repoComm.SaveModel(admRepo.Orm, admin, _select...)
 }
