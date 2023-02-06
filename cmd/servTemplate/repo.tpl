@@ -29,11 +29,13 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) SaveOmit({{.Alias}} *model.{{.Model}}, 
 	return repoComm.SaveModelOmit({{.Alias}}Repo.Orm, {{.Alias}}, _omit...)
 }
 
+//这里因为gorm的缘故 传入的{{.Alias}}主键必须不为空
 func ({{.Alias}}Repo {{.Model}}RepoGorm) Delete({{.Alias}} model.{{.Model}}) (rowsAffected int64, err error) {
     tx := {{.Alias}}Repo.Orm.Delete({{.Alias}})
 	return tx.RowsAffected, tx.Error
 }
 
+//为了避免更换源之后的一些麻烦 该方法不建议在仓库结构{{.Model}}RepoGorm以外使用
 func ({{.Alias}}Repo {{.Model}}RepoGorm) DeleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
 	tx := {{.Alias}}Repo.Orm.Where(query, args...).Delete(model.{{.Model}}{})
 	return tx.RowsAffected, tx.Error
