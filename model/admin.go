@@ -103,8 +103,8 @@ func (adm Admin) ShowMap() map[string]interface{} {
 		"Sex":           adm.Sex,
 		"SexDesc":       global.SexDescMap[adm.Sex],
 		"LastLoginTime": "",
-		"CreatedAt":     time.Unix(adm.CreatedAt, 0).Format(global.DateTimeFormatStr),
-		"UpdatedAt":     time.Unix(adm.UpdatedAt, 0).Format(global.DateTimeFormatStr),
+		"CreatedAt":     time.Unix(adm.CreatedAt, 0).Format(time.DateTime),
+		"UpdatedAt":     time.Unix(adm.UpdatedAt, 0).Format(time.DateTime),
 		"RolesId":       adm.RolesId,
 		"Status":        adm.Status,
 		"StatusDesc":    AdmStatusDescMap[adm.Status],
@@ -115,7 +115,7 @@ func (adm Admin) ShowMap() map[string]interface{} {
 		"RolesNameStr":  strings.Join(adm.RolesName, ","),
 	}
 	if adm.LastLoginTime > 0 {
-		r["LastLoginTime"] = time.Unix(adm.LastLoginTime, 0).Format(global.DateTimeFormatStr)
+		r["LastLoginTime"] = time.Unix(adm.LastLoginTime, 0).Format(time.DateTime)
 	}
 	if adm.Avatar == "" {
 		r["Avatar"] = global.DefaultAvatar

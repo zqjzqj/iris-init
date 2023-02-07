@@ -5,9 +5,6 @@ const (
 	IsYes = 1
 	IsNo  = 0
 
-	DateTimeFormatStr        = "2006-01-02 15:04:05"
-	DateHisFormatStr         = "15:04:05"
-	DateFormatStr            = "2006-01-02"
 	DateYmFormatStr          = "2006-01"
 	DateTzFormatStr          = "2006-01-02T15:04:05+08:00"
 	DateTimeFormatStrCompact = "20060102150405"

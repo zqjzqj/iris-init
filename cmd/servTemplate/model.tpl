@@ -18,7 +18,7 @@ func ({{.Alias}} {{.Model}}) TableName() string {
 func ({{.Alias}} {{.Model}}) ShowMap() map[string]interface{} {
 	return map[string]interface{}{
 		"ID":         {{.Alias}}.ID,
-		"CreatedAt":  time.Unix({{.Alias}}.CreatedAt, 0).Format(global.DateTimeFormatStr),
-		"UpdatedAt":  time.Unix({{.Alias}}.UpdatedAt, 0).Format(global.DateTimeFormatStr),
+		"CreatedAt":  time.Unix({{.Alias}}.CreatedAt, 0).Format(time.DateTime),
+		"UpdatedAt":  time.Unix({{.Alias}}.UpdatedAt, 0).Format(time.DateTime),
 	}
 }

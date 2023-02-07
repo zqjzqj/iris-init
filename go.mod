@@ -1,6 +1,6 @@
 module iris-init
 
-go 1.19
+go 1.20
 
 require (
 	github.com/go-gormigrate/gormigrate/v2 v2.0.2

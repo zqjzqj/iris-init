@@ -363,7 +363,7 @@ func GenerateRangeNum(min, max int64) int64 {
 }
 
 func Hour2Unix(hour string) (time.Time, error) {
-	return time.ParseInLocation(DateTimeFormatStr, time.Now().Format(DateFormatStr)+" "+hour, GetLocalTime())
+	return time.ParseInLocation(time.DateTime, time.Now().Format(time.DateOnly)+" "+hour, GetLocalTime())
 }
 
 func Md5(s string) string {

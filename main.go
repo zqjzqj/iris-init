@@ -11,7 +11,6 @@ import (
 	"iris-init/appWeb/routes"
 	"iris-init/config"
 	"iris-init/cron"
-	"iris-init/global"
 	"iris-init/logs"
 	"iris-init/migrates"
 	"log"
@@ -19,6 +18,7 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"runtime"
+	"time"
 )
 
 var configPath = flag.String("config", "./config", "配置文件路径")
@@ -114,7 +114,7 @@ func ListenWeb(appWeb *iris.Application) error {
 	}
 	//监听http
 	err := appWeb.Run(iris.Addr(fmt.Sprintf(":%d", port)), iris.WithConfiguration(iris.Configuration{
-		TimeFormat:        global.DateTimeFormatStr,
+		TimeFormat:        time.DateTime,
 		RemoteAddrHeaders: []string{"X-Real-Ip", "X-Forwarded-For"},
 	}))
 	if err != nil {

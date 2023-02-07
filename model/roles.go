@@ -1,7 +1,6 @@
 package model
 
 import (
-	"iris-init/global"
 	"iris-init/model/mField"
 	"time"
 )
@@ -29,8 +28,8 @@ func (role Roles) ShowMap() map[string]interface{} {
 		"Name":       role.Name,
 		"Remark":     role.Remark,
 		"IsSysRole":  role.IsSysRole(),
-		"CreatedAt":  time.Unix(role.CreatedAt, 0).Format(global.DateTimeFormatStr),
-		"UpdatedAt":  time.Unix(role.UpdatedAt, 0).Format(global.DateTimeFormatStr),
+		"CreatedAt":  time.Unix(role.CreatedAt, 0).Format(time.DateTime),
+		"UpdatedAt":  time.Unix(role.UpdatedAt, 0).Format(time.DateTime),
 		"PermIdents": role.PermIdents,
 	}
 }

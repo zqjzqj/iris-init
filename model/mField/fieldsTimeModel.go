@@ -2,7 +2,6 @@ package mField
 
 import (
 	"database/sql/driver"
-	"iris-init/global"
 	"time"
 )
 
@@ -18,15 +17,15 @@ func (t *LocalTime) UnmarshalJSON(data []byte) (err error) {
 		*t = LocalTime(time.Time{})
 		return
 	}
-	now, err := time.Parse(global.DateTimeFormatStr, string(data))
+	now, err := time.Parse(time.DateTime, string(data))
 	*t = LocalTime(now)
 	return
 }
 
 func (t LocalTime) MarshalJSON() ([]byte, error) {
-	b := make([]byte, 0, len(global.DateTimeFormatStr)+2)
+	b := make([]byte, 0, len(time.DateTime)+2)
 	b = append(b, '"')
-	b = time.Time(t).AppendFormat(b, global.DateTimeFormatStr)
+	b = time.Time(t).AppendFormat(b, time.DateTime)
 	b = append(b, '"')
 	return b, nil
 }
@@ -35,7 +34,7 @@ func (t LocalTime) Value() (driver.Value, error) {
 	if t.String() == "0001-01-01 00:00:00" {
 		return nil, nil
 	}
-	return []byte(time.Time(t).Format(global.DateTimeFormatStr)), nil
+	return []byte(time.Time(t).Format(time.DateTime)), nil
 }
 
 func (t *LocalTime) Scan(v interface{}) error {
@@ -45,7 +44,7 @@ func (t *LocalTime) Scan(v interface{}) error {
 }
 
 func (t LocalTime) String() string {
-	return time.Time(t).Format(global.DateTimeFormatStr)
+	return time.Time(t).Format(time.DateTime)
 }
 
 func (t LocalTime) Unix() int64 {
