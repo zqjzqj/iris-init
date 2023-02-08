@@ -83,6 +83,9 @@ func (permRepo PermissionsRepoGorm) GetListPreloadChildren_2() []model.Permissio
 			OrderBy: []repoComm.OrderByParams{{
 				Column: "sort",
 				Desc:   false,
+			}, {
+				Column: "id",
+				Desc:   false,
 			}},
 			Preload: []repoComm.PreloadParams{
 				{
