@@ -112,9 +112,9 @@ func (permRepo PermissionsRepoGorm) GetListAsMenu(idents []string) []model.Permi
 					Args: []interface{}{
 						func(tx *gorm.DB) *gorm.DB {
 							if idents == nil { //不限制权限idents
-								return tx.Order("sort")
+								return tx.Order("sort asc, id asc")
 							}
-							return tx.Order("sort").Where("ident in ?", idents)
+							return tx.Order("sort asc, id asc").Where("ident in ?", idents)
 						},
 					},
 				},
