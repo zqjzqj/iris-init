@@ -105,6 +105,9 @@ func (permRepo PermissionsRepoGorm) GetListAsMenu(idents []string) []model.Permi
 			OrderBy: []repoComm.OrderByParams{{
 				Column: "sort",
 				Desc:   false,
+			}, {
+				Column: "id",
+				Desc:   false,
 			}},
 			Preload: []repoComm.PreloadParams{
 				{
