@@ -280,7 +280,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
     });
     var dataUrlEl = $("[data-action=url]")
     dataUrlEl.on("click", function(){
-        var url = $(this).data("url");
+        var url = $(this).data("data-url");
         if ( !url ) {
             url = $(this).attr("href")
         }
