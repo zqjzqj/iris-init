@@ -35,6 +35,12 @@ func RegisterRoutes(app *iris.Application) {
 	//b.Handle(http.MethodPost, "delete", "PostDelete").SetName("用户组@用户列表:删除")
 	//子按钮 子页面按钮点击跳转新的页面
 	//b.Handle(http.MethodPost, "delete", "PostDelete").SetName("用户组@用户列表:子页面:子页面")
+
+	//设置排序的方式
+	// 默认会按照 application.Party编写的顺序来生成路由菜单的顺序
+	// 设置排序方式 b.Handle(http.MethodGet, "list", "GetList").SetName("用户组.Sort{99}@用户列表.Sort{99}")
+	// 设置排序方式 b.Handle(http.MethodGet, "list", "GetList").SetName("用户组@用户列表.Sort{99}")
+	// 设置排序方式 b.Handle(http.MethodGet, "list", "GetList").SetName("用户组.Sort{99}@用户列表")
 	mvc.Configure(party, func(application *mvc.Application) {
 		application.Register(adminMiddleware.RegisterAdmin).Handle(&admin.LoginController{})
 

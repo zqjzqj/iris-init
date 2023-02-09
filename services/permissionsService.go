@@ -7,6 +7,7 @@ import (
 	"iris-init/model"
 	"iris-init/repositories"
 	"iris-init/repositories/repoInterface"
+	"strconv"
 	"strings"
 )
 
@@ -88,10 +89,11 @@ func (permServ PermissionService) GenerateAdminPermissionsByRoutes(app *iris.App
 		//分为目录和菜单
 		dir, mBtn := pName[0], pName[1]
 		if dir != "" {
-			perm, err := permServ.repo.GetOrCreatePermissionByName(dir, 0, model.PermissionsLevelDir)
+			_dir, sort := permServ.getNameAndSortByName(dir)
+			perm, err := permServ.repo.GetOrCreatePermissionByName(_dir, 0, model.PermissionsLevelDir, sort)
 			pid = perm.ID
 			if err != nil {
-				logs.PrintErr("get dir pid fail ", dir, err)
+				logs.PrintErr("get dir pid fail ", _dir, err)
 				continue
 			}
 		}
@@ -100,8 +102,9 @@ func (permServ PermissionService) GenerateAdminPermissionsByRoutes(app *iris.App
 		lenMBts := len(mBts)
 		var path model.Permissions
 		path = permServ.repo.GetByIdent(permServ.GeneratePermissionAuthIdentify(r.Method, r.Path))
-		if lenMBts >= 2 {
-			perm, err := permServ.repo.GetOrCreatePermissionByName(mBts[0], pid, model.PermissionsLevelMenu)
+		if lenMBts >= 2 { //有按钮存在
+			_btn, sort := permServ.getNameAndSortByName(mBts[0])
+			perm, err := permServ.repo.GetOrCreatePermissionByName(_btn, pid, model.PermissionsLevelMenu, sort)
 			pid = perm.ID
 			if err != nil {
 				logs.PrintErr(err)
@@ -112,19 +115,22 @@ func (permServ PermissionService) GenerateAdminPermissionsByRoutes(app *iris.App
 			mBts = mBts[:lenMBts-1]
 			for _, v := range mBts[1:] {
 				logs.PrintlnSuccess("get or create ...", v)
-				perm, _ = permServ.repo.GetOrCreatePermissionByName(v, pid, model.PermissionsLevelBtn)
+				_v, _sort := permServ.getNameAndSortByName(v)
+				perm, _ = permServ.repo.GetOrCreatePermissionByName(_v, pid, model.PermissionsLevelBtn, _sort)
 				pid = perm.ID
 			}
 			path = model.Permissions{Level: model.PermissionsLevelBtn}
 		} else {
 			path = model.Permissions{Level: model.PermissionsLevelMenu}
 		}
+
 		//没有修改
 		if path.ID > 0 && path.Pid == pid && path.Path == r.Path && path.Method == r.Method && path.Name == mBtn {
 			logs.PrintlnSuccess("exist path ", mBtn, path.Name, path.Method, path.Path)
 			continue
 		}
-		path.Name = mBtn
+		//排序处理
+		path.Name, path.Sort = permServ.getNameAndSortByName(mBtn)
 		path.Pid = pid
 		path.Path = r.Path
 		path.Method = r.Method
@@ -136,6 +142,21 @@ func (permServ PermissionService) GenerateAdminPermissionsByRoutes(app *iris.App
 		logs.PrintlnSuccess("save path success ", mBtn, path.Name, path.Method, path.Path)
 	}
 	logs.PrintlnSuccess("GenerateAdminPermissionsByRoutes OK.")
+}
+
+func (permServ PermissionService) getNameAndSortByName(name string) (newName string, sort uint) {
+	if strings.Contains(name, ".Sort{") {
+		_mBtn := strings.Split(name, ".Sort{")
+		newName = _mBtn[0]
+		_mBtn[1] = strings.TrimRight(_mBtn[1], "}")
+		_sort, err := strconv.Atoi(_mBtn[1])
+		if err != nil {
+			_sort = 100
+		}
+		sort = uint(_sort)
+		return newName, sort
+	}
+	return name, 100
 }
 
 func (permServ PermissionService) GeneratePermissionAuthIdentify(method, path string) string {

@@ -146,7 +146,7 @@ func (permRepo PermissionsRepoGorm) GetList(where repoInterface.PermissionsSearc
 	return perm
 }
 
-func (permRepo PermissionsRepoGorm) GetOrCreatePermissionByName(name string, pid uint64, level uint8) (model.Permissions, error) {
+func (permRepo PermissionsRepoGorm) GetOrCreatePermissionByName(name string, pid uint64, level uint8, sort uint) (model.Permissions, error) {
 	perm := model.Permissions{}
 	if permRepo.Orm.
 		Where("pid", pid).
@@ -156,6 +156,7 @@ func (permRepo PermissionsRepoGorm) GetOrCreatePermissionByName(name string, pid
 		perm.Pid = pid
 		perm.Name = name
 		perm.Level = level
+		perm.Sort = sort
 		perm.GenerateIdent()
 		err := permRepo.Save(&perm)
 		return perm, err

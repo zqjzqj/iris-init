@@ -13,7 +13,7 @@ type PermissionsRepo interface {
 	GetListAsMenu(idents []string) []model.Permissions
 	GetListPreloadChildren_2() []model.Permissions
 	TruncateTable()
-	GetOrCreatePermissionByName(name string, pid uint64, level uint8) (model.Permissions, error)
+	GetOrCreatePermissionByName(name string, pid uint64, level uint8, sort uint) (model.Permissions, error)
 	GetList(where PermissionsSearchWhere) []model.Permissions
 	GetListPreloadChildren(where PermissionsSearchWhere) []model.Permissions
 }
