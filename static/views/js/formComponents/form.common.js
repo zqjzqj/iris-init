@@ -46,7 +46,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
             funcSuccess = $(this).attr("data-success") || 'successCallback(response.Msg, response.Data, ifrIndex)';
         }
         funcError = $(this).attr("data-error") || 'errorCallback(response.Msg, response.Data, ifrIndex)';
-        var csrfContent = $("meta[name=csrf-token]").attr('content');
         var beforeFun = $(this).attr("data-before") || "";
         if ( beforeFun ) {
             var beforeFunRet = eval(beforeFun)();//console.log(beforeFunRet)
@@ -67,7 +66,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
         loadingShow();
         $(this).ajaxSubmit({
             dataType: 'json',
-            headers: {"X-CSRF-Token":csrfContent},
             success: function (response) {
                 loadingClose();
                 if ( funcCallback ) {
@@ -93,7 +91,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
         var title = $(this).attr("data-title") || "默认对话框";
         var msg = $(this).attr("data-msg") || "";
         var id = $(this).attr("data-id") || 0;
-        var csrfContent = $("meta[name=csrf-token]").attr('content');
         var ifrIndex = $(this).attr("data-ifr-index")
         var funcCallback = $(this).attr("data-callback") || "";
         var funcSuccess = $(this).attr("data-success") || 'successCallback(response.Msg, response.Data, ifrIndex)';
@@ -120,7 +117,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
                 type:"POST",
                 url: url,
                 data: requestData,
-                headers:{"X-CSRF-Token":csrfContent},
                 dataType:'json',
                 success: function (response) {
                     loadingClose();
@@ -143,7 +139,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
         var url = $(this).attr("href");
         var title = $(this).attr("data-title") || "你确定要删除吗?";
         var msg = $(this).attr("data-msg") || "";
-        var csrfContent = $("meta[name=csrf-token]").attr('content');
         var method = $(this).attr('data-method') || "POST";
         var id = $(this).attr("data-id") || 0;
         var ifrIndex = $(this).attr("data-ifr-index")
@@ -164,7 +159,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
                 type:method,
                 url: url,
                 data:requestData,
-                headers:{"X-CSRF-Token":csrfContent},
                 dataType:'json',
                 success: function (response) {
                     loadingClose();
@@ -249,7 +243,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
 
 
     $("[data-action=input]").on("click", function(){
-        var csrfContent = $("meta[name=csrf-token]").attr('content');
         var title = $(this).attr("data-title");
         var formType = $(this).attr("data-type") || 3;
         var method = $(this).attr("data-method") || "post";
@@ -272,7 +265,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
                 type : method,
                 url : url,
                 data : data,
-                headers:{"X-CSRF-Token":csrfContent},
                 dataType:'json',
                 success: function (response) {
                     loadingClose();
@@ -292,7 +284,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
         if ( !url ) {
             url = $(this).attr("href")
         }
-        var csrfContent = $("meta[name=csrf-token]").attr('content');
         var requestData = $(this).attr('data-params') || {};
         var method = $(this).attr("data-method") || "GET";
         if( typeof(requestData) == 'string' ){
@@ -304,7 +295,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
             type:method,
             url: url,
             data:requestData,
-            headers:{"X-CSRF-Token":csrfContent},
             dataType:'json',
             success: function (response) {
                 loadingClose();
@@ -320,7 +310,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
     });
     dataUrlEl.on("change", function(){
         var url = $(this).data("url");
-        var csrfContent = $("meta[name=csrf-token]").attr('content');
         var requestData = $(this).attr('data-params') || {};
         var method = $(this).attr("data-method") || "GET";
         if(typeof(requestData)=='string'){
@@ -332,7 +321,6 @@ layui.use(['form', 'laydate', 'upload'], function(){
             type:method,
             url: url,
             data:requestData,
-            headers:{"X-CSRF-Token":csrfContent},
             dataType:'json',
             success: function (response) {
                 loadingClose();
