@@ -451,7 +451,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
     $("[data-action=upload-multiple]").each(function(k ,v){
         var id = $(v).attr("id")
         var inputName = $(v).attr("data-input-name")
-        var _accept = $(v).attr("data-accept") || "file"
+        var accept = $(v).attr("data-accept") || "file"
         var fileName = $(v).attr("data-file-name") || "File"
         var ListView = $('#list-view-'+id)
         var dataMore = $(v).attr("data-more")
@@ -466,7 +466,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
         uploadListIns = layui.upload.render({
             elem: '#'+id
             ,url: _uploadUrl
-            ,accept: _accept
+            ,accept: accept
             ,multiple: more
             ,auto: false
             ,field: fileName
@@ -478,8 +478,8 @@ layui.use(['form', 'laydate', 'upload'], function(){
                     var _td0 = file.name
                     if (file.type.indexOf("image") !== -1) {
                         _td0 =  '<a href="javascript:void(0);" id="upload-view-img-'+index+'">' +
-                                '<img width="80" height="80" src=""> '+ file.name +'' +
-                                '</a>'
+                            '<img width="80" height="80" src=""> '+ file.name +'' +
+                            '</a>'
                     }
                     var tr = $(['<tr id="upload-'+ index +'">'
                         ,'<td>'+_td0+'</td>'
