@@ -1,14 +1,16 @@
 package tplStruct
 
 import (
+	"iris-init/global"
 	"reflect"
 	"strings"
 )
 
 type Field struct {
-	Name  string
-	Type  string
-	Label string
+	Name      string
+	NameSnake string
+	Type      string
+	Label     string
 }
 
 func RefStructField(_struct any) []Field {
@@ -35,6 +37,7 @@ func RefStructField(_struct any) []Field {
 				Type:  ref.Field(i).Type.String(),
 				Label: ref.Field(i).Tag.Get("label"),
 			}
+			_f.NameSnake = global.SnakeString(_f.Name)
 			if _f.Label == "" {
 				_f.Label = _f.Name
 			}

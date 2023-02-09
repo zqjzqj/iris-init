@@ -76,6 +76,9 @@ func CheckPassword(pwd string) error {
 
 // 驼峰转蛇形
 func SnakeString(s string) string {
+	if s == "ID" || s == "Id" {
+		return "id"
+	}
 	data := make([]byte, 0, len(s)*2)
 	j := false
 	num := len(s)
@@ -92,8 +95,8 @@ func SnakeString(s string) string {
 		}
 		data = append(data, d)
 	}
-	//ToLower把大写字母统一转小写
-	return strings.ToLower(string(data[:]))
+	//ToLower把大写字母统一转小写 并且替换错误的ID转化
+	return strings.ReplaceAll(strings.ToLower(string(data[:])), "i_d", "id")
 }
 
 func Day2YearMonthStrCh(_day uint, round bool) string {

@@ -39,7 +39,7 @@ func NewServTpl(_model, alias, ctrDir string) ServTpl {
 	st.SetAppPath(pwd)
 	_modelStruct, ok := Str2ModelMap[st.Model]
 	if !ok {
-		logs.PrintErr(fmt.Sprintf("请先在cmd/servTemplate/tplStruct/str2modelMap.go中添加model的映射关系%s=>model.%s{}, 或使用go run ./cmd/generateTpl.go -createModel=%s命令创建", _model, _model, _model))
+		logs.PrintErr(fmt.Sprintf("请先在cmd/servTemplate/tplStruct/str2modelMap.go中添加model的映射关系\"%s\":model.%s{}, , 或使用go run ./cmd/generateTpl.go -createModel=%s命令创建", _model, _model, _model))
 		panic("model参数错误")
 	}
 	st.ModelField = RefStructField(_modelStruct)
@@ -134,7 +134,7 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("controller err %v", err))
 		}
-	} else {
+	} else if servTpl.controllerDir != "" {
 		logs.PrintlnSuccess("create controller success")
 	}
 	if servTpl.ViewDir != "" {
