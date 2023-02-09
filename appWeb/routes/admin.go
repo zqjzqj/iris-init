@@ -41,6 +41,7 @@ func RegisterRoutes(app *iris.Application) {
 	// 设置排序方式 b.Handle(http.MethodGet, "list", "GetList").SetName("用户组.Sort{99}@用户列表.Sort{99}")
 	// 设置排序方式 b.Handle(http.MethodGet, "list", "GetList").SetName("用户组@用户列表.Sort{99}")
 	// 设置排序方式 b.Handle(http.MethodGet, "list", "GetList").SetName("用户组.Sort{99}@用户列表")
+	// 目录排序要写在 第一个目录路由的里面 如 admin和role都是用户管理 则用户管理目录排序要写在admin内
 	mvc.Configure(party, func(application *mvc.Application) {
 		application.Register(adminMiddleware.RegisterAdmin).Handle(&admin.LoginController{})
 
