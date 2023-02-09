@@ -16,6 +16,11 @@ const (
 	DefaultAvatar = "https://avatars.githubusercontent.com/u/16177551?s=48&v=4"
 )
 
+var IsMap = map[uint8]string{
+	IsYes: "是",
+	IsNo:  "否",
+}
+
 var SexDescMap = map[uint8]string{
 	SexMan:     "男",
 	SexWoman:   "女",
