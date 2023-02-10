@@ -475,11 +475,13 @@ layui.use(['form', 'laydate', 'upload'], function(){
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
                 //读取本地文件
                 obj.preview(function(index, file, result){
-                    var _td0 = file.name
+                    var _td0 = ""
                     if (file.type.indexOf("image") !== -1) {
-                        _td0 =  '<a href="javascript:void(0);" id="upload-view-img-'+index+'">' +
-                            '<img width="80" height="80" src=""> '+ file.name +'' +
-                            '</a>'
+                        _td0 =  '<a href="javascript:void(0);" id="upload-view-file-'+index+'">' +
+                                '<img width="80" height="80" src=""> '+ file.name +'' +
+                                '</a>'
+                    } else {
+                        _td0 = '<a href="javascript:void(0);" id="upload-view-file-'+index+'">'+file.name+'</a>'
                     }
                     var tr = $(['<tr id="upload-'+ index +'">'
                         ,'<td>'+_td0+'</td>'
@@ -512,7 +514,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
                         reader.readAsDataURL(file)
                         reader.onload = function(e){
                             var urlData = this.result;
-                            var _upAImg = $('#upload-view-img-'+index)
+                            var _upAImg = $('#upload-view-file-'+index)
                             _upAImg.find("img").attr("src", urlData)
                             _upAImg.attr("href", "<img src='"+urlData+"'>")
                             _upAImg.on('click', function(){
@@ -551,7 +553,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
                     var tr = ListView.find('tr#upload-'+ index)
                         ,tds = tr.children();
                     tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                    $('#upload-view-img-'+index).append("<input type='hidden' name='"+inputName+"' value='"+res.Data.Url+"'>")
+                    $('#upload-view-file-'+index).append("<input type='hidden' name='"+inputName+"' value='"+res.Data.Url+"'>")
                     return delete this.files[index]; //删除文件队列已经上传成功的文件
                 }
                 this.error(index, upload);
