@@ -145,15 +145,23 @@ func (roleServ RolesService) GetRoleByValidate(roleValidator RolesValidator) (mo
 
 // 在cmd/updateSysRoles.go中调用
 func (roleServ RolesService) UpdateSysRole() {
+	permissionServ := NewPermissionService()
 	for _, v := range model.GetSysRoles() {
-		_v := roleServ.repo.GetByID(v.ID)
-		if _v.ID > 0 {
-			logs.PrintlnInfo("update role ", _v.Name)
-			if _v.PermIdents == nil {
-				_v.PermIdents = make([]string, 0, len(v.PermIdents))
+		role := roleServ.repo.GetByID(v.ID)
+		permIdents := make([]string, 0, 5)
+		for _, _vPermIdent := range v.PermIdents {
+			for _, permIdent := range permissionServ.GetPermParentsByIdent(_vPermIdent) {
+				permIdents = append(permIdents, permIdent.Ident)
 			}
-			_v.PermIdents = append(_v.PermIdents, v.PermIdents...)
-			_ = roleServ.Save(&_v)
+		}
+		v.PermIdents = append(v.PermIdents, permIdents...)
+		if role.ID > 0 {
+			logs.PrintlnInfo("update role ", role.Name, role.PermIdents)
+			if role.PermIdents == nil {
+				role.PermIdents = make([]string, 0, len(v.PermIdents))
+			}
+			role.PermIdents = append(role.PermIdents, v.PermIdents...)
+			_ = roleServ.Save(&role)
 		} else {
 			logs.PrintlnInfo("create role ", v.Name)
 			_ = roleServ.Save(&v)

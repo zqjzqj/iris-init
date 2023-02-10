@@ -172,3 +172,26 @@ func (permServ PermissionService) IdentifyExists(ident string) bool {
 	}
 	return false
 }
+
+func (permServ PermissionService) GetByIdent(ident string, _select ...string) model.Permissions {
+	return permServ.repo.GetByIdent(ident, _select...)
+}
+
+func (permServ PermissionService) GetByID(id uint64, _select ...string) model.Permissions {
+	return permServ.repo.GetByID(id, _select...)
+}
+
+func (permServ PermissionService) GetPermParentsByIdent(ident string) []model.Permissions {
+	permIdent := permServ.GetByIdent(ident)
+	if permIdent.Pid == 0 {
+		return nil
+	}
+	r := permServ.GetByID(permIdent.Pid)
+	if r.Pid == 0 {
+		return []model.Permissions{r}
+	}
+	perms := make([]model.Permissions, 0, 2)
+	perms = append(perms, r)
+	perms = append(perms, permServ.GetPermParentsByIdent(r.Ident)...)
+	return perms
+}
