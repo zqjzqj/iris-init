@@ -19,7 +19,7 @@ func New{{.Model}}Repo() repoInterface.{{.Model}}Repo {
 //该方法需要自己去完善 GetSearchWhereTx方法内部
 func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByWhere(where repoInterface.{{.Model}}SearchWhere) model.{{.Model}} {
 	{{.Alias}} := model.{{.Model}}{}
-	_ = {{.Alias}}Repo.GetSearchWhereTx(where, nil).First(&{{.Alias}})
+	_ = {{.Alias}}Repo.GetSearchWhereTx(where, nil).Find(&{{.Alias}})
 	return {{.Alias}}
 }
 
@@ -99,7 +99,7 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByID(id uint64, _select ...string) m
 	if len(_select) > 0 {
 		tx = tx.Select(_select)
 	}
-	tx.First(&{{.Alias}})
+	tx.Find(&{{.Alias}})
 	return {{.Alias}}
 }
 
@@ -115,7 +115,7 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByIDLock(id uint64, _select ...strin
 	if len(_select) > 0 {
 		tx = tx.Select(_select)
 	}
-	tx.First(&{{.Alias}})
+	tx.Find(&{{.Alias}})
 
 	//这里返回一个空的释放锁方法 因为gorm在事务提交或回滚后会自动释放
 	return {{.Alias}}, func() {}
