@@ -53,6 +53,10 @@ func ({{.Alias}}Serv {{.Model}}Service) GetByID(id uint64, _select ...string) mo
 	return {{.Alias}}Serv.repo.GetByID(id, _select...)
 }
 
+func ({{.Alias}}Serv {{.Model}}Service) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
+	return {{.Alias}}Serv.repo.GetByIDLock(id, _select...)
+}
+
 // 通过请求ctx编辑/新增一条数据
 func ({{.Alias}}Serv {{.Model}}Service) EditByCtx(ctx iris.Context) (model.{{.Model}}, error) {
 	{{.Alias}}Validator := {{.Model}}Validator{}

@@ -3,6 +3,7 @@ package repositories
 import (
 	"gorm.io/gorm"
 	"iris-init/model"
+	"iris-init/orm"
 	"iris-init/repositories/repoComm"
 	"iris-init/repositories/repoInterface"
 )
@@ -100,4 +101,22 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByID(id uint64, _select ...string) m
 	}
 	tx.First(&{{.Alias}})
 	return {{.Alias}}
+}
+
+func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
+	if id == 0 {
+		panic("{{.Alias}}Repo.GetByIDLock id must > 0")
+	}
+	if !orm.IsBeginTransaction({{.Alias}}Repo.Orm) {
+		panic("{{.Alias}}Repo.GetByIDLock is must beginTransaction")
+	}
+	{{.Alias}} := model.{{.Model}}{}
+	tx := orm.LockForUpdate({{.Alias}}Repo.Orm.Where("id", id))
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	tx.First(&{{.Alias}})
+
+	//这里返回一个空的释放锁方法 因为gorm在事务提交或回滚后会自动释放
+	return {{.Alias}}, func() {}
 }

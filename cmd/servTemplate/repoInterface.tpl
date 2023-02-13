@@ -14,6 +14,7 @@ type {{.Model}}Repo interface {
 	Save(_model *model.{{.Model}}, _select ...string) error
 	SaveOmit(_model *model.{{.Model}}, _omit ...string) error
 	GetByID(id uint64, _select ...string) model.{{.Model}}
+	GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock)
 	GetByWhere(where {{.Model}}SearchWhere) model.{{.Model}}
 	GetIDByWhere(where {{.Model}}SearchWhere) []uint64
 }
