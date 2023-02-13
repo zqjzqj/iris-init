@@ -1,7 +1,6 @@
 package model
 
 import (
-	"iris-init/global"
 	"iris-init/model/mField"
 	"time"
 )
