@@ -29,7 +29,7 @@ func RefStructField(_struct any) []Field {
 		}
 		//对于组合的结构 只反射mField包下的
 		if ref.Field(i).Type.Kind() == reflect.Struct &&
-			strings.HasSuffix(ref.Field(i).Type.PkgPath(), "model/mField") {
+			strings.HasSuffix(ref.Field(i).Type.PkgPath(), "model/mField") || ref.Field(i).Tag.Get("ref") == "true" {
 			fields = append(fields, RefStructField(ref.Field(i).Type)...)
 		} else {
 			_f := Field{
