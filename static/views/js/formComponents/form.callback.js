@@ -135,19 +135,31 @@ function reloadLayuiShowFrame(url) {
     top.$("#LAY_app_body .layui-show iframe").attr('src', url)
 }
 
+
 //顶部ifr刷新或跳转
 function topIfrGo(url, ifrIndex){
     if (ifrIndex !== undefined && ifrIndex !== "") {
-        var layerIndex = top.layer.getFrameIndex(window.name)
-        if (ifrIndex === 0 || ifrIndex === "0") {
+        var closeAll = false
+        var _ifrIndex = ifrIndex.split("-")
+        ifrIndex = _ifrIndex[0]
+        if (_ifrIndex.length > 1 && _ifrIndex[1] === "closeAll") {
+            closeAll = true
+        }
+        //  var layerIndex = top.layer.getFrameIndex(window.name)
+        if (ifrIndex === 0 || ifrIndex === "0") {//刷新当前 - 不是当前打开的框架 而是打开最上层框架的框架
             reloadLayuiShowFrame(url)
-        } else if ( ifrIndex === "both" ) {
+        } else if ( ifrIndex === "both" ) {//刷新当前和父级框架
             reloadParentLayerIframe(url)
             reloadLayuiShowFrame("")
-        } else {
+        } else {//刷新父级框架
             reloadParentLayerIframe(url)
         }
-        top.layer.close(layerIndex)
+        if (closeAll === true){
+            top.layer.closeAll()
+        } else {
+            var layerIndex = top.layer.getFrameIndex(window.name)
+            top.layer.close(layerIndex)
+        }
         return
     }
     if (url === undefined || url=== "") {
