@@ -29,16 +29,27 @@ $(function(){
     listSearch.find("input").each(function(k, v){
         $(v).val(getURLString($(v).attr("name")))
     })
-    listSearch.find("select").each(function(k, v){
+    var listSearchSelect = listSearch.find("select")
+    listSearchSelect.each(function(k, v){
         var value = getURLString($(v).attr("name"))
         $(v).find("option[value='"+value+"']").attr("selected",true);
     })
-    if (listSearch.length > 0) {
+    if (listSearchSelect.length > 0) {
         layui.use(['form'], function(){
             var form = layui.form
             form.render('select');
         })
     }
+    listSearch.find("button[type=reset]").click(function (){
+        listSearch.find("input").val("")
+        listSearchSelect.find("option").removeAttr("selected")
+        if (listSearchSelect.length > 0) {
+            layui.use(['form'], function(){
+                var form = layui.form
+                form.render('select');
+            })
+        }
+    })
     var perms =  $("[data-perm]")
     if (perms.length > 0) {
         $.get("/admin/perms", {}, function(resp){
