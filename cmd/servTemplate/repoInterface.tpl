@@ -21,7 +21,7 @@ type {{.Model}}Repo interface {
 
 type {{.Model}}SearchWhere struct {
     {{- range .ModelField}}
-    {{.Name}}   {{.Type}}
+    {{.Name}}   string
     {{- end}}
 	SelectParams repoComm.SelectFrom
 }
