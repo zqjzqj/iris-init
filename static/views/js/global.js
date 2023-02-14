@@ -33,6 +33,12 @@ $(function(){
         var value = getURLString($(v).attr("name"))
         $(v).find("option[value='"+value+"']").attr("selected",true);
     })
+    if (listSearch.length > 0) {
+        layui.use(['form'], function(){
+            var form = layui.form
+            form.render('select');
+        })
+    }
     var perms =  $("[data-perm]")
     if (perms.length > 0) {
         $.get("/admin/perms", {}, function(resp){
