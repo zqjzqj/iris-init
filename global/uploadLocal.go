@@ -2,7 +2,6 @@ package global
 
 import (
 	"bytes"
-	"github.com/google/uuid"
 	"github.com/kataras/iris/v12"
 	"io"
 	"net/http"
@@ -18,7 +17,8 @@ func UploadLocalByUrl(url, path, filename string) (filePath string, err error) {
 	}
 	defer func() { _ = resp.Body.Close() }()
 	if filename == "" {
-		filename = Md5(uuid.New().String()) + GetFileSuffix(url)
+		_url := strings.Split(strings.TrimRight(url, "/"), "/")
+		filename = GetNewFilename(_url[len(_url)-1])
 	}
 	filename = strings.TrimRight(path, "/") + "/" + filename
 	err = UploadLocalByReader(resp.Body, filename)
@@ -35,7 +35,9 @@ func UploadLocalByCtx(ctx iris.Context, field, path, filename string) (filePath 
 	}
 	defer func() { _ = file.Close() }()
 	if filename == "" {
-		filename = Md5(uuid.New().String()) + GetFileSuffix(info.Filename)
+		//处理一下文件名 防止重复了
+		filename = GetNewFilename(info.Filename)
+		//filename = Md5(uuid.New().String()) + GetFileSuffix(info.Filename)
 	}
 	filename = strings.TrimRight(path, "/") + "/" + filename
 	err = UploadLocalByReader(file, filename)

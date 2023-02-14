@@ -13,6 +13,7 @@ type UploadController struct {
 
 // 本地上传方法 配合封装好的js使用 注意接收参数File与返回json格式
 func (uploadCtrl UploadController) Post(ctx iris.Context) appWeb.ResponseFormat {
+	//处理一下文件名 防止重复了
 	filename, err := global.UploadLocalByCtx(ctx, "File", "./static/uploads/", "")
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)

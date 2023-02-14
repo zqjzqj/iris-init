@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"time"
 )
 
@@ -29,6 +30,14 @@ type NumberIntType interface {
 
 type ShuffleType interface {
 	map[string]interface{} | NumberIntType | string | interface{}
+}
+
+// 上传文件序号
+var UploadFileNum uint64
+
+func GetNewFilename(oldFilename string) string {
+	i := atomic.AddUint64(&UploadFileNum, 1)
+	return fmt.Sprintf("%s%d_%s", time.Now().Format(DateTimeFormatStrCompact), i, oldFilename)
 }
 
 func GetFileSuffix(filename string) string {

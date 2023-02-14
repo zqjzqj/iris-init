@@ -439,8 +439,9 @@ layui.use(['form', 'laydate', 'upload'], function(){
             return res.blob()
         }).then(function(data){
             if (data.type.indexOf("image") === -1) {
+                var lastItem = decodeURI(_url.substring(_url.lastIndexOf('/') + 1))
                 _this.find("img").remove()
-                _this.html("<span style='color: #00a0e9'>点击下载附件</span>")
+                _this.html("<span style='color: #00a0e9'>"+lastItem+" 【点击下载附件】</span>")
                 _this.attr("href", _url)
                 _this.attr("target", "_blank")
                 _this.unbind("click")
