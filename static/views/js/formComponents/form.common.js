@@ -469,7 +469,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
             ,url: _uploadUrl
             ,accept: accept
             ,multiple: more
-            ,auto: false
+            ,auto: true
             ,field: fileName
             ,bindAction: '#upFile-'+id
             ,choose: function(obj){
@@ -489,16 +489,9 @@ layui.use(['form', 'laydate', 'upload'], function(){
                         ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
                         ,'<td>等待上传</td>'
                         ,'<td>'
-                        ,'<button class="layui-btn layui-btn-mini upload-reload layui-hide">重传</button>'
                         ,'<button class="layui-btn layui-btn-mini layui-btn-danger upload-delete">删除</button>'
                         ,'</td>'
                         ,'</tr>'].join(''));
-
-                    //单个重传
-                    tr.find('.upload-reload').on('click', function(){
-                        obj.upload(index, file);
-                        return false
-                    });
 
                     //删除
                     tr.find('.upload-delete').on('click', function(){
@@ -532,10 +525,10 @@ layui.use(['form', 'laydate', 'upload'], function(){
                                 return false;
                             })
                         }
-                    }
+                    }/*
                     if (!more) {
-                        obj.upload(index, file);
-                    }
+                       // obj.upload(index, file);
+                    }*/
                 });
             }
             ,before: function(){
@@ -549,7 +542,13 @@ layui.use(['form', 'laydate', 'upload'], function(){
                 loadingShow()
             }
             ,done: function(res, index, upload){
-                loadingClose()
+                var i = 0
+                for (k in this.files) {
+                    i++
+                }
+                if (i === 1) {
+                    loadingClose()
+                }
                 if(res.Code === 0){ //上传成功
                     var tr = ListView.find('tr#upload-'+ index)
                         ,tds = tr.children();
@@ -560,15 +559,17 @@ layui.use(['form', 'laydate', 'upload'], function(){
                 this.error(index, upload);
             }
             ,error: function(index, upload){
-                loadingClose()
+                var i = 0
+                for (k in this.files) {
+                    i++
+                }
+                if (i === 1) {
+                    loadingClose()
+                }
                 var tr = ListView.find('tr#upload-'+ index)
                     ,tds = tr.children();
                 tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                if (more) {
-                    tds.eq(3).find('.test-upload-demo-reload').removeClass('layui-hide'); //显示重传
-                } else {
-                    delete this.files[index]; //删除文件队列已经上传成功的文件
-                }
+                delete this.files[index]; //删除文件队列已经上传成功的文件
             }
         });
     })
