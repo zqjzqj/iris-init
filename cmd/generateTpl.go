@@ -9,6 +9,7 @@ import (
 
 var migrate = flag.String("migrate", "", "迁移models ','多个逗号分割")
 var model = flag.String("model", "", "model名")
+var _model = flag.String("_model", "", "model名,在创建services和repo的时候也生成一个临时用于复制ShowMap方法的model")
 var createModel = flag.String("createModel", "", "创建model")
 var tableName = flag.String("tableName", "", "创建model的表名, 与createModel关联使用 为空则使用model的蛇形作为表名")
 var view = flag.String("view", "", "创建view 默认空 不创建")
@@ -49,6 +50,13 @@ func main() {
 	}
 	if *view != "" {
 		servTpl.SetViewDir(*view)
+	}
+
+	if *_model != "" {
+		err := servTpl.GenerateModel()
+		if err != nil {
+			logs.PrintErr(err)
+		}
 	}
 	_ = servTpl.GenerateFile(true)
 	logs.PrintlnSuccess("GenerateFile OK...")

@@ -17,6 +17,8 @@ type ServTpl struct {
 	AppRoot              string
 	servTplPath          string
 	repoTplPath          string
+	modelTplPath         string
+	modelPath            string
 	repoInterfaceTplPath string
 	controllerTplPath    string
 	repoPath             string
@@ -61,6 +63,7 @@ func (servTpl *ServTpl) SetAppPath(AppRoot string) {
 	servTpl.controllerTplPath = fmt.Sprintf("%s/cmd/servTemplate/controller.tpl", servTpl.AppRoot)
 	servTpl.viewListTplPath = fmt.Sprintf("%s/cmd/servTemplate/viewList.tpl", servTpl.AppRoot)
 	servTpl.viewItemTplPath = fmt.Sprintf("%s/cmd/servTemplate/viewItem.tpl", servTpl.AppRoot)
+	servTpl.modelTplPath = fmt.Sprintf("%s/cmd/servTemplate/_model.tpl", servTpl.AppRoot)
 	servTpl.RefreshModel()
 }
 
@@ -75,6 +78,7 @@ func (servTpl *ServTpl) RefreshModel() {
 	servTpl.repoPath = fmt.Sprintf("%s/repositories/%s.go", servTpl.AppRoot, _m+"Repo")
 	servTpl.repoInterfacePath = fmt.Sprintf("%s/repositories/repoInterface/%s.go", servTpl.AppRoot, _m+"Repo")
 	servTpl.servPath = fmt.Sprintf("%s/services/%s.go", servTpl.AppRoot, _m+"Service")
+	servTpl.modelPath = fmt.Sprintf("%s/model/_%s.go", servTpl.AppRoot, _m)
 	if servTpl.controllerDir == "" {
 		servTpl.controllerPath = fmt.Sprintf("%s/appWeb/controller/%s.go", servTpl.AppRoot, _m+"Controller")
 	} else {
@@ -150,6 +154,13 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		}
 	}
 	return nil
+}
+
+func (servTpl ServTpl) GenerateModel() error {
+	return servTpl.generateFile(servTpl.modelTplPath, servTpl.modelPath, map[string]any{
+		"ModelField": servTpl.ModelField,
+		"TableName":  global.SnakeString(servTpl.Model),
+	})
 }
 
 func (servTpl ServTpl) GenerateRepoInterface() error {
