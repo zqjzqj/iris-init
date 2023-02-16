@@ -427,28 +427,29 @@ layui.use(['form', 'laydate', 'upload'], function(){
         })
     })
 
-    $("[data-action=upload-multiple-tbody]").find("._filename").each(function(k, v){
-        var _this = $(this)
-        _this.parent().parent().find('.upload-delete').on('click', function(){
-            console.log($(this))
-            $(this).parent().parent().remove();
-            return false
+    setTimeout(function(){
+        $("[data-action=upload-multiple-tbody]").find("._filename").each(function(k, v){
+            var _this = $(this)
+            _this.parent().parent().find('.upload-delete').on('click', function(){
+                $(this).parent().parent().remove();
+                return false
+            })
+            var _url = $(v).find("img")[0].src
+            fetch(_url).then(function(res){
+                return res.blob()
+            }).then(function(data){
+                if (data.type.indexOf("image") === -1) {
+                    var lastItem = decodeURI(_url.substring(_url.lastIndexOf('/') + 1))
+                    _this.find("img").remove()
+                    _this.html("<span style='color: #00a0e9'>"+lastItem+" 【点击下载附件】</span>")
+                    _this.attr("href", _url)
+                    _this.attr("target", "_blank")
+                    _this.unbind("click")
+                }
+                _this.parent('td').next('.file-size').text((data.size/1014).toFixed(1) + "kb")
+            })
         })
-        var _url = $(v).find("img")[0].src
-        fetch(_url).then(function(res){
-            return res.blob()
-        }).then(function(data){
-            if (data.type.indexOf("image") === -1) {
-                var lastItem = decodeURI(_url.substring(_url.lastIndexOf('/') + 1))
-                _this.find("img").remove()
-                _this.html("<span style='color: #00a0e9'>"+lastItem+" 【点击下载附件】</span>")
-                _this.attr("href", _url)
-                _this.attr("target", "_blank")
-                _this.unbind("click")
-            }
-            _this.parent('td').next('.file-size').text((data.size/1014).toFixed(1) + "kb")
-        })
-    })
+    }, 100)
     $("[data-action=upload-multiple]").each(function(k ,v){
         var id = $(v).attr("id")
         var inputName = $(v).attr("data-input-name")

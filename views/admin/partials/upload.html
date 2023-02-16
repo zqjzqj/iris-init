@@ -33,7 +33,9 @@
                 <td style="color: #00a0e9">已知文件</td>
                 <td>
                     <button class="layui-btn layui-btn-mini disabled layui-hide"></button>
+                    {% if !DisabledUpload %}
                     <button class="layui-btn layui-btn-mini layui-btn-danger upload-delete">删除</button>
+                    {% endif %}
                 </td>
             </tr>
             {% endif %}
@@ -49,7 +51,9 @@
                 <td style="color: #00a0e9">已知文件</td>
                 <td>
                     <button class="layui-btn layui-btn-mini disabled layui-hide"></button>
+                    {% if !DisabledUpload %}
                     <button class="layui-btn layui-btn-mini layui-btn-danger upload-delete">删除</button>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

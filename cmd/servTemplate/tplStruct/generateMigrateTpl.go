@@ -50,7 +50,7 @@ func (migrateTpl *MigrateTpl) RefreshName() {
 	}
 	migrateTpl.Name = strings.TrimLeft(migrateTpl.Name, "_")
 	migrateTpl.Name = fmt.Sprintf("%s_%s", time.Now().Format(global.DateTimeFormatStrCompact), global.StringFirstUpper(migrateTpl.Name))
-	migrateTpl.migratePath = fmt.Sprintf("%s/migrates/migrate_%s.go", migrateTpl.AppRoot, strings.ToLower(migrateTpl.Name))
+	migrateTpl.migratePath = fmt.Sprintf("%s/migrates/migrate_%s.go", migrateTpl.AppRoot, global.StringFirstLower(migrateTpl.Name))
 }
 
 func (migrateTpl MigrateTpl) GenerateFile() error {
