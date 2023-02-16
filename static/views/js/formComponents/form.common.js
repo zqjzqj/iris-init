@@ -449,7 +449,7 @@ layui.use(['form', 'laydate', 'upload'], function(){
                 _this.parent('td').next('.file-size').text((data.size/1014).toFixed(1) + "kb")
             })
         })
-    }, 100)
+    }, 300)
     $("[data-action=upload-multiple]").each(function(k ,v){
         var id = $(v).attr("id")
         var inputName = $(v).attr("data-input-name")
