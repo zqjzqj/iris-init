@@ -18,11 +18,25 @@ $(function(){
     })
 
     if (getURLString("form-disabled") === "1" ) {
-        $("input").attr("disabled", "disabled")
-        $("textarea").attr("disabled", "disabled")
-        $("select").attr("disabled", "disabled")
-        $("button").attr("disabled", "disabled")
-        $(".layui-footer .layui-btn").hide()
+        $("input").attr("disabled", true)
+        $("textarea").attr("disabled", true)
+        $("select").attr("disabled", true)
+        //$("button").attr("disabled", "disabled")
+        $("button").hide()
+        var notDisabled = $(".form-disabled-not")
+        notDisabled.show()
+        notDisabled.removeAttr("disabled")
+        //$(".layui-footer .layui-btn").hide()
+        layui.use(['form'], function(){
+            var form = layui.form
+            form.render('select');
+            form.render('radio');
+
+            $(".layui-input").removeClass('layui-disabled')
+            var  formRadio = $(".layui-form-radio")
+            formRadio.removeClass('layui-radio-disbaled')
+            formRadio.removeClass('layui-disabled')
+        })
     }
 
     var listSearch = $(".list-search")
