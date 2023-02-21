@@ -32,10 +32,12 @@ $(function(){
             form.render('select');
             form.render('radio');
 
-            $(".layui-input").removeClass('layui-disabled')
-            var  formRadio = $(".layui-form-radio")
-            formRadio.removeClass('layui-radio-disbaled')
-            formRadio.removeClass('layui-disabled')
+            setTimeout(function(){
+                $(".layui-input").removeClass('layui-disabled')
+                var  formRadio = $(".layui-form-radio")
+                formRadio.removeClass('layui-radio-disbaled')
+                formRadio.removeClass('layui-disabled')
+            }, 300)
         })
     }
 
