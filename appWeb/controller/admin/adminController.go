@@ -39,7 +39,7 @@ func (admCtrl AdminController) GetSelf(ctx iris.Context) mvc.Result {
 }
 
 func (admCtrl AdminController) PostSelf(ctx iris.Context) appWeb.ResponseFormat {
-	_adm, err := services.NewAdminService().EditByCtx(ctx, admCtrl.Admin.ID)
+	_adm, err := services.NewAdminService().SaveByCtx(ctx, admCtrl.Admin.ID)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}
@@ -71,7 +71,7 @@ func (admCtrl AdminController) GetItem(ctx iris.Context) mvc.Result {
 }
 
 func (admCtrl AdminController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
-	_adm, err := services.NewAdminService().EditByCtx(ctx, 0)
+	_adm, err := services.NewAdminService().SaveByCtx(ctx, 0)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}

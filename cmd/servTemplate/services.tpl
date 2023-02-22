@@ -58,16 +58,16 @@ func ({{.Alias}}Serv {{.Model}}Service) GetByIDLock(id uint64, _select ...string
 }
 
 // 通过请求ctx编辑/新增一条数据
-func ({{.Alias}}Serv {{.Model}}Service) EditByCtx(ctx iris.Context) (model.{{.Model}}, error) {
+func ({{.Alias}}Serv {{.Model}}Service) SaveByCtx(ctx iris.Context) (model.{{.Model}}, error) {
 	{{.Alias}}Validator := {{.Model}}Validator{}
 	err := global.ScanValidatorByRequestPost(ctx, &{{.Alias}}Validator)
 	if err != nil {
 		return model.{{.Model}}{}, err
 	}
-	return {{.Alias}}Serv.EditByValidator({{.Alias}}Validator)
+	return {{.Alias}}Serv.SaveByValidator({{.Alias}}Validator)
 }
 
-func ({{.Alias}}Serv {{.Model}}Service) EditByValidator({{.Alias}}Validator {{.Model}}Validator) (model.{{.Model}}, error) {
+func ({{.Alias}}Serv {{.Model}}Service) SaveByValidator({{.Alias}}Validator {{.Model}}Validator) (model.{{.Model}}, error) {
 	{{.Alias}}, err := {{.Alias}}Serv.Get{{.Model}}ByValidate({{.Alias}}Validator)
 	if err != nil {
 		return {{.Alias}}, err

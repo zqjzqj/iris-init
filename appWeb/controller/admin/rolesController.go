@@ -46,7 +46,7 @@ func (rolesCtrl RolesController) GetItem(ctx iris.Context) mvc.Result {
 }
 
 func (rolesCtrl RolesController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
-	role, err := services.NewRolesService().EditByCtx(ctx)
+	role, err := services.NewRolesService().SaveByCtx(ctx)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}

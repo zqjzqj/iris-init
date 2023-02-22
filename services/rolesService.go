@@ -50,16 +50,16 @@ func (roleServ RolesService) ShowMapList(roles []model.Roles) []map[string]inter
 	return _roles
 }
 
-func (roleServ RolesService) EditByCtx(ctx iris.Context) (model.Roles, error) {
+func (roleServ RolesService) SaveByCtx(ctx iris.Context) (model.Roles, error) {
 	roleValidator := RolesValidator{}
 	err := ctx.ReadBody(&roleValidator)
 	if err != nil {
 		return model.Roles{}, err
 	}
-	return roleServ.EditByValidator(roleValidator)
+	return roleServ.SaveByValidator(roleValidator)
 }
 
-func (roleServ RolesService) EditByValidator(roleValidator RolesValidator) (model.Roles, error) {
+func (roleServ RolesService) SaveByValidator(roleValidator RolesValidator) (model.Roles, error) {
 	role, err := roleServ.GetRoleByValidate(roleValidator)
 	if err != nil {
 		return role, err

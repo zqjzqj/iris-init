@@ -94,7 +94,7 @@ func (admServ AdminService) GetByID(id uint64, _select ...string) model.Admin {
 }
 
 // 通过请求ctx编辑/新增一条数据
-func (admServ AdminService) EditByCtx(ctx iris.Context, admID uint64) (model.Admin, error) {
+func (admServ AdminService) SaveByCtx(ctx iris.Context, admID uint64) (model.Admin, error) {
 	admValidator := AdminValidator{}
 	err := global.ScanValidatorByRequestPost(ctx, &admValidator)
 	if err != nil {
@@ -104,10 +104,10 @@ func (admServ AdminService) EditByCtx(ctx iris.Context, admID uint64) (model.Adm
 	if admID > 0 {
 		admValidator.ID = admID
 	}
-	return admServ.EditByValidator(admValidator)
+	return admServ.SaveByValidator(admValidator)
 }
 
-func (admServ AdminService) EditByValidator(admValidator AdminValidator) (model.Admin, error) {
+func (admServ AdminService) SaveByValidator(admValidator AdminValidator) (model.Admin, error) {
 	adm, err := admServ.GetAdmByValidate(admValidator)
 	if err != nil {
 		return adm, err

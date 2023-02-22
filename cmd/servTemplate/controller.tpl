@@ -69,7 +69,7 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) GetItem(ctx iris.Context) {{- if .Vie
 }
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
-	{{.Alias}}, err := services.New{{.Model}}Service().EditByCtx(ctx)
+	{{.Alias}}, err := services.New{{.Model}}Service().SaveByCtx(ctx)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}
