@@ -39,7 +39,7 @@ func RefStructField(_struct any) []Field {
 				Type:  ref.Field(i).Type.String(),
 				Label: ref.Field(i).Tag.Get("label"),
 			}
-			if _validate != "" {
+			if _validate != "" && _f.Name != "ID" {
 				_f.ValidateLabel = `validate:"` + _validate + `"`
 			}
 			_f.NameSnake = global.SnakeString(_f.Name)
