@@ -1,4 +1,4 @@
-package tplStruct
+package servTemplate
 
 import (
 	"fmt"
@@ -6,8 +6,6 @@ import (
 	"iris-init/logs"
 	"iris-init/sErr"
 	"os"
-	"os/exec"
-	"runtime"
 	"text/template"
 )
 
@@ -17,8 +15,6 @@ type ServTpl struct {
 	AppRoot              string
 	servTplPath          string
 	repoTplPath          string
-	modelTplPath         string
-	modelPath            string
 	repoInterfaceTplPath string
 	controllerTplPath    string
 	repoPath             string
@@ -29,7 +25,6 @@ type ServTpl struct {
 	ViewDir              string
 	viewListTplPath      string
 	viewItemTplPath      string
-	ModelField           []Field
 }
 
 func NewServTpl(_model, alias, ctrDir string) ServTpl {
@@ -39,12 +34,6 @@ func NewServTpl(_model, alias, ctrDir string) ServTpl {
 	st := ServTpl{Model: _model, Alias: alias, controllerDir: ctrDir}
 	pwd, _ := os.Getwd()
 	st.SetAppPath(pwd)
-	_modelStruct, ok := Str2ModelMap[st.Model]
-	if !ok {
-		logs.PrintErr(fmt.Sprintf("请先在cmd/servTemplate/tplStruct/str2modelMap.go中添加model的映射关系%s=>model.%s{}, 或使用go run ./cmd/generateTpl.go -createModel=%s命令创建", _model, _model, _model))
-		panic("model参数错误")
-	}
-	st.ModelField = RefStructField(_modelStruct)
 	return st
 }
 
@@ -63,7 +52,6 @@ func (servTpl *ServTpl) SetAppPath(AppRoot string) {
 	servTpl.controllerTplPath = fmt.Sprintf("%s/cmd/servTemplate/controller.tpl", servTpl.AppRoot)
 	servTpl.viewListTplPath = fmt.Sprintf("%s/cmd/servTemplate/viewList.tpl", servTpl.AppRoot)
 	servTpl.viewItemTplPath = fmt.Sprintf("%s/cmd/servTemplate/viewItem.tpl", servTpl.AppRoot)
-	servTpl.modelTplPath = fmt.Sprintf("%s/cmd/servTemplate/_model.tpl", servTpl.AppRoot)
 	servTpl.RefreshModel()
 }
 
@@ -78,7 +66,6 @@ func (servTpl *ServTpl) RefreshModel() {
 	servTpl.repoPath = fmt.Sprintf("%s/repositories/%s.go", servTpl.AppRoot, _m+"Repo")
 	servTpl.repoInterfacePath = fmt.Sprintf("%s/repositories/repoInterface/%s.go", servTpl.AppRoot, _m+"Repo")
 	servTpl.servPath = fmt.Sprintf("%s/services/%s.go", servTpl.AppRoot, _m+"Service")
-	servTpl.modelPath = fmt.Sprintf("%s/model/_%s.go", servTpl.AppRoot, _m)
 	if servTpl.controllerDir == "" {
 		servTpl.controllerPath = fmt.Sprintf("%s/appWeb/controller/%s.go", servTpl.AppRoot, _m+"Controller")
 	} else {
@@ -94,13 +81,6 @@ func (servTpl *ServTpl) RefreshModel() {
 }
 
 func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
-	defer func() {
-		if runtime.GOOS == "windows" {
-			_ = exec.Command("cmd", "/C", fmt.Sprintf("gofmt -l -w ./")).Run()
-		} else {
-			_ = exec.Command("bash", "-c", fmt.Sprintf("gofmt -l -w ./")).Run()
-		}
-	}()
 	err := servTpl.GenerateRepoInterface()
 	if err != nil {
 		if !ignoreErr {
@@ -108,8 +88,6 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("repoInterface err %v", err))
 		}
-	} else {
-		logs.PrintlnSuccess("create repoInterface success")
 	}
 	err = servTpl.GenerateRepo()
 	if err != nil {
@@ -118,8 +96,6 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("repo err %v", err))
 		}
-	} else {
-		logs.PrintlnSuccess("create repo success")
 	}
 	err = servTpl.GenerateService()
 	if err != nil {
@@ -128,8 +104,6 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("service err %v", err))
 		}
-	} else {
-		logs.PrintlnSuccess("create service success")
 	}
 	err = servTpl.GenerateController()
 	if err != nil {
@@ -138,8 +112,6 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 		} else {
 			logs.PrintlnWarning(fmt.Sprintf("controller err %v", err))
 		}
-	} else if servTpl.controllerDir != "" {
-		logs.PrintlnSuccess("create controller success")
 	}
 	if servTpl.ViewDir != "" {
 		err = servTpl.GenerateView()
@@ -149,36 +121,21 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 			} else {
 				logs.PrintlnWarning(fmt.Sprintf("view err %v", err))
 			}
-		} else {
-			logs.PrintlnSuccess("create view success")
 		}
 	}
 	return nil
 }
 
 func (servTpl ServTpl) GenerateRepoInterface() error {
-	return servTpl.generateFile(servTpl.repoInterfaceTplPath, servTpl.repoInterfacePath, map[string]any{
-		"ModelField": servTpl.ModelField,
-	})
+	return servTpl.generateFile(servTpl.repoInterfaceTplPath, servTpl.repoInterfacePath, nil)
 }
 
 func (servTpl ServTpl) GenerateRepo() error {
-	return servTpl.generateFile(servTpl.repoTplPath, servTpl.repoPath, map[string]any{
-		"ModelField": servTpl.ModelField,
-	})
+	return servTpl.generateFile(servTpl.repoTplPath, servTpl.repoPath, nil)
 }
 
 func (servTpl ServTpl) GenerateService() error {
-	return servTpl.generateFile(servTpl.servTplPath, servTpl.servPath, map[string]any{
-		"ModelField": servTpl.ModelField,
-	})
-}
-
-func (servTpl ServTpl) GenerateModel() error {
-	return servTpl.generateFile(servTpl.modelTplPath, servTpl.modelPath, map[string]any{
-		"ModelField": servTpl.ModelField,
-		"TableName":  global.SnakeString(servTpl.Model),
-	})
+	return servTpl.generateFile(servTpl.servTplPath, servTpl.servPath, nil)
 }
 
 func (servTpl ServTpl) GenerateController() error {
@@ -206,15 +163,13 @@ func (servTpl ServTpl) GenerateView() error {
 	viewList := fmt.Sprintf("%s/list.html", viewRoot)
 	viewItem := fmt.Sprintf("%s/item.html", viewRoot)
 	err := servTpl.generateFile(servTpl.viewListTplPath, viewList, map[string]any{
-		"View":       servTpl.ViewDir,
-		"ModelField": servTpl.ModelField,
+		"View": servTpl.ViewDir,
 	})
 	if err != nil {
 		return err
 	}
 	return servTpl.generateFile(servTpl.viewItemTplPath, viewItem, map[string]any{
-		"View":       servTpl.ViewDir,
-		"ModelField": servTpl.ModelField,
+		"View": servTpl.ViewDir,
 	})
 }
 

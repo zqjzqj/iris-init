@@ -128,7 +128,11 @@ func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Valida
 
 type {{.Model}}Validator struct {
 	{{- range .ModelField}}
+	{{- if ne .ValidateLabel ""}}
+	{{.Name}}   {{.Type}} `{{.ValidateLabel}} label:"{{.Label}}"`
+	{{- else}}
 	{{.Name}}   {{.Type}} `label:"{{.Label}}"`
+	{{- end}}
 	{{- end}}
 }
 

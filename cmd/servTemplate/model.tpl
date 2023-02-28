@@ -6,7 +6,7 @@ import (
 )
 
 type {{.Model}} struct {
-	mField.FieldsPk        
+	mField.FieldsPk
 	mField.FieldsTimeUnixModel
 }
 

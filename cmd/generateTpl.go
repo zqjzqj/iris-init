@@ -51,13 +51,12 @@ func main() {
 	if *view != "" {
 		servTpl.SetViewDir(*view)
 	}
-
+	_ = servTpl.GenerateFile(true)
 	if *_model != "" {
 		err := servTpl.GenerateModel()
 		if err != nil {
 			logs.PrintErr(err)
 		}
 	}
-	_ = servTpl.GenerateFile(true)
 	logs.PrintlnSuccess("GenerateFile OK...")
 }

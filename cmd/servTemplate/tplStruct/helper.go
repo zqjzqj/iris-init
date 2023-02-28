@@ -7,10 +7,11 @@ import (
 )
 
 type Field struct {
-	Name      string
-	NameSnake string
-	Type      string
-	Label     string
+	Name          string
+	NameSnake     string
+	Type          string
+	Label         string
+	ValidateLabel string //主要用于service的验证标签
 }
 
 func RefStructField(_struct any) []Field {
@@ -32,10 +33,14 @@ func RefStructField(_struct any) []Field {
 			strings.HasSuffix(ref.Field(i).Type.PkgPath(), "model/mField") || ref.Field(i).Tag.Get("ref") == "true" {
 			fields = append(fields, RefStructField(ref.Field(i).Type)...)
 		} else {
+			_validate := GetValidateStrByGormLabel(ref.Field(i).Tag.Get("gorm"))
 			_f := Field{
 				Name:  ref.Field(i).Name,
 				Type:  ref.Field(i).Type.String(),
 				Label: ref.Field(i).Tag.Get("label"),
+			}
+			if _validate != "" {
+				_f.ValidateLabel = `validate:"` + _validate + `"`
 			}
 			_f.NameSnake = global.SnakeString(_f.Name)
 			if _f.Label == "" {
@@ -45,4 +50,22 @@ func RefStructField(_struct any) []Field {
 		}
 	}
 	return fields
+}
+
+func GetValidateStrByGormLabel(gormLabel string) string {
+	_gormLabel := strings.Split(gormLabel, ";")
+	validate := ""
+	var required = true
+	for _, v := range _gormLabel {
+		if strings.HasPrefix(v, "size:") {
+			validate += "max=" + strings.TrimLeft(v, "size:") + ","
+		}
+		if strings.HasPrefix(v, "default:") {
+			required = false
+		}
+	}
+	if required {
+		validate += "required"
+	}
+	return validate
 }

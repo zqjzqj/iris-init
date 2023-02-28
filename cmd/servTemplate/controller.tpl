@@ -59,7 +59,7 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) GetItem(ctx iris.Context) {{- if .Vie
         },
     }, ctx)
     {{- else}}
-     if {{.Alias}}.ID == 0 {
+    if {{.Alias}}.ID == 0 {
         return appWeb.NewFailErrResponse(sErr.ErrNotFoundData, nil)
     }
     return appWeb.NewSuccessResponse("", map[string]interface{}{
