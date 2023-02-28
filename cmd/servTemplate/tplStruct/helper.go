@@ -67,5 +67,8 @@ func GetValidateStrByGormLabel(gormLabel string) string {
 	if required {
 		validate += "required"
 	}
+	if validate != "" {
+		validate = strings.TrimRight(validate, ",")
+	}
 	return validate
 }
