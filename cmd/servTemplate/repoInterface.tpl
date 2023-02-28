@@ -22,6 +22,9 @@ type {{.Model}}Repo interface {
 type {{.Model}}SearchWhere struct {
     {{- range .ModelField}}
     {{.Name}}   string
+    {{- if eq .Type "string" }}
+    {{.Name}}Like string
+    {{- end}}
     {{- end}}
 	SelectParams repoComm.SelectFrom
 }
