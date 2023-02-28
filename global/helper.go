@@ -29,7 +29,7 @@ type NumberIntType interface {
 }
 
 type ShuffleType interface {
-	map[string]interface{} | NumberIntType | string | interface{}
+	map[string]interface{} | NumberIntType | string
 }
 
 // 上传文件序号
