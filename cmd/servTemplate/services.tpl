@@ -51,6 +51,10 @@ func ({{.Alias}}Serv {{.Model}}Service) ListAvailable(_select ...string) []model
 	})
 }
 
+func ({{.Alias}}Serv {{.Model}}Service) ListByWhere(where repoInterface.{{.Model}}SearchWhere) []model.{{.Model}} {
+	return {{.Alias}}Serv.repo.GetList(where)
+}
+
 // 获取一条数据根据ctx
 // 这里条件为ID 传入ctx是方便后续修改参数条件
 func ({{.Alias}}Serv {{.Model}}Service) GetItem(ctx iris.Context, _select ...string) model.{{.Model}} {
