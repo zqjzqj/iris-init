@@ -40,6 +40,17 @@ func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.M
 	return {{.Alias}}Serv.repo.GetList(where), pager
 }
 
+func ({{.Alias}}Serv {{.Model}}Service) ListAvailable(_select ...string) []model.{{.Model}} {
+	if len(_select) == 0 {
+		_select = nil
+	}
+	return {{.Alias}}Serv.repo.GetList(repoInterface.{{.Model}}SearchWhere{
+		SelectParams: repoComm.SelectFrom{
+			Select: _select,
+		},
+	})
+}
+
 // 获取一条数据根据ctx
 // 这里条件为ID 传入ctx是方便后续修改参数条件
 func ({{.Alias}}Serv {{.Model}}Service) GetItem(ctx iris.Context, _select ...string) model.{{.Model}} {
