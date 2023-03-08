@@ -91,6 +91,18 @@ func ({{$.Alias}}Serv {{$.Model}}Service) GetBy{{.Name}}({{.NameFirstLower}} {{.
     }
     return {{$.Alias}}Serv.repo.GetBy{{.Name}}({{.NameFirstLower}}, _select...)
 }
+
+func ({{$.Alias}}Serv {{$.Model}}Service) Check{{.Name}}Valid({{$.Alias}} model.{{$.Model}}) error {
+    v := reflect.ValueOf({{$.Alias}}.{{.Name}})
+    if !v.IsValid() { // 值不存在
+         return sErr.New("无效的{{.Label}}")
+    }
+    _{{$.Alias}} := {{$.Alias}}Serv.GetBy{{.Name}}({{$.Alias}}.{{.Name}}, "id")
+    if _{{$.Alias}}.ID > 0 && {{$.Alias}}.ID != _{{$.Alias}}.ID {
+        return sErr.NewFmt("%s已存在", "{{.Label}}", {{$.Alias}}.Name)
+    }
+    return nil
+}
 {{- end}}
 {{- end}}
 
