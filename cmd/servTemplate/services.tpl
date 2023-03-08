@@ -8,6 +8,15 @@ import (
     "iris-init/repositories/repoComm"
     "iris-init/repositories/repoInterface"
     "iris-init/sErr"
+    {{- $stop := false }}
+    {{- range .ModelField}}
+    {{- if .Unique }}
+     {{- if not $stop}}
+     "reflect"
+     {{- end}}
+     {{- $stop := true }}
+    {{- end}}
+    {{- end}}
 )
 
 func New{{.Model}}Service() {{.Model}}Service {
@@ -51,6 +60,7 @@ func ({{.Alias}}Serv {{.Model}}Service) ListAvailable(_select ...string) []model
 	})
 }
 
+
 func ({{.Alias}}Serv {{.Model}}Service) ListByWhere(where repoInterface.{{.Model}}SearchWhere) []model.{{.Model}} {
 	return {{.Alias}}Serv.repo.GetList(where)
 }
@@ -71,6 +81,18 @@ func ({{.Alias}}Serv {{.Model}}Service) GetByID(id uint64, _select ...string) mo
 	}
 	return {{.Alias}}Serv.repo.GetByID(id, _select...)
 }
+
+{{- range .ModelField}}
+{{- if .Unique }}
+func ({{$.Alias}}Serv {{$.Model}}Service) GetBy{{.Name}}({{.NameFirstLower}} {{.Type}}, _select ...string) model.{{$.Model}} {
+    v := reflect.ValueOf({{.NameFirstLower}})
+    if !v.IsValid() { // 值不存在
+         return model.{{$.Model}}{};
+    }
+    return {{$.Alias}}Serv.repo.GetBy{{.Name}}({{.NameFirstLower}}, _select...)
+}
+{{- end}}
+{{- end}}
 
 func ({{.Alias}}Serv {{.Model}}Service) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
 	return {{.Alias}}Serv.repo.GetByIDLock(id, _select...)

@@ -17,6 +17,11 @@ type {{.Model}}Repo interface {
 	GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock)
 	GetByWhere(where {{.Model}}SearchWhere) model.{{.Model}}
 	GetIDByWhere(where {{.Model}}SearchWhere) []uint64
+    {{- range .ModelField}}
+    {{- if .Unique }}
+    GetBy{{.Name}}({{.NameFirstLower}} {{.Type}}, _select ...string) model.{{$.Model}}
+    {{- end}}
+    {{- end}}
 }
 
 type {{.Model}}SearchWhere struct {

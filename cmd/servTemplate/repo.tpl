@@ -108,6 +108,20 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByID(id uint64, _select ...string) m
 	return {{.Alias}}
 }
 
+{{- range .ModelField}}
+{{- if .Unique }}
+func ({{$.Alias}}Repo {{$.Model}}RepoGorm) GetBy{{.Name}}({{.NameFirstLower}} {{.Type}}, _select ...string) model.{{$.Model}} {
+    {{$.Alias}} := model.{{$.Model}}{}
+	tx := {{$.Alias}}Repo.Orm.Where("{{.NameSnake}}", {{.NameFirstLower}})
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	tx.Find(&{{$.Alias}})
+	return {{$.Alias}}
+}
+{{- end}}
+{{- end}}
+
 func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
 	if id == 0 {
 		panic("{{.Alias}}Repo.GetByIDLock id must > 0")

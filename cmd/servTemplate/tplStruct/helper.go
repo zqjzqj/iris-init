@@ -7,11 +7,13 @@ import (
 )
 
 type Field struct {
-	Name          string
-	NameSnake     string
-	Type          string
-	Label         string
-	ValidateLabel string //主要用于service的验证标签
+	Name           string
+	NameSnake      string
+	NameFirstLower string
+	Type           string
+	Label          string
+	ValidateLabel  string //主要用于service的验证标签
+	Unique         bool
 }
 
 func RefStructField(_struct any) []Field {
@@ -33,12 +35,14 @@ func RefStructField(_struct any) []Field {
 			strings.HasSuffix(ref.Field(i).Type.PkgPath(), "model/mField") || ref.Field(i).Tag.Get("ref") == "true" {
 			fields = append(fields, RefStructField(ref.Field(i).Type)...)
 		} else {
-			_validate := GetValidateStrByGormLabel(ref.Field(i).Tag.Get("gorm"))
+			_tag := ref.Field(i).Tag
+			_validate, _unique := GetValidateStrByGormLabel(_tag.Get("gorm"))
 			_f := Field{
 				Name:  ref.Field(i).Name,
 				Type:  ref.Field(i).Type.String(),
 				Label: ref.Field(i).Tag.Get("label"),
 			}
+			_f.NameFirstLower = global.StringFirstLower(_f.Name)
 			if _validate != "" && _f.Name != "ID" {
 				_f.ValidateLabel = `validate:"` + _validate + `"`
 			}
@@ -46,15 +50,17 @@ func RefStructField(_struct any) []Field {
 			if _f.Label == "" {
 				_f.Label = _f.Name
 			}
+			if _tag.Get("Unique") == "true" || _unique {
+				_f.Unique = true
+			}
 			fields = append(fields, _f)
 		}
 	}
 	return fields
 }
 
-func GetValidateStrByGormLabel(gormLabel string) string {
+func GetValidateStrByGormLabel(gormLabel string) (validate string, unique bool) {
 	_gormLabel := strings.Split(gormLabel, ";")
-	validate := ""
 	var required = true
 	for _, v := range _gormLabel {
 		if strings.HasPrefix(v, "size:") {
@@ -63,6 +69,10 @@ func GetValidateStrByGormLabel(gormLabel string) string {
 		if strings.HasPrefix(v, "default:") {
 			required = false
 		}
+		//如果包含唯一索引
+		if strings.HasPrefix(v, "index:") && strings.Contains(v, "unique") {
+			unique = true
+		}
 	}
 	if required {
 		validate += "required"
@@ -70,5 +80,5 @@ func GetValidateStrByGormLabel(gormLabel string) string {
 	if validate != "" {
 		validate = strings.TrimRight(validate, ",")
 	}
-	return validate
+	return
 }
