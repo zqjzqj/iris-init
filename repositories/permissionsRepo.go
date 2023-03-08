@@ -112,13 +112,28 @@ func (permRepo PermissionsRepoGorm) GetListAsMenu(idents []string) []model.Permi
 			Preload: []repoComm.PreloadParams{
 				{
 					Query: "Children",
-					Args: []interface{}{
-						func(tx *gorm.DB) *gorm.DB {
-							if idents == nil { //不限制权限idents
-								return tx.Order("sort asc, id asc")
+					Args: func() repoComm.SelectFrom {
+						var where []repoComm.WhereParams
+						if len(idents) > 0 {
+							where = []repoComm.WhereParams{
+								{
+									Query: "ident in ?",
+									Args:  []interface{}{idents},
+								},
 							}
-							return tx.Order("sort asc, id asc").Where("ident in ?", idents)
-						},
+						}
+						return repoComm.SelectFrom{
+							Where: where,
+							OrderBy: []repoComm.OrderByParams{
+								{
+									Column: "sort",
+									Desc:   false,
+								},
+								{
+									Column: "id",
+									Desc:   false,
+								},
+							}}
 					},
 				},
 			},

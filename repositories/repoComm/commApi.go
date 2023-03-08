@@ -14,7 +14,7 @@ type RepoInterface interface {
 	//第一个参数为执行事务的代码func
 	//第二个参数为关联的数据仓库
 	//第三个参数为关联的其他数据仓库 与第二个参与一样 分开是因为必须要求有一个传递一个关联仓库就算是nil值以防开发时忘记
-	Transaction(f func() error, _repo RepoInterface, _repos ...RepoInterface) error
+	Transaction(f func() error, _repos ...RepoInterface) error
 }
 
 func SaveModel(_orm, _model any, _select ...string) error {
@@ -53,7 +53,7 @@ type OrderByParams struct {
 // 用于关联预加载
 type PreloadParams struct {
 	Query string
-	Args  []interface{}
+	Args  func() SelectFrom
 }
 
 type WhereParams struct {
@@ -89,7 +89,15 @@ func (selectFrom SelectFrom) SetTxGorm(tx *gorm.DB) *gorm.DB {
 	}
 	if len(selectFrom.Preload) > 0 {
 		for _, v := range selectFrom.Preload {
-			tx.Preload(v.Query, v.Args...)
+			if v.Args == nil {
+				tx.Preload(v.Query)
+			} else {
+				_args := v.Args()
+				tx.Preload(v.Query, func(_tx *gorm.DB) *gorm.DB {
+					//这里where为空主要是需要去给_tx一个AddClause 不然SetTxGorm返回的tx无法生效
+					return _args.SetTxGorm(_tx.Where(""))
+				})
+			}
 		}
 	}
 	if len(selectFrom.Where) > 0 {

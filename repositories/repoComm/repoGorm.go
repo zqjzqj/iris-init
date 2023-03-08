@@ -25,12 +25,7 @@ func (repo *RepoGorm) ResetOrm() {
 	repo.Orm = orm.GetDb()
 }
 
-func (repo *RepoGorm) Transaction(f func() error, _repo RepoInterface, _repos ...RepoInterface) error {
-	if _repos == nil || len(_repos) == 0 {
-		_repos = []RepoInterface{_repo}
-	} else {
-		_repos = append(_repos, _repo)
-	}
+func (repo *RepoGorm) Transaction(f func() error, _repos ...RepoInterface) error {
 	return repo.Orm.Transaction(func(tx *gorm.DB) error {
 		repo.SetOrm(tx)
 		defer repo.ResetOrm()
