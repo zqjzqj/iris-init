@@ -174,7 +174,18 @@ func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Valida
 	}
 	//完成其他的赋值逻辑处理...
     {{- range .ModelField}}
+    {{- if not .Unique }}
     {{$.Alias}}.{{.Name}} = {{$.Alias}}Validator.{{.Name}}
+    {{- end}}
+    {{- end}}
+
+    {{- range .ModelField}}
+    {{- if .Unique }}
+    if err = {{$.Alias}}Serv.Check{{.Name}}Valid({{$.Alias}}); err != nil {
+        return {{$.Alias}}, err
+    }
+    {{$.Alias}}.{{.Name}} = {{$.Alias}}Validator.{{.Name}}
+    {{- end}}
     {{- end}}
 	return {{.Alias}}, nil
 }
