@@ -47,7 +47,7 @@ func (migrateTpl *MigrateTpl) SetModel(models []string) {
 func (migrateTpl *MigrateTpl) RefreshName() {
 	migrateTpl.Name = strings.Join(migrateTpl.Models, "_")
 	migrateTpl.Name = strings.ToLower(migrateTpl.Name)
-	migrateTpl.Name = fmt.Sprintf("%s_%s", time.Now().Format(time.DateTimeCompact), global.StringFirstUpper(migrateTpl.Name))
+	migrateTpl.Name = fmt.Sprintf("%s_%s", time.Now().Format(global.DateTimeFormatStrCompact), global.StringFirstUpper(migrateTpl.Name))
 	migrateTpl.migratePath = fmt.Sprintf("%s/migrates/migrate_%s.go", migrateTpl.AppRoot, strings.ToLower(migrateTpl.Name))
 }
 
