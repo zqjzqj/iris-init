@@ -5,12 +5,14 @@
         <div class="layui-card-body" style="padding: 15px;">
             <form class="layui-form" action="/{{.Alias}}/edit" method="post" data-action="form" data-ifr-index="0" lay-filter="component-form-group">
                 {{- range .ModelField}}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{{.Label}}</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="{{.Name}}" value="{{printf "{{Data.Item"}}.{{.Name}}{{print "}}"}}" autocomplete="off" placeholder="{{.Label}}" class="layui-input">
+                    {{- if not .OnlyRead}}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{.Label}}</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="{{.Name}}" value="{{printf "{{Data.Item"}}.{{.Name}}{{print "}}"}}" autocomplete="off" placeholder="{{.Label}}" class="layui-input">
+                        </div>
                     </div>
-                </div>
+                    {{- end}}
                 {{- end}}
                 <div class="layui-form-item layui-layout-admin">
                     <div class="layui-input-block">

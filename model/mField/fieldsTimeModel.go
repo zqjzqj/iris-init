@@ -6,8 +6,8 @@ import (
 )
 
 type FieldsTimeModel struct {
-	CreatedAt LocalTime
-	UpdatedAt LocalTime
+	CreatedAt LocalTime `OnlyRead:"true"`
+	UpdatedAt LocalTime `OnlyRead:"true"`
 }
 
 type LocalTime time.Time

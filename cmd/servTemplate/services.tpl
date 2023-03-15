@@ -174,7 +174,9 @@ func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Valida
 	}
 	//完成其他的赋值逻辑处理...
     {{- range .ModelField}}
-    {{$.Alias}}.{{.Name}} = {{$.Alias}}Validator.{{.Name}}
+        {{- if not .OnlyRead}}
+        {{$.Alias}}.{{.Name}} = {{$.Alias}}Validator.{{.Name}}
+        {{- end}}
     {{- end}}
 
     {{- range .ModelField}}
@@ -189,11 +191,13 @@ func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Valida
 
 type {{.Model}}Validator struct {
 	{{- range .ModelField}}
-	{{- if ne .ValidateLabel ""}}
-	{{.Name}}   {{.Type}} `{{.ValidateLabel}} label:"{{.Label}}"`
-	{{- else}}
-	{{.Name}}   {{.Type}} `label:"{{.Label}}"`
-	{{- end}}
+        {{- if not .OnlyRead}}
+            {{- if ne .ValidateLabel ""}}
+            {{.Name}}   {{.Type}} `{{.ValidateLabel}} label:"{{.Label}}"`
+            {{- else}}
+            {{.Name}}   {{.Type}} `label:"{{.Label}}"`
+            {{- end}}
+        {{- end}}
 	{{- end}}
 }
 
