@@ -9,13 +9,11 @@ import (
     "iris-init/repositories/repoInterface"
     "iris-init/sErr"
     {{- $stop := false }}
-    {{- range .ModelField}}
-    {{- if .Unique }}
+    {{- range .UniqueField}}
      {{- if not $stop}}
      "reflect"
-     {{- end}}
      {{- $stop := true }}
-    {{- end}}
+     {{- end}}
     {{- end}}
 )
 
@@ -82,28 +80,32 @@ func ({{.Alias}}Serv {{.Model}}Service) GetByID(id uint64, _select ...string) mo
 	return {{.Alias}}Serv.repo.GetByID(id, _select...)
 }
 
-{{- range .ModelField}}
-{{- if .Unique }}
-func ({{$.Alias}}Serv {{$.Model}}Service) GetBy{{.Name}}({{.NameFirstLower}} {{.Type}}, _select ...string) model.{{$.Model}} {
-    v := reflect.ValueOf({{.NameFirstLower}})
+{{- range  $key, $item := .UniqueField}}
+func ({{$.Alias}}Serv {{$.Model}}Service) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) model.{{$.Model}} {
+    var v reflect.Value
+    {{- range $item}}
+    v = reflect.ValueOf({{.NameFirstLower}})
     if !v.IsValid() { // 值不存在
          return model.{{$.Model}}{};
     }
-    return {{$.Alias}}Serv.repo.GetBy{{.Name}}({{.NameFirstLower}}, _select...)
+    {{- end}}
+    return {{$.Alias}}Serv.repo.GetBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}} _select...)
 }
 
-func ({{$.Alias}}Serv {{$.Model}}Service) Check{{.Name}}Valid({{$.Alias}} model.{{$.Model}}) error {
-    v := reflect.ValueOf({{$.Alias}}.{{.Name}})
+func ({{$.Alias}}Serv {{$.Model}}Service) Check{{$key}}Valid({{$.Alias}} model.{{$.Model}}) error {
+    var v reflect.Value
+    {{- range $item}}
+    v = reflect.ValueOf({{$.Alias}}.{{.Name}})
     if !v.IsValid() { // 值不存在
          return sErr.New("无效的{{.Label}}")
     }
-    _{{$.Alias}} := {{$.Alias}}Serv.GetBy{{.Name}}({{$.Alias}}.{{.Name}}, "id")
+    {{- end}}
+    _{{$.Alias}} := {{$.Alias}}Serv.GetBy{{$key}}({{- range $item}}{{$.Alias}}.{{.Name}}, {{- end}} "id")
     if _{{$.Alias}}.ID > 0 && {{$.Alias}}.ID != _{{$.Alias}}.ID {
-        return sErr.NewFmt("%s已存在", "{{.Label}}", {{$.Alias}}.Name)
+        return sErr.NewFmt("{{- range $item}}{{.Label}}.{{- end}}已存在: {{- range $item}}%s.{{- end}}", {{- range $item}}{{$.Alias}}.{{.Name}},{{- end}})
     }
     return nil
 }
-{{- end}}
 {{- end}}
 
 func ({{.Alias}}Serv {{.Model}}Service) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
@@ -179,12 +181,10 @@ func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Valida
         {{- end}}
     {{- end}}
 
-    {{- range .ModelField}}
-    {{- if .Unique }}
-    if err = {{$.Alias}}Serv.Check{{.Name}}Valid({{$.Alias}}); err != nil {
+    {{- range $key, $item := .UniqueField}}
+    if err = {{$.Alias}}Serv.Check{{$key}}Valid({{$.Alias}}); err != nil {
         return {{$.Alias}}, err
     }
-    {{- end}}
     {{- end}}
 	return {{.Alias}}, nil
 }

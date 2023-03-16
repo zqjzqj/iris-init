@@ -17,10 +17,8 @@ type {{.Model}}Repo interface {
 	GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock)
 	GetByWhere(where {{.Model}}SearchWhere) model.{{.Model}}
 	GetIDByWhere(where {{.Model}}SearchWhere) []uint64
-    {{- range .ModelField}}
-    {{- if .Unique }}
-    GetBy{{.Name}}({{.NameFirstLower}} {{.Type}}, _select ...string) model.{{$.Model}}
-    {{- end}}
+    {{- range $key, $item := .UniqueField}}
+    GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) model.{{$.Model}}
     {{- end}}
 }
 

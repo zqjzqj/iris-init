@@ -30,6 +30,7 @@ type ServTpl struct {
 	viewListTplPath      string
 	viewItemTplPath      string
 	ModelField           []Field
+	UniqueField          map[string][]Field
 }
 
 func NewServTpl(_model, alias, ctrDir string) ServTpl {
@@ -45,6 +46,7 @@ func NewServTpl(_model, alias, ctrDir string) ServTpl {
 		panic("model参数错误")
 	}
 	st.ModelField = RefStructField(_modelStruct)
+	st.UniqueField = GetUniqueFields(st.ModelField)
 	return st
 }
 
@@ -158,19 +160,22 @@ func (servTpl ServTpl) GenerateFile(ignoreErr bool) error {
 
 func (servTpl ServTpl) GenerateRepoInterface() error {
 	return servTpl.generateFile(servTpl.repoInterfaceTplPath, servTpl.repoInterfacePath, map[string]any{
-		"ModelField": servTpl.ModelField,
+		"ModelField":  servTpl.ModelField,
+		"UniqueField": servTpl.UniqueField,
 	})
 }
 
 func (servTpl ServTpl) GenerateRepo() error {
 	return servTpl.generateFile(servTpl.repoTplPath, servTpl.repoPath, map[string]any{
-		"ModelField": servTpl.ModelField,
+		"ModelField":  servTpl.ModelField,
+		"UniqueField": servTpl.UniqueField,
 	})
 }
 
 func (servTpl ServTpl) GenerateService() error {
 	return servTpl.generateFile(servTpl.servTplPath, servTpl.servPath, map[string]any{
-		"ModelField": servTpl.ModelField,
+		"ModelField":  servTpl.ModelField,
+		"UniqueField": servTpl.UniqueField,
 	})
 }
 

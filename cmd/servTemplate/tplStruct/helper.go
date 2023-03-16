@@ -13,9 +13,34 @@ type Field struct {
 	Type           string
 	Label          string
 	ValidateLabel  string //主要用于service的验证标签
-	Unique         bool
+	Unique         string
 	OnlyRead       bool
 	Search         bool
+}
+
+func GetUniqueFields(fields []Field) map[string][]Field {
+	r := make(map[string][]Field)
+	for _, v := range fields {
+		if v.Unique != "" {
+			if r[v.Unique] == nil {
+				r[v.Unique] = make([]Field, 0, 3)
+			}
+			r[v.Unique] = append(r[v.Unique], v)
+		}
+	}
+	if len(r) == 0 {
+		return nil
+	}
+	rr := make(map[string][]Field, len(r))
+	for _, v := range r {
+		name := ""
+		for _, vv := range v {
+			name += vv.Name + "_"
+		}
+		name = strings.TrimRight(name, "_")
+		rr[name] = v
+	}
+	return rr
 }
 
 func RefStructField(_struct any) []Field {
@@ -40,9 +65,10 @@ func RefStructField(_struct any) []Field {
 			_tag := ref.Field(i).Tag
 			_validate, _unique := GetValidateStrByGormLabel(_tag.Get("gorm"))
 			_f := Field{
-				Name:  ref.Field(i).Name,
-				Type:  ref.Field(i).Type.String(),
-				Label: ref.Field(i).Tag.Get("label"),
+				Name:   ref.Field(i).Name,
+				Type:   ref.Field(i).Type.String(),
+				Label:  ref.Field(i).Tag.Get("label"),
+				Unique: _unique,
 			}
 			_f.NameFirstLower = global.StringFirstLower(_f.Name)
 			if _validate != "" && _f.Name != "ID" {
@@ -52,8 +78,8 @@ func RefStructField(_struct any) []Field {
 			if _f.Label == "" {
 				_f.Label = _f.Name
 			}
-			if _tag.Get("Unique") == "true" || _unique {
-				_f.Unique = true
+			if _tag.Get("Unique") != "" {
+				_f.Unique = _tag.Get("Unique")
 			}
 			if _tag.Get("OnlyRead") == "true" {
 				_f.OnlyRead = true
@@ -67,7 +93,7 @@ func RefStructField(_struct any) []Field {
 	return fields
 }
 
-func GetValidateStrByGormLabel(gormLabel string) (validate string, unique bool) {
+func GetValidateStrByGormLabel(gormLabel string) (validate string, unique string) {
 	_gormLabel := strings.Split(gormLabel, ";")
 	var required = true
 	for _, v := range _gormLabel {
@@ -79,7 +105,8 @@ func GetValidateStrByGormLabel(gormLabel string) (validate string, unique bool) 
 		}
 		//如果包含唯一索引
 		if strings.HasPrefix(v, "index:") && strings.Contains(v, "unique") {
-			unique = true
+			_unique := strings.Split(v, ",")
+			unique = strings.TrimLeft(_unique[0], "index:")
 		}
 	}
 	if required {
