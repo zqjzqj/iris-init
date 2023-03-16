@@ -12,6 +12,17 @@
                             <div class="layui-inline">
                                 <input class="layui-input" name="ID" placeholder="ID">
                             </div>
+                         {{- range .ModelField}}
+                            {{- if .Search}}
+                            <div class="layui-inline">
+                                {{- if eq .Type "string"}}
+                                <input class="layui-input" name="{{.Name}}Like" placeholder="{{.Label}}">
+                                {{- else}}
+                                <input class="layui-input" name="{{.Name}}" placeholder="{{.Label}}">
+                                {{- end}}
+                            </div>
+                            {{- end}}
+                         {{- end}}
                             <button class="layui-btn" type="submit">搜索</button>
                             <button class="layui-btn layui-btn-primary" type="reset">重置</button>
                         </form>

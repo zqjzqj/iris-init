@@ -15,6 +15,7 @@ type Field struct {
 	ValidateLabel  string //主要用于service的验证标签
 	Unique         bool
 	OnlyRead       bool
+	Search         bool
 }
 
 func RefStructField(_struct any) []Field {
@@ -56,6 +57,9 @@ func RefStructField(_struct any) []Field {
 			}
 			if _tag.Get("OnlyRead") == "true" {
 				_f.OnlyRead = true
+			}
+			if _tag.Get("Search") == "true" {
+				_f.Search = true
 			}
 			fields = append(fields, _f)
 		}
