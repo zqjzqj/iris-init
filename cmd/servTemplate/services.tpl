@@ -131,6 +131,10 @@ func ({{.Alias}}Serv {{.Model}}Service) SaveByValidator({{.Alias}}Validator {{.M
 	return {{.Alias}}, err
 }
 
+func ({{.Alias}}Serv {{.Model}}Service) Save({{.Alias}} *model.{{.Model}}) error {
+	return {{.Alias}}Serv.repo.Save({{.Alias}})
+}
+
 func ({{.Alias}}Serv {{.Model}}Service) DeleteByCtx(ctx iris.Context) error {
 	return {{.Alias}}Serv.DeleteByID(uint64(ctx.PostValueInt64Default("ID", 0)))
 }
