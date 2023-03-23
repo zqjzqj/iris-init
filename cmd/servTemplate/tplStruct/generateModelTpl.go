@@ -66,8 +66,7 @@ func (modelTpl ModelTpl) GenerateFile() error {
 		_ = os.Remove(_tmpStr2ModelPath)
 		return nil
 	}
-	_ = os.Rename(_tmpStr2ModelPath, modelTpl.str2modelPath)
-	return err
+	return os.Rename(_tmpStr2ModelPath, modelTpl.str2modelPath)
 }
 
 func (modelTpl ModelTpl) generateFile(tplPath, filePath string, data map[string]any) error {

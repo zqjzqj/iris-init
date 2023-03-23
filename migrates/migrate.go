@@ -19,7 +19,7 @@ var _migrates = []MigrateInterface{
 }
 
 func Migrate() {
-	_migrates = append(_migrates, mm...)
+	_migrates = append(_migrates, MM...)
 	for _, m := range _migrates {
 		gm := m.Migrate()
 		if err := gm.Migrate(); err != nil {
@@ -34,7 +34,7 @@ func Rollback(id string) {
 	if id == "" {
 		return
 	}
-	_migrates = append(_migrates, mm...)
+	_migrates = append(_migrates, MM...)
 	for _, m := range _migrates {
 		if id == m.GetId() {
 			gm := m.Migrate()

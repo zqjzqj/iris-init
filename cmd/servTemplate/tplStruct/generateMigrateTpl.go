@@ -3,19 +3,24 @@ package tplStruct
 import (
 	"fmt"
 	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/migrates"
 	"iris-init/sErr"
 	"os"
+	"reflect"
 	"strings"
 	"text/template"
 	"time"
 )
 
 type MigrateTpl struct {
-	Name           string
-	Models         []string
-	AppRoot        string
-	migrateTplPath string
-	migratePath    string
+	Name                   string
+	Models                 []string
+	AppRoot                string
+	migrateTplPath         string
+	migratePath            string
+	aMigratesSlicesTplPath string
+	aMigratesSlicesPath    string
 }
 
 func NewMigrateTpl(_models []string) MigrateTpl {
@@ -31,6 +36,8 @@ func NewMigrateTpl(_models []string) MigrateTpl {
 func (migrateTpl *MigrateTpl) SetAppPath(AppRoot string) {
 	migrateTpl.AppRoot = AppRoot
 	migrateTpl.migrateTplPath = fmt.Sprintf("%s/cmd/servTemplate/migrate.tpl", migrateTpl.AppRoot)
+	migrateTpl.aMigratesSlicesTplPath = fmt.Sprintf("%s/cmd/servTemplate/aMigratesSlices.tpl", migrateTpl.AppRoot)
+	migrateTpl.aMigratesSlicesPath = fmt.Sprintf("%s/migrates/aMigratesSlices.go", migrateTpl.AppRoot)
 	migrateTpl.RefreshName()
 }
 
@@ -54,14 +61,33 @@ func (migrateTpl *MigrateTpl) RefreshName() {
 }
 
 func (migrateTpl MigrateTpl) GenerateFile() error {
-	err := migrateTpl.generateFile(migrateTpl.migrateTplPath, migrateTpl.migratePath)
+	err := migrateTpl.generateFile(migrateTpl.migrateTplPath, migrateTpl.migratePath, nil)
 	if err != nil {
 		return fmt.Errorf("repoInterface err %v", err)
 	}
-	return nil
+	_aMigratesSlices := make([]string, 0, 10)
+	for _, v := range migrates.MM {
+		_aMigratesSlices = append(_aMigratesSlices, fmt.Sprintf("%s{}", reflect.TypeOf(v).Name()))
+	}
+	_aMigratesSlices = append(_aMigratesSlices, fmt.Sprintf("Migrate_%s{}", migrateTpl.Name))
+
+	_tmpAMigratesSlicesPath := fmt.Sprintf("%s.tmp", migrateTpl.aMigratesSlicesPath)
+	err = os.Rename(migrateTpl.aMigratesSlicesPath, _tmpAMigratesSlicesPath)
+	if err != nil {
+		logs.PrintErr("create aMigratesSlices fail")
+		return err
+	}
+	err = migrateTpl.generateFile(migrateTpl.aMigratesSlicesTplPath, migrateTpl.aMigratesSlicesPath, map[string]any{
+		"AMigratesSlices": _aMigratesSlices,
+	})
+	if err == nil {
+		_ = os.Remove(_tmpAMigratesSlicesPath)
+		return nil
+	}
+	return os.Rename(_tmpAMigratesSlicesPath, migrateTpl.aMigratesSlicesPath)
 }
 
-func (migrateTpl MigrateTpl) generateFile(tplPath, filePath string) error {
+func (migrateTpl MigrateTpl) generateFile(tplPath, filePath string, data map[string]any) error {
 	_riTplBytes, err := os.ReadFile(tplPath)
 	if err != nil {
 		return err
@@ -79,8 +105,10 @@ func (migrateTpl MigrateTpl) generateFile(tplPath, filePath string) error {
 	if err != nil {
 		return err
 	}
-	return tpl.Execute(f, map[string]interface{}{
-		"Models":      migrateTpl.Models,
-		"MigrateName": migrateTpl.Name,
-	})
+	if data == nil {
+		data = make(map[string]interface{})
+	}
+	data["Models"] = migrateTpl.Models
+	data["MigrateName"] = migrateTpl.Name
+	return tpl.Execute(f, data)
 }
