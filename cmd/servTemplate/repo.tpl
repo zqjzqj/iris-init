@@ -31,6 +31,10 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetIDByWhere(where repoInterface.{{.Mod
 	return id
 }
 
+func ({{.Alias}}Repo {{.Model}}RepoGorm) Create({{.Alias}} *[]model.{{.Model}}) error {
+	return {{.Alias}}Repo.Orm.Create({{.Alias}}).Error
+}
+
 func ({{.Alias}}Repo {{.Model}}RepoGorm) Save({{.Alias}} *model.{{.Model}}, _select ...string) error {
 	return repoComm.SaveModel({{.Alias}}Repo.Orm, {{.Alias}}, _select...)
 }

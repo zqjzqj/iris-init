@@ -13,6 +13,7 @@ type {{.Model}}Repo interface {
 	DeleteByID(id ...uint64) (rowsAffected int64, err error)
 	Save(_model *model.{{.Model}}, _select ...string) error
 	SaveOmit(_model *model.{{.Model}}, _omit ...string) error
+	Create(_model *[]model.{{.Model}}) error
 	GetByID(id uint64, _select ...string) model.{{.Model}}
 	GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock)
 	GetByWhere(where {{.Model}}SearchWhere) model.{{.Model}}
