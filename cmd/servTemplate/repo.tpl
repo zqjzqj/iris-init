@@ -115,9 +115,13 @@ func ({{.Alias}}Repo {{.Model}}RepoGorm) GetByID(id uint64, _select ...string) m
 {{- range $key, $item := .UniqueField}}
 func ({{$.Alias}}Repo {{$.Model}}RepoGorm) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) model.{{$.Model}} {
     {{$.Alias}} := model.{{$.Model}}{}
-	tx := {{$.Alias}}Repo.Orm
-	{{- range $item}}
-	tx.Where("{{.NameSnake}}", {{.NameFirstLower}})
+	tx := {{$.Alias}}Repo.Orm.
+	{{- range $index, $val := $item}}
+	{{- if eq $index (sub (len $item) 1)}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}})
+	{{- else}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
+	{{- end}}
 	{{- end}}
 	if len(_select) > 0 {
 		tx = tx.Select(_select)

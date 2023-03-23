@@ -228,8 +228,9 @@ func (servTpl ServTpl) generateFile(tplPath, filePath string, data map[string]an
 	if err != nil {
 		return err
 	}
-	tpl, err := template.New(filePath).
-		Parse(string(_riTplBytes))
+	tpl, err := template.New(filePath).Funcs(template.FuncMap{
+		"sub": func(a, b int) int { return a - b },
+	}).Parse(string(_riTplBytes))
 	if err != nil {
 		return err
 	}
