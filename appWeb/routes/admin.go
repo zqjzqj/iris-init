@@ -22,6 +22,7 @@ func RegisterRoutes(app *iris.Application) {
 	})
 	party.Use(sess.Handler())
 	party.RegisterView(tmpl)
+	// 将静态文件嵌入到可执行文件中
 	party.HandleDir("/static", "./static")
 	party.OnErrorCode(iris.StatusNotFound, func(ctx iris.Context) {
 		if !ctx.IsAjax() /*&& !strings.HasPrefix(ctx.Request().URL.Path, "/api/")*/ {

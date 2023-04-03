@@ -83,7 +83,6 @@ func main() {
 		logs.Fatal(err)
 	}
 	app := iris.New()
-
 	err = ListenWeb(app)
 	if err != nil {
 		logs.Fatal(err)
