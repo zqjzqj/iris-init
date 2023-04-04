@@ -69,7 +69,8 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) GetItem(ctx iris.Context) {{- if .Vie
 }
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
-	{{.Alias}}, err := services.New{{.Model}}Service().SaveByCtx(ctx)
+    {{.Alias}}Serv := services.New{{.Model}}Service()
+	{{.Alias}}, err := {{.Alias}}Serv.SaveByCtx(ctx)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}
@@ -77,7 +78,8 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) PostEdit(ctx iris.Context) appWeb.Res
 }
 
 func ({{.Alias}}Ctrl {{.Model}}Controller) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
-	err := services.New{{.Model}}Service().DeleteByCtx(ctx)
+    {{.Alias}}Serv := services.New{{.Model}}Service()
+	err := {{.Alias}}Serv.DeleteByCtx(ctx)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}
