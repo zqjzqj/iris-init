@@ -127,7 +127,7 @@ func ({{.Alias}}Serv *{{.Model}}Service) SaveByValidator({{.Alias}}Validator {{.
 	if err != nil {
 		return {{.Alias}}, err
 	}
-	err = {{.Alias}}Serv.repo.Save(&{{.Alias}})
+	err = {{.Alias}}Serv.Save(&{{.Alias}})
 	return {{.Alias}}, err
 }
 
