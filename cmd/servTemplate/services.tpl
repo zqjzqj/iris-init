@@ -143,6 +143,8 @@ func ({{.Alias}}Serv *{{.Model}}Service) DeleteByCtx(ctx iris.Context) error {
 	return {{.Alias}}Serv.DeleteByID(uint64(ctx.PostValueInt64Default("ID", 0)))
 }
 
+
+//这个方法主要是用来扩展的 根据model的多条件作删除 需要开发者自己完成业务逻辑
 func ({{.Alias}}Serv *{{.Model}}Service) Delete({{.Alias}} model.{{.Model}}) error {
 	if {{.Alias}}.ID == 0 {
 		return nil
