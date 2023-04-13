@@ -104,7 +104,7 @@ func GetValidateStrByGormLabel(gormLabel string) (validate string, unique string
 			required = false
 		}
 		//如果包含唯一索引
-		if strings.HasPrefix(v, "index:") && strings.Contains(v, "unique") {
+		if strings.HasPrefix(v, "index:") && strings.Contains(v, ",unique") {
 			_unique := strings.Split(v, ",")
 			unique = strings.TrimLeft(_unique[0], "index:")
 		}
