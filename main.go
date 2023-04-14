@@ -11,6 +11,7 @@ import (
 	"iris-init/appWeb/routes"
 	"iris-init/config"
 	"iris-init/cron"
+	"iris-init/global"
 	"iris-init/logs"
 	"iris-init/migrates"
 	"log"
@@ -76,6 +77,13 @@ func main() {
 			log.Println(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", config.PprofPort()), nil))
 		}()
 	}
+
+	//进程退出时
+	pRuntime.HandleEndSignal(func() {
+		logs.PrintlnInfo("Exiting...")
+		global.CancelGlobalCtx()
+		logs.PrintlnInfo("Exit OK.")
+	})
 
 	//初始化计划任务
 	err := cron.InitCron()
