@@ -406,6 +406,8 @@ github.com/zqjzqj/pRuntime v1.1.0 h1:Ys+usROjm7pAq8jtjvGZErrIHR/5aJgbsAA6tiyS+5A
 github.com/zqjzqj/pRuntime v1.1.0/go.mod h1:K/c9feO9pRiBsTZJPrSD6DXSzHY0d2yDVuMCpkAOEJo=
 github.com/zqjzqj/pRuntime v1.1.1 h1:l2pgFHfYy62/dCZo2Hqi1vFMxH3ImEXw6dLyErDmx/c=
 github.com/zqjzqj/pRuntime v1.1.1/go.mod h1:K/c9feO9pRiBsTZJPrSD6DXSzHY0d2yDVuMCpkAOEJo=
+github.com/zqjzqj/pRuntime v1.1.2-0.20230414021355-c9721c3fe46d h1:PnwRM+pK9BHkyci2UfB1Kvfxt9q6Q/fED5fnInYWkbc=
+github.com/zqjzqj/pRuntime v1.1.2-0.20230414021355-c9721c3fe46d/go.mod h1:K/c9feO9pRiBsTZJPrSD6DXSzHY0d2yDVuMCpkAOEJo=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
 go.opencensus.io v0.22.0/go.mod h1:+kGneAE2xo2IficOXnaByMWTGM9T73dGwxeWcUqIpI8=
 go.opencensus.io v0.22.2/go.mod h1:yxeiOL68Rb0Xd1ddK5vPZ/oVn4vY4Ynel7k9FzqtOIw=

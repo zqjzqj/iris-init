@@ -14,7 +14,7 @@ require (
 	github.com/rs/cors v1.9.0
 	github.com/spf13/viper v1.15.0
 	github.com/tidwall/gjson v1.14.4
-	github.com/zqjzqj/pRuntime v1.1.1
+	github.com/zqjzqj/pRuntime v1.1.2-0.20230414021355-c9721c3fe46d
 	gopkg.in/go-playground/validator.v9 v9.31.0
 	gorm.io/driver/mysql v1.5.0
 	gorm.io/gorm v1.25.0
