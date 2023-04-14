@@ -79,7 +79,7 @@ func main() {
 	}
 
 	//进程退出时
-	pRuntime.HandleEndSignal(func() {
+	end := pRuntime.HandleEndSignal(func() {
 		logs.PrintlnInfo("Exiting...")
 		global.CancelGlobalCtx()
 		logs.PrintlnInfo("Exit OK.")
@@ -95,6 +95,7 @@ func main() {
 	if err != nil {
 		logs.Fatal(err)
 	}
+	<-end
 }
 
 func ListenWeb(appWeb *iris.Application) error {
