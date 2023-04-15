@@ -106,11 +106,21 @@ func ({{$.Alias}}Serv *{{$.Model}}Service) Check{{$key}}Valid({{$.Alias}} model.
     }
     return nil
 }
+
+func ({{$.Alias}}Serv *{{$.Model}}Service) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) error {
+    _, err := {{$.Alias}}Serv.repo.DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}})
+    return err
+}
 {{- end}}
 
 {{- range  $key, $item := .IndexField}}
 func ({{$.Alias}}Serv *{{$.Model}}Service) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) []model.{{$.Model}} {
     return {{$.Alias}}Serv.repo.GetBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}} _select...)
+}
+
+func ({{$.Alias}}Serv *{{$.Model}}Service) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) error {
+    _, err := {{$.Alias}}Serv.repo.DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}})
+    return err
 }
 {{- end}}
 

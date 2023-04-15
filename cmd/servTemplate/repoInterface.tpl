@@ -24,6 +24,12 @@ type {{.Model}}Repo interface {
     {{- range $key, $item := .IndexField}}
     GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) []model.{{$.Model}}
     {{- end}}
+    {{- range $key, $item := .UniqueField}}
+    DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) (rowsAffected int64, err error)
+    {{- end}}
+    {{- range $key, $item := .IndexField}}
+    DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) (rowsAffected int64, err error)
+    {{- end}}
 }
 
 type {{.Model}}SearchWhere struct {

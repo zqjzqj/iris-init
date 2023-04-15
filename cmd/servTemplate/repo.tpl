@@ -129,6 +129,20 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) GetBy{{$key}}({{- range $item}}{{.Na
 	tx.Find(&{{$.Alias}})
 	return {{$.Alias}}
 }
+
+
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) (rowsAffected int64, err error) {
+	tx := {{$.Alias}}Repo.Orm.
+	{{- range $index, $val := $item}}
+	{{- if eq $index (sub (len $item) 1)}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}})
+	{{- else}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
+	{{- end}}
+	{{- end}}
+	r := tx.Delete(model.{{$.Model}}{})
+    return r.RowsAffected, r.Error
+}
 {{- end}}
 
 {{- range $key, $item := .IndexField}}
@@ -147,6 +161,19 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) GetBy{{$key}}({{- range $item}}{{.Na
 	}
 	tx.Find(&{{$.Alias}})
 	return {{$.Alias}}
+}
+
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) (rowsAffected int64, err error) {
+	tx := {{$.Alias}}Repo.Orm.
+	{{- range $index, $val := $item}}
+	{{- if eq $index (sub (len $item) 1)}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}})
+	{{- else}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
+	{{- end}}
+	{{- end}}
+	r := tx.Delete(model.{{$.Model}}{})
+    return r.RowsAffected, r.Error
 }
 {{- end}}
 
