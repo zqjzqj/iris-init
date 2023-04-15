@@ -30,6 +30,7 @@ type {{.Model}}Repo interface {
     {{- range $key, $item := .IndexField}}
     DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) (rowsAffected int64, err error)
     {{- end}}
+    UpdateByWhere(where {{.Model}}SearchWhere, data interface{}) (rowsAffected int64, err error)
 }
 
 type {{.Model}}SearchWhere struct {

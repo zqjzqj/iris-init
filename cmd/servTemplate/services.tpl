@@ -80,6 +80,10 @@ func ({{.Alias}}Serv *{{.Model}}Service) GetByID(id uint64, _select ...string) m
 	return {{.Alias}}Serv.repo.GetByID(id, _select...)
 }
 
+func ({{.Alias}}Serv *{{.Model}}Service) UpdateByWhere(where repoInterface.{{.Model}}SearchWhere, data interface{}) (rowsAffected int64, err error) {
+	return {{.Alias}}Serv.repo.UpdateByWhere(where, data)
+}
+
 {{- range  $key, $item := .UniqueField}}
 func ({{$.Alias}}Serv *{{$.Model}}Service) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) model.{{$.Model}} {
     var v reflect.Value
