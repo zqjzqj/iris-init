@@ -108,6 +108,12 @@ func ({{$.Alias}}Serv *{{$.Model}}Service) Check{{$key}}Valid({{$.Alias}} model.
 }
 {{- end}}
 
+{{- range  $key, $item := .IndexField}}
+func ({{$.Alias}}Serv *{{$.Model}}Service) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) []model.{{$.Model}} {
+    return {{$.Alias}}Serv.repo.GetBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}} _select...)
+}
+{{- end}}
+
 func ({{.Alias}}Serv *{{.Model}}Service) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
 	return {{.Alias}}Serv.repo.GetByIDLock(id, _select...)
 }
@@ -142,7 +148,6 @@ func ({{.Alias}}Serv *{{.Model}}Service) Create({{.Alias}} *[]model.{{.Model}}) 
 func ({{.Alias}}Serv *{{.Model}}Service) DeleteByCtx(ctx iris.Context) error {
 	return {{.Alias}}Serv.DeleteByID(uint64(ctx.PostValueInt64Default("ID", 0)))
 }
-
 
 //这个方法目前是与DeleteByID功能一致 主要是用来扩展的 根据model的多条件作删除 需要开发者自己完成业务逻辑
 func ({{.Alias}}Serv *{{.Model}}Service) Delete({{.Alias}} model.{{.Model}}) error {

@@ -131,6 +131,25 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) GetBy{{$key}}({{- range $item}}{{.Na
 }
 {{- end}}
 
+{{- range $key, $item := .IndexField}}
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) []model.{{$.Model}} {
+    {{$.Alias}} := make([]model.{{$.Model}}, 0)
+	tx := {{$.Alias}}Repo.Orm.
+	{{- range $index, $val := $item}}
+	{{- if eq $index (sub (len $item) 1)}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}})
+	{{- else}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
+	{{- end}}
+	{{- end}}
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	tx.Find(&{{$.Alias}})
+	return {{$.Alias}}
+}
+{{- end}}
+
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
 	if id == 0 {
 		panic("{{.Alias}}Repo.GetByIDLock id must > 0")

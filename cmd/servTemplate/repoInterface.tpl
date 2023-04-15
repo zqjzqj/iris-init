@@ -21,6 +21,9 @@ type {{.Model}}Repo interface {
     {{- range $key, $item := .UniqueField}}
     GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) model.{{$.Model}}
     {{- end}}
+    {{- range $key, $item := .IndexField}}
+    GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) []model.{{$.Model}}
+    {{- end}}
 }
 
 type {{.Model}}SearchWhere struct {
