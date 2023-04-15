@@ -11,6 +11,7 @@ import (
 	"iris-init/appWeb/routes"
 	"iris-init/config"
 	"iris-init/cron"
+	"iris-init/global"
 	"iris-init/logs"
 	"iris-init/migrates"
 	"log"
@@ -77,6 +78,13 @@ func main() {
 		}()
 	}
 
+	//进程退出时
+	end := pRuntime.HandleEndSignal(func() {
+		logs.PrintlnInfo("Exiting...")
+		global.CancelGlobalCtx()
+		logs.PrintlnInfo("Exit OK.")
+	})
+
 	//初始化计划任务
 	err := cron.InitCron()
 	if err != nil {
@@ -87,6 +95,7 @@ func main() {
 	if err != nil {
 		logs.Fatal(err)
 	}
+	<-end
 }
 
 func ListenWeb(appWeb *iris.Application) error {
