@@ -59,15 +59,11 @@ func (p *Pager) SetTotal(total int64) {
 	}
 	p.TotalPage = int(math.Ceil(float64(p.Total) / float64(p.Size)))
 	pageUrlNum := 10
-	if pageUrlNum > p.TotalPage {
-		pageUrlNum = p.TotalPage
-	}
 	p.PagesUrl = make([]PageUrl, 0, pageUrlNum)
 	req := p.ctx.Request()
 	var pagesUrl PageUrl
 	var n = p.Current % pageUrlNum
 	for k := 1; k <= pageUrlNum; k++ {
-		query := req.URL.Query()
 		if n == 0 {
 			pagesUrl = PageUrl{Page: p.Current - pageUrlNum + k}
 		} else if k < n {
@@ -75,6 +71,10 @@ func (p *Pager) SetTotal(total int64) {
 		} else {
 			pagesUrl = PageUrl{Page: p.Current + (k - n)}
 		}
+		if pagesUrl.Page > p.TotalPage {
+			break
+		}
+		query := req.URL.Query()
 		query.Set("Page", fmt.Sprintf("%d", pagesUrl.Page))
 		pagesUrl.Url = p.ReqPath + "?" + query.Encode()
 		p.PagesUrl = append(p.PagesUrl, pagesUrl)
@@ -90,6 +90,7 @@ func (p *Pager) SetTotal(total int64) {
 	}
 	query.Set("Page", fmt.Sprintf("%d", 1))
 	p.FirstUrl = p.ReqPath + "?" + query.Encode()
+
 	query.Set("Page", fmt.Sprintf("%d", p.TotalPage))
 	p.EndUrl = p.ReqPath + "?" + query.Encode()
 }
