@@ -62,6 +62,11 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) DeleteByID(id ...uint64) (rowsAffected
 	return {{.Alias}}Repo.deleteByWhere("id in ?", id)
 }
 
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) UpdateByWhere(where repoInterface.{{.Model}}SearchWhere, data interface{}) (rowsAffected int64, err error) {
+	tx := {{$.Alias}}Repo.GetSearchWhereTx(where, nil)
+	r := tx.Updates(data)
+	return r.RowsAffected, r.Error
+}
 
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{{.Model}}SearchWhere, tx0 *gorm.DB) *gorm.DB {
 	var tx *gorm.DB
@@ -128,6 +133,52 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) GetBy{{$key}}({{- range $item}}{{.Na
 	}
 	tx.Find(&{{$.Alias}})
 	return {{$.Alias}}
+}
+
+
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) (rowsAffected int64, err error) {
+	tx := {{$.Alias}}Repo.Orm.
+	{{- range $index, $val := $item}}
+	{{- if eq $index (sub (len $item) 1)}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}})
+	{{- else}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
+	{{- end}}
+	{{- end}}
+	r := tx.Delete(model.{{$.Model}}{})
+    return r.RowsAffected, r.Error
+}
+{{- end}}
+
+{{- range $key, $item := .IndexField}}
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) []model.{{$.Model}} {
+    {{$.Alias}} := make([]model.{{$.Model}}, 0)
+	tx := {{$.Alias}}Repo.Orm.
+	{{- range $index, $val := $item}}
+	{{- if eq $index (sub (len $item) 1)}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}})
+	{{- else}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
+	{{- end}}
+	{{- end}}
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	tx.Find(&{{$.Alias}})
+	return {{$.Alias}}
+}
+
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) (rowsAffected int64, err error) {
+	tx := {{$.Alias}}Repo.Orm.
+	{{- range $index, $val := $item}}
+	{{- if eq $index (sub (len $item) 1)}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}})
+	{{- else}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
+	{{- end}}
+	{{- end}}
+	r := tx.Delete(model.{{$.Model}}{})
+    return r.RowsAffected, r.Error
 }
 {{- end}}
 

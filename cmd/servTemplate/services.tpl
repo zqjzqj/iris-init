@@ -80,6 +80,10 @@ func ({{.Alias}}Serv *{{.Model}}Service) GetByID(id uint64, _select ...string) m
 	return {{.Alias}}Serv.repo.GetByID(id, _select...)
 }
 
+func ({{.Alias}}Serv *{{.Model}}Service) UpdateByWhere(where repoInterface.{{.Model}}SearchWhere, data interface{}) (rowsAffected int64, err error) {
+	return {{.Alias}}Serv.repo.UpdateByWhere(where, data)
+}
+
 {{- range  $key, $item := .UniqueField}}
 func ({{$.Alias}}Serv *{{$.Model}}Service) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) model.{{$.Model}} {
     var v reflect.Value
@@ -105,6 +109,22 @@ func ({{$.Alias}}Serv *{{$.Model}}Service) Check{{$key}}Valid({{$.Alias}} model.
         return sErr.NewFmt("{{- range $item}}{{.Label}}.{{- end}}已存在: {{- range $item}}%s.{{- end}}", {{- range $item}}{{$.Alias}}.{{.Name}},{{- end}})
     }
     return nil
+}
+
+func ({{$.Alias}}Serv *{{$.Model}}Service) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) error {
+    _, err := {{$.Alias}}Serv.repo.DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}})
+    return err
+}
+{{- end}}
+
+{{- range  $key, $item := .IndexField}}
+func ({{$.Alias}}Serv *{{$.Model}}Service) GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) []model.{{$.Model}} {
+    return {{$.Alias}}Serv.repo.GetBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}} _select...)
+}
+
+func ({{$.Alias}}Serv *{{$.Model}}Service) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) error {
+    _, err := {{$.Alias}}Serv.repo.DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}})
+    return err
 }
 {{- end}}
 
@@ -142,7 +162,6 @@ func ({{.Alias}}Serv *{{.Model}}Service) Create({{.Alias}} *[]model.{{.Model}}) 
 func ({{.Alias}}Serv *{{.Model}}Service) DeleteByCtx(ctx iris.Context) error {
 	return {{.Alias}}Serv.DeleteByID(uint64(ctx.PostValueInt64Default("ID", 0)))
 }
-
 
 //这个方法目前是与DeleteByID功能一致 主要是用来扩展的 根据model的多条件作删除 需要开发者自己完成业务逻辑
 func ({{.Alias}}Serv *{{.Model}}Service) Delete({{.Alias}} model.{{.Model}}) error {

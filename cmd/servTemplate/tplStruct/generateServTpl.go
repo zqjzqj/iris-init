@@ -31,6 +31,7 @@ type ServTpl struct {
 	viewItemTplPath      string
 	ModelField           []Field
 	UniqueField          map[string][]Field
+	IndexField           map[string][]Field
 }
 
 func NewServTpl(_model, alias, ctrDir string) ServTpl {
@@ -47,12 +48,13 @@ func NewServTpl(_model, alias, ctrDir string) ServTpl {
 	}
 	st.ModelField = RefStructField(_modelStruct)
 	st.UniqueField = GetUniqueFields(st.ModelField)
+	st.IndexField = GetIndexFields(st.ModelField)
 	return st
 }
 
 func (servTpl *ServTpl) SetViewDir(viewDir string) {
-	if viewDir != "admin" {
-		panic("无效的view参数，暂只支持admin")
+	if viewDir != "user" {
+		panic("无效的view参数，暂只支持user")
 	}
 	servTpl.ViewDir = viewDir
 }
@@ -162,6 +164,7 @@ func (servTpl ServTpl) GenerateRepoInterface() error {
 	return servTpl.generateFile(servTpl.repoInterfaceTplPath, servTpl.repoInterfacePath, map[string]any{
 		"ModelField":  servTpl.ModelField,
 		"UniqueField": servTpl.UniqueField,
+		"IndexField":  servTpl.IndexField,
 	})
 }
 
@@ -169,6 +172,7 @@ func (servTpl ServTpl) GenerateRepo() error {
 	return servTpl.generateFile(servTpl.repoTplPath, servTpl.repoPath, map[string]any{
 		"ModelField":  servTpl.ModelField,
 		"UniqueField": servTpl.UniqueField,
+		"IndexField":  servTpl.IndexField,
 	})
 }
 
@@ -176,6 +180,7 @@ func (servTpl ServTpl) GenerateService() error {
 	return servTpl.generateFile(servTpl.servTplPath, servTpl.servPath, map[string]any{
 		"ModelField":  servTpl.ModelField,
 		"UniqueField": servTpl.UniqueField,
+		"IndexField":  servTpl.IndexField,
 	})
 }
 
