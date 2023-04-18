@@ -57,8 +57,15 @@ $(function(){
         })
     }
     listSearch.find("button[type=reset]").click(function (){
+        var hidden  = {}
+        listSearch.find("input[type=hidden]").each(function(k, v){
+            hidden[$(v).attr("name")] = $(v).val()
+        })
         listSearch.find("input").val("")
         listSearchSelect.find("option").removeAttr("selected")
+        for (var k in hidden) {
+            $("[name="+k+"]").val(hidden[k])
+        }
         if (listSearchSelect.length > 0) {
             layui.use(['form'], function(){
                 var form = layui.form
