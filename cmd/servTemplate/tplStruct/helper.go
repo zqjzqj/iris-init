@@ -17,6 +17,7 @@ type Field struct {
 	Index          string //用于生成 如 GetByField() []model.Model 这样的方法
 	OnlyRead       bool
 	Search         bool
+	IsNumber       bool
 }
 
 func GetIndexFields(fields []Field) map[string][]Field {
@@ -91,11 +92,12 @@ func RefStructField(_struct any) []Field {
 			_tag := ref.Field(i).Tag
 			_validate, _unique, _index := GetValidateStrByGormLabel(_tag.Get("gorm"))
 			_f := Field{
-				Name:   ref.Field(i).Name,
-				Type:   ref.Field(i).Type.String(),
-				Label:  ref.Field(i).Tag.Get("label"),
-				Unique: _unique,
-				Index:  _index,
+				Name:     ref.Field(i).Name,
+				Type:     ref.Field(i).Type.String(),
+				Label:    ref.Field(i).Tag.Get("label"),
+				Unique:   _unique,
+				Index:    _index,
+				IsNumber: global.IsNumber(ref.Field(i).Type),
 			}
 			_f.NameFirstLower = global.StringFirstLower(_f.Name)
 			if _validate != "" && _f.Name != "ID" {
