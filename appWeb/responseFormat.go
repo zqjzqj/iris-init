@@ -8,7 +8,8 @@ const (
 	ResponseNotLoginCode = -1
 	ResponseNotAuthCode  = -2
 
-	AjaxLocationKey = "_url"
+	AjaxLocationKey          = "_url"
+	AjaxLocationLayerOpenKey = "_open_url"
 )
 
 type ResponseFormat struct {
@@ -61,4 +62,12 @@ func NewNotAuthResponse(msg string, data interface{}) ResponseFormat {
 
 func NewNotLoginResponse(msg string, data interface{}) ResponseFormat {
 	return NewResponse(ResponseNotLoginCode, msg, data)
+}
+
+type AjaxLocationLayerOpenParams struct {
+	Content string
+	Title   string
+	Width   string
+	Height  string
+	Type    string
 }

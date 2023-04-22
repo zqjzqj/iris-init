@@ -182,7 +182,7 @@ $(function(){
             var type = $(this).attr('data-type') || 2;
             var before = $(this).attr("data-before") || null;
             var callbackEnd = $(this).attr('data-callback-end') || "";
-            var callbackSuccess = $(this).attr('data-callback-success') || "";
+            var callbackSuccess = $(this).attr('data-callback-end') || "";
 
             if ( before ) {
                 var beforeFunRet = eval(before)($(this));//console.log(beforeFunRet)
@@ -200,7 +200,7 @@ $(function(){
                 }
             }
             close=1;
-            if(title=="false") {
+            if(title==="false") {
                 title=false;
                 close=0;
             }
@@ -405,6 +405,9 @@ $(function(){
             if($(this).attr('name').indexOf('_ymd')!=-1) {
                 type='date';
                 format = 'yyyy-MM-dd';
+            }
+            if (format == "HH:mm:ss") {
+                type = "time"
             }
             laydate.render({
                 elem: this,

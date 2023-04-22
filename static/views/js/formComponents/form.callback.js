@@ -29,10 +29,30 @@ function successCallback(message, data, ifrIndex) {
     setTimeout(function () {
         if (data !== null &&  typeof data['_url'] !== "undefined" && data['_url'] ) {
             topIfrGo(data["_url"], ifrIndex)
-        } else {
+        }  else if (data !== null &&  typeof data['_open_url'] !== "undefined" && data['_open_url']) {
+            var width = data['_open_url'].Width || "85%"
+            var height = data['_open_url'].Height || "95%"
+            var title = data['_open_url'].Title;
+            var type = data['_open_url'].Type || 2;
+            close=1;
+            if(title==="false") {
+                title=false;
+                close=0;
+            }
+            top.layer.open({
+                type: parseInt(type),
+                title: title,
+                shadeClose: false,
+                shade: 0.3,
+                maxmin: true, //开启最大化最小化按钮
+                area: [width, height],
+                closeBtn:close,
+                content: data['_open_url'].Content,
+            });
+        }else {
             topIfrGo("", ifrIndex)
         }
-    }, 500);
+    }, 1000);
 }
 
 
@@ -81,26 +101,47 @@ function errorCallback(message, data, ifrIndex) {
 
     alertError(message)
 
-    if ( data !== null && typeof data['_url'] !== "undefined" && data['_url'] ) {
-        topIfrGo(data['_url'], ifrIndex)
-        return true
-    }
-
-    if (data !== null &&  typeof data !== "undefined" && !isEmptyObject(data) ) {
-        $.each(data, function (key, item) {
-            if ( typeof item === "object" || typeof item === 'Array' ) {
-                item = item[0]
+    setTimeout(function(){
+        if ( data !== null && typeof data['_url'] !== "undefined" && data['_url'] ) {
+            return true
+        } else if (data !== null &&  typeof data['_open_url'] !== "undefined" && data['_open_url']) {
+            var width = data['_open_url'].Width || "85%"
+            var height = data['_open_url'].Height || "95%"
+            var title = data['_open_url'].Title;
+            var type = data['_open_url'].Type || 2;
+            close=1;
+            if(title==="false") {
+                title=false;
+                close=0;
             }
+            top.layer.open({
+                type: parseInt(type),
+                title: title,
+                shadeClose: false,
+                shade: 0.3,
+                maxmin: true, //开启最大化最小化按钮
+                area: [width, height],
+                closeBtn:close,
+                content: data['_open_url'].Content,
+            });
+        }
 
-            $("[name='"+key+"']").parents(".form-group").addClass("has-error has-danger");/*
+        if (data !== null &&  typeof data !== "undefined" && !isEmptyObject(data) ) {
+            $.each(data, function (key, item) {
+                if ( typeof item === "object" || typeof item === 'Array' ) {
+                    item = item[0]
+                }
+
+                $("[name='"+key+"']").parents(".form-group").addClass("has-error has-danger");/*
             $("[name='"+key+"']").addClass("has-danger")*/
 
-            var errorElem= $("[data-mark='"+key+"']");
-            errorElem.text(item);
-            errorElem.css("color", "#a94442");
+                var errorElem= $("[data-mark='"+key+"']");
+                errorElem.text(item);
+                errorElem.css("color", "#a94442");
 
-        });
-    }
+            });
+        }
+    }, 1000)
 }
 
 
