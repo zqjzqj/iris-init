@@ -3,3 +3,6 @@
 .layui-form-label {
     width: 110px;
 }
+.layui-input {
+    width: 90%;
+}
