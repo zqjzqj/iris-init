@@ -85,6 +85,20 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
        tx.Where("{{.NameSnake}} like ?", "%"+where.{{.Name}}Like+"%")
     }
    {{- end}}
+   {{- if .IsNumber}}
+    if where.{{.Name}}Lt != "" {
+      tx.Where("{{.NameSnake}} < ?", where.{{.Name}}Lt)
+    }
+    if where.{{.Name}}Elt != "" {
+      tx.Where("{{.NameSnake}} <= ?", where.{{.Name}}Elt)
+    }
+    if where.{{.Name}}Gt != "" {
+      tx.Where("{{.NameSnake}} > ?", where.{{.Name}}Gt)
+    }
+    if where.{{.Name}}Egt != "" {
+      tx.Where("{{.NameSnake}} >= ?", where.{{.Name}}Egt)
+    }
+    {{- end}}
    {{- end}}
 	return tx
 }

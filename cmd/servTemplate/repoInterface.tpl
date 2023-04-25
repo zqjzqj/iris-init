@@ -39,6 +39,12 @@ type {{.Model}}SearchWhere struct {
     {{- if eq .Type "string" }}
     {{.Name}}Like string
     {{- end}}
+    {{- if .IsNumber }}
+    {{.Name}}Lt string // {{.Name}} < {{.Name}}Lt
+    {{.Name}}Gt string // {{.Name}} > {{.Name}}Gt
+    {{.Name}}Elt string // {{.Name}} <= {{.Name}}Elt
+    {{.Name}}Egt string // {{.Name}} >= {{.Name}}Egt
+    {{- end}}
     {{- end}}
 	SelectParams repoComm.SelectFrom
 }
