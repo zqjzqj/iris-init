@@ -182,7 +182,7 @@ $(function(){
             var type = $(this).attr('data-type') || 2;
             var before = $(this).attr("data-before") || null;
             var callbackEnd = $(this).attr('data-callback-end') || "";
-            var callbackSuccess = $(this).attr('data-callback-success') || "";
+            var callbackSuccess = $(this).attr('data-callback-end') || "";
 
             if ( before ) {
                 var beforeFunRet = eval(before)($(this));//console.log(beforeFunRet)
@@ -200,7 +200,7 @@ $(function(){
                 }
             }
             close=1;
-            if(title=="false") {
+            if(title==="false") {
                 title=false;
                 close=0;
             }
@@ -249,6 +249,7 @@ $(function(){
             var method = $(this).attr("data-method") || "post";
             var url = $(this).attr("href");
             var name = $(this).attr("data-name");
+            var id = $(this).attr("data-id");
             var params = $(this).attr("data-params");
             var value = $(this).attr("data-val")
             var ifrIndex = $(this).attr("data-ifr-index")
@@ -258,6 +259,9 @@ $(function(){
                 var data = {};
             }
             data[name] = "";
+            if (id) {
+                data["ID"] = id
+            }
             layer.prompt({title: title, formType: formType, value:value}, function(pass, index){
                 layer.close(index);
                 data[name] = pass;
@@ -405,6 +409,9 @@ $(function(){
             if($(this).attr('name').indexOf('_ymd')!=-1) {
                 type='date';
                 format = 'yyyy-MM-dd';
+            }
+            if (format == "HH:mm:ss") {
+                type = "time"
             }
             laydate.render({
                 elem: this,
