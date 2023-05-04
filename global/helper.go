@@ -11,6 +11,7 @@ import (
 	"iris-init/sErr"
 	"math/rand"
 	"os"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -34,6 +35,25 @@ type ShuffleType interface {
 
 // 上传文件序号
 var UploadFileNum uint64
+
+func IsNumber(v any) bool {
+	var ref reflect.Type
+	_v, ok := v.(reflect.Type)
+	if ok {
+		ref = _v
+	} else {
+		ref = reflect.TypeOf(v)
+	}
+	kind := ref.Kind()
+	switch kind {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+		reflect.Float32, reflect.Float64:
+		return true
+	default:
+		return false
+	}
+}
 
 func GetNewFilename(oldFilename string) string {
 	i := atomic.AddUint64(&UploadFileNum, 1)
