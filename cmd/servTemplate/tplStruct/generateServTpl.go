@@ -53,8 +53,8 @@ func NewServTpl(_model, alias, ctrDir string) ServTpl {
 }
 
 func (servTpl *ServTpl) SetViewDir(viewDir string) {
-	if viewDir != "user" {
-		panic("无效的view参数，暂只支持user")
+	if viewDir != "admin" {
+		panic("无效的view参数，暂只支持admin")
 	}
 	servTpl.ViewDir = viewDir
 }
