@@ -14,15 +14,12 @@
 ---
 - 1.将config.env复制更名为config.yml或者config.yaml 然后填写对应的配置
 ---
-- 2.运行迁移命令 go run main.go -migrate=run 创建数据库 初始账号 admin 123456
----
-- 3.启动程序go run main.go [如未配置域名访问 请使用localhost:port访问本地]
+- 2.启动程序go run main.go - [如未配置域名访问 请使用localhost:port访问本地， 初始账号 admin 123456]
 ---
 
 ### 支持参数
- * -config 指定配置文件位置 默认./config 【注：参数值不要带.yml】
- * -migrate (run, rollback) 运行或回滚迁移 
- * -mRollbackId 当 -migrate=rollback时 需要指定回滚版本号
+  * -config 指定配置文件位置 默认./config - [注：参数值不要带.yml]
+  * -migrate-back 填写需要回滚迁移的版本号
 
 
 

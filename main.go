@@ -23,8 +23,7 @@ import (
 )
 
 var configPath = flag.String("config", "./config", "配置文件路径")
-var migrateCmd = flag.String("migrate", "", "迁移参数 run执行迁移 rollback回滚迁移") //rollback
-var mRollbackId = flag.String("mRollbackId", "", "回滚迁移所需要的版本号")
+var migrateCmd = flag.String("migrate-back", "", "回滚迁移所需要的版本号") //rollback
 
 func init() {
 	flag.Parse()
@@ -36,16 +35,11 @@ func init() {
 }
 
 func migrateFunc() {
-	if *migrateCmd == "" {
-		return
-	}
-	if *migrateCmd == "run" {
+	if *migrateCmd != "" {
+		migrates.Rollback(*migrateCmd)
+	} else {
 		migrates.Migrate()
-	} else if *migrateCmd == "rollback" {
-		if *mRollbackId == "" {
-			logs.Fatal("无效的回退版本号【请填写参数 mRollbackId】")
-		}
-		migrates.Rollback(*mRollbackId)
+		return
 	}
 	os.Exit(0)
 }
