@@ -35,15 +35,16 @@ type {{.Model}}Repo interface {
 
 type {{.Model}}SearchWhere struct {
     {{- range .ModelField}}
-    {{.Name}}   string
+    {{.Name}}     string
     {{- if eq .Type "string" }}
     {{.Name}}Like string
     {{- end}}
     {{- if .IsNumber }}
-    {{.Name}}Lt string // {{.Name}} < {{.Name}}Lt
-    {{.Name}}Gt string // {{.Name}} > {{.Name}}Gt
-    {{.Name}}Elt string // {{.Name}} <= {{.Name}}Elt
-    {{.Name}}Egt string // {{.Name}} >= {{.Name}}Egt
+    {{.Name}}Lt   string // {{.Name}} < {{.Name}}Lt
+    {{.Name}}Gt   string // {{.Name}} > {{.Name}}Gt
+    {{.Name}}Elt  string // {{.Name}} <= {{.Name}}Elt
+    {{.Name}}Egt  string // {{.Name}} >= {{.Name}}Egt
+    {{.Name}}Sort string // 排序
     {{- end}}
     {{- end}}
 	SelectParams repoComm.SelectFrom
