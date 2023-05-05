@@ -12,7 +12,7 @@
 ### 正式数据请编译后替代[go run main.go]运行
 
 ---
-- 1.将config.env复制更名为config.yml或者config.yaml 然后填写对应的配置
+- 1.将_config.env复制更名为config.yml或者config.yaml 然后填写对应的配置
 ---
 - 2.启动程序go run main.go - [如未配置域名访问 请使用localhost:port访问本地， 初始账号 admin 123456]
 ---
