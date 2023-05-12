@@ -14,7 +14,7 @@
                         {%-if item.InputType == 'input'%}
                         <input type="text" id="{{item.Key}}" name="{{item.Key}}" value="{{item.Value}}" autocomplete="off" placeholder="{{item.Desc}}" class="layui-input">
                         {%-elif item.InputType == 'textarea'%}
-                        <textarea id="{{item.Key}}" name="{{item.Key}}">{{item.Value}}</textarea>
+                        <textarea class="layui-textarea" id="{{item.Key}}" name="{{item.Key}}">{{item.Value}}</textarea>
                         {%-elif item.InputType == 'editor'%}
                         <script data-ueditor id="{{item.Key}}" name="{{item.Key}}" type="text/plain">{{item.Value|safe}}</script>
                         {%-else%}
