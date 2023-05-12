@@ -62,7 +62,7 @@ func main() {
 	if config.RunDaemon() {
 		err := pRuntime.RunDaemon(true)
 		if err != nil {
-			logs.PrintErr(err)
+			logs.PrintlnWarning(err)
 		}
 	}
 	//性能剖析
