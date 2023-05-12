@@ -49,6 +49,8 @@ func RegisterRoutes(app *iris.Application) {
 		application.Party("/", adminMiddleware.AdminLogin, adminMiddleware.AdminPermission).
 			Register(adminMiddleware.RegisterAdmin).Handle(&admin.SiteController{})
 
+		application.Party("/settings", adminMiddleware.AdminLogin).Handle(&admin.SettingsController{})
+
 		application.Party("/upload", adminMiddleware.AdminLogin).Handle(&admin.UploadController{})
 
 		application.Party("/areas", adminMiddleware.AdminLogin, adminMiddleware.AdminPermission).Handle(&admin.AreaController{})

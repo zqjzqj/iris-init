@@ -1,0 +1,34 @@
+{% extends "layouts/main.html" %}
+{% block content %}
+<style>
+    .layui-input{width: 700px;}
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="/settings/edit" method="post" data-action="form" data-ifr-index="0" lay-filter="component-form-group">
+
+                {% for item in Data.List %}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{item.Name}}</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="{{item.Key}}" name="{{item.Key}}" value="{{item.Value}}" autocomplete="off" placeholder="{{item.Desc}}" class="layui-input">
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <div class="layui-footer" style="left: 0;">
+                            <button class="layui-btn">立即提交</button>
+<!--                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+
+{% endblock %}

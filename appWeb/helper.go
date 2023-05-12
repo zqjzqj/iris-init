@@ -6,6 +6,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 	"iris-init/global"
 	"iris-init/model"
+	"iris-init/services"
 	"net/url"
 	"strings"
 )
@@ -47,7 +48,7 @@ func ResponseDataView(view string, dataView DataView, ctx iris.Context) mvc.Resu
 	if dataView.Data == nil {
 		dataView.Data = make(map[string]interface{})
 	}
-	dataView.Title = "系统登录"
+	dataView.Title = services.NewSettingsService().GetWebsiteTitle()
 	//引入资源
 	if len(dataView.ResourcePkg) > 0 {
 		for _, rPkg := range dataView.ResourcePkg {

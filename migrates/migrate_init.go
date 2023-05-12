@@ -25,6 +25,7 @@ func (m MigrateInit) Migrate() *gormigrate.Gormigrate {
 		model.RolesPermissions{},
 		model.RolesAdmin{},
 		model.Roles{},
+		model.Settings{},
 	}
 
 	return gormigrate.New(orm.GetDb(), gormigrate.DefaultOptions, []*gormigrate.Migration{

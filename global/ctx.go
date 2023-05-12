@@ -33,10 +33,10 @@ func CancelGlobalCtx() {
 
 func HandleAppEndFunc(app context2.Application) {
 	CancelGlobalCtx()
-	c, cc := context.WithTimeout(context.Background(), time.Second*3)
+	c, cc := context.WithTimeout(context.Background(), time.Second*1)
 	defer cc()
 	//等待时间根据自身应用来决定
-	logs.PrintlnInfo("等待3s退出进程。。。")
-	time.Sleep(3 * time.Second)
+	logs.PrintlnInfo("等待1s退出进程。。。")
+	time.Sleep(1 * time.Second)
 	_ = app.Shutdown(c)
 }
