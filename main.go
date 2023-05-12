@@ -80,7 +80,7 @@ func main() {
 	app := iris.New()
 	//进程退出时
 	end := pRuntime.HandleEndSignal(func() {
-		logs.PrintlnInfo("Exiting.")
+		logs.PrintlnInfo("Exiting...")
 		global.HandleAppEndFunc(app)
 		logs.PrintlnInfo("Exit OK.")
 	})
