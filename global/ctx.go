@@ -1,6 +1,11 @@
 package global
 
-import "context"
+import (
+	"context"
+	context2 "github.com/kataras/iris/v12/context"
+	"iris-init/logs"
+	"time"
+)
 
 var globalContext = NewContext(context.Background())
 
@@ -24,4 +29,14 @@ func GetGlobalCtx() context.Context {
 func CancelGlobalCtx() {
 	cc := globalContext.Cc
 	cc()
+}
+
+func HandleAppEndFunc(app context2.Application) {
+	CancelGlobalCtx()
+	c, cc := context.WithTimeout(context.Background(), time.Second*3)
+	defer cc()
+	//等待时间根据自身应用来决定
+	logs.PrintlnInfo("等待3s退出进程。。。")
+	time.Sleep(3 * time.Second)
+	_ = app.Shutdown(c)
 }

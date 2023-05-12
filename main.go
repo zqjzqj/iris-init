@@ -72,19 +72,18 @@ func main() {
 		}()
 	}
 
-	//进程退出时
-	end := pRuntime.HandleEndSignal(func() {
-		logs.PrintlnInfo("Exiting...")
-		global.CancelGlobalCtx()
-		logs.PrintlnInfo("Exit OK.")
-	})
-
 	//初始化计划任务
 	err := cron.InitCron()
 	if err != nil {
 		logs.Fatal(err)
 	}
 	app := iris.New()
+	//进程退出时
+	end := pRuntime.HandleEndSignal(func() {
+		logs.PrintlnInfo("Exiting.")
+		global.HandleAppEndFunc(app)
+		logs.PrintlnInfo("Exit OK.")
+	})
 	err = ListenWeb(app)
 	if err != nil {
 		logs.Fatal(err)
