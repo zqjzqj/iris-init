@@ -29,6 +29,38 @@ type DataView struct {
 	ResourcePkg []ResourcePkg
 }
 
+func (dataView *DataView) LoadStaticResource(ignorePrefix ...string) {
+	//引入资源
+	if len(dataView.ResourcePkg) > 0 {
+		for _, rPkg := range dataView.ResourcePkg {
+			dataView.PageCss = append(dataView.PageCss, rPkg.GetCss()...)
+			dataView.PageJs = append(dataView.PageJs, rPkg.GetJs()...)
+		}
+	}
+	for k := range dataView.PageCss {
+		for _, _prefix := range ignorePrefix {
+			if strings.HasPrefix(dataView.PageCss[k], _prefix) {
+				continue
+			}
+		}
+		if !strings.HasPrefix(dataView.PageCss[k], "/static") &&
+			!strings.HasPrefix(dataView.PageCss[k], "http") {
+			dataView.PageCss[k] = fmt.Sprintf("/static/views/css/%s", dataView.PageCss[k])
+		}
+	}
+	for k := range dataView.PageJs {
+		for _, _prefix := range ignorePrefix {
+			if strings.HasPrefix(dataView.PageJs[k], _prefix) {
+				continue
+			}
+		}
+		if !strings.HasPrefix(dataView.PageJs[k], "/static") &&
+			!strings.HasPrefix(dataView.PageJs[k], "http") {
+			dataView.PageJs[k] = fmt.Sprintf("/static/views/js/%s", dataView.PageJs[k])
+		}
+	}
+}
+
 func ResponseView(view mvc.View) mvc.Result {
 	return view
 }
@@ -49,25 +81,10 @@ func ResponseDataView(view string, dataView DataView, ctx iris.Context) mvc.Resu
 		dataView.Data = make(map[string]interface{})
 	}
 	dataView.Title = services.NewSettingsService().GetWebsiteTitle()
-	//引入资源
-	if len(dataView.ResourcePkg) > 0 {
-		for _, rPkg := range dataView.ResourcePkg {
-			dataView.PageCss = append(dataView.PageCss, rPkg.GetCss()...)
-			dataView.PageJs = append(dataView.PageJs, rPkg.GetJs()...)
-		}
+	if dataView.Title == "" {
+		dataView.Title = "iris-init"
 	}
-	for k := range dataView.PageCss {
-		if !strings.HasPrefix(dataView.PageCss[k], "/static") &&
-			!strings.HasPrefix(dataView.PageCss[k], "http") {
-			dataView.PageCss[k] = fmt.Sprintf("/static/views/css/%s", dataView.PageCss[k])
-		}
-	}
-	for k := range dataView.PageJs {
-		if !strings.HasPrefix(dataView.PageJs[k], "/static") &&
-			!strings.HasPrefix(dataView.PageJs[k], "http") {
-			dataView.PageJs[k] = fmt.Sprintf("/static/views/js/%s", dataView.PageJs[k])
-		}
-	}
+	dataView.LoadStaticResource()
 	//模板注入公共参数
 	if ctx != nil {
 		dataView.PageUrl = ctx.Request().URL
