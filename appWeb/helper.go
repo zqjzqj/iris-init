@@ -38,23 +38,27 @@ func (dataView *DataView) LoadStaticResource(ignorePrefix ...string) {
 		}
 	}
 	for k := range dataView.PageCss {
+		var _continue = false
 		for _, _prefix := range ignorePrefix {
 			if strings.HasPrefix(dataView.PageCss[k], _prefix) {
-				continue
+				_continue = true
+				break
 			}
 		}
-		if !strings.HasPrefix(dataView.PageCss[k], "/static") &&
+		if !_continue && !strings.HasPrefix(dataView.PageCss[k], "/static") &&
 			!strings.HasPrefix(dataView.PageCss[k], "http") {
 			dataView.PageCss[k] = fmt.Sprintf("/static/views/css/%s", dataView.PageCss[k])
 		}
 	}
 	for k := range dataView.PageJs {
+		var _continue = false
 		for _, _prefix := range ignorePrefix {
 			if strings.HasPrefix(dataView.PageJs[k], _prefix) {
-				continue
+				_continue = true
+				break
 			}
 		}
-		if !strings.HasPrefix(dataView.PageJs[k], "/static") &&
+		if !_continue && !strings.HasPrefix(dataView.PageJs[k], "/static") &&
 			!strings.HasPrefix(dataView.PageJs[k], "http") {
 			dataView.PageJs[k] = fmt.Sprintf("/static/views/js/%s", dataView.PageJs[k])
 		}
