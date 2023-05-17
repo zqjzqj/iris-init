@@ -20,6 +20,9 @@ func NewPermissionService() PermissionService {
 }
 
 func (permServ PermissionService) GetPremAsMenu(idents []string) []model.Permissions {
+	if len(idents) == 0 {
+		return nil
+	}
 	if len(idents) == 1 && idents[0] == model.RoleAdmin {
 		idents = nil
 	}
