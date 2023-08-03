@@ -80,6 +80,10 @@ func ({{.Alias}}Serv {{.Model}}Service) GetByID(id uint64, _select ...string) mo
 	return {{.Alias}}Serv.repo.GetByID(id, _select...)
 }
 
+func ({{.Alias}}Serv {{.Model}}Service) GetByWhere(where repoInterface.{{.Model}}SearchWhere) model.{{.Model}} {
+	return {{.Alias}}Serv.repo.GetByWhere(where)
+}
+
 func ({{.Alias}}Serv {{.Model}}Service) UpdateByWhere(where repoInterface.{{.Model}}SearchWhere, data interface{}) (rowsAffected int64, err error) {
 	return {{.Alias}}Serv.repo.UpdateByWhere(where, data)
 }
