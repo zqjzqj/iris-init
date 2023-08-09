@@ -10,14 +10,14 @@ type {{.Model}}Repo interface {
 	GetTotalCount(where {{.Model}}SearchWhere) int64
 	GetList(where {{.Model}}SearchWhere) []model.{{.Model}}
 	Delete(_model model.{{.Model}}) (rowsAffected int64, err error)
-	DeleteByID(id ...uint64) (rowsAffected int64, err error)
+	DeleteByID({{.Pk.Name}} ...{{.Pk.Type}}) (rowsAffected int64, err error)
 	Save(_model *model.{{.Model}}, _select ...string) error
 	SaveOmit(_model *model.{{.Model}}, _omit ...string) error
 	Create(_model *[]model.{{.Model}}) error
-	GetByID(id uint64, _select ...string) model.{{.Model}}
-	GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock)
+	GetByID({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}}
+	GetByIDLock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock)
 	GetByWhere(where {{.Model}}SearchWhere) model.{{.Model}}
-	GetIDByWhere(where {{.Model}}SearchWhere) []uint64
+	GetIDByWhere(where {{.Model}}SearchWhere) []{{.Pk.Type}}
     {{- range $key, $item := .UniqueField}}
     GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) model.{{$.Model}}
     {{- end}}

@@ -18,6 +18,7 @@ type Field struct {
 	OnlyRead       bool
 	Search         bool
 	IsNumber       bool
+	IsPk           bool //是否是主键
 }
 
 func GetIndexFields(fields []Field) map[string][]Field {
@@ -90,13 +91,14 @@ func RefStructField(_struct any) []Field {
 			fields = append(fields, RefStructField(ref.Field(i).Type)...)
 		} else {
 			_tag := ref.Field(i).Tag
-			_validate, _unique, _index := GetValidateStrByGormLabel(_tag.Get("gorm"))
+			_validate, _unique, _index, _pk := GetValidateStrByGormLabel(_tag.Get("gorm"))
 			_f := Field{
 				Name:     ref.Field(i).Name,
 				Type:     ref.Field(i).Type.String(),
 				Label:    ref.Field(i).Tag.Get("label"),
 				Unique:   _unique,
 				Index:    _index,
+				IsPk:     _pk,
 				IsNumber: global.IsNumber(ref.Field(i).Type),
 			}
 			_f.NameFirstLower = global.StringFirstLower(_f.Name)
@@ -125,7 +127,7 @@ func RefStructField(_struct any) []Field {
 	return fields
 }
 
-func GetValidateStrByGormLabel(gormLabel string) (validate string, unique string, index string) {
+func GetValidateStrByGormLabel(gormLabel string) (validate string, unique string, index string, pk bool) {
 	_gormLabel := strings.Split(gormLabel, ";")
 	var required = true
 	for _, v := range _gormLabel {
@@ -134,6 +136,9 @@ func GetValidateStrByGormLabel(gormLabel string) (validate string, unique string
 		}
 		if strings.HasPrefix(v, "default:") {
 			required = false
+		}
+		if strings.HasPrefix(v, "primarykey") {
+			pk = true
 		}
 		//如果包含索引
 		if strings.HasPrefix(v, "index:") {

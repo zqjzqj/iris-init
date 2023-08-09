@@ -32,6 +32,7 @@ type ServTpl struct {
 	ModelField           []Field
 	UniqueField          map[string][]Field
 	IndexField           map[string][]Field
+	Pk                   Field
 }
 
 func NewServTpl(_model, alias, ctrDir string) ServTpl {
@@ -49,6 +50,11 @@ func NewServTpl(_model, alias, ctrDir string) ServTpl {
 	st.ModelField = RefStructField(_modelStruct)
 	st.UniqueField = GetUniqueFields(st.ModelField)
 	st.IndexField = GetIndexFields(st.ModelField)
+	for _, field := range st.ModelField {
+		if field.IsPk {
+			st.Pk = field
+		}
+	}
 	return st
 }
 
@@ -165,6 +171,7 @@ func (servTpl ServTpl) GenerateRepoInterface() error {
 		"ModelField":  servTpl.ModelField,
 		"UniqueField": servTpl.UniqueField,
 		"IndexField":  servTpl.IndexField,
+		"Pk":          servTpl.Pk,
 	})
 }
 
@@ -173,6 +180,7 @@ func (servTpl ServTpl) GenerateRepo() error {
 		"ModelField":  servTpl.ModelField,
 		"UniqueField": servTpl.UniqueField,
 		"IndexField":  servTpl.IndexField,
+		"Pk":          servTpl.Pk,
 	})
 }
 
@@ -181,6 +189,7 @@ func (servTpl ServTpl) GenerateService() error {
 		"ModelField":  servTpl.ModelField,
 		"UniqueField": servTpl.UniqueField,
 		"IndexField":  servTpl.IndexField,
+		"Pk":          servTpl.Pk,
 	})
 }
 

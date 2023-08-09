@@ -24,11 +24,11 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByWhere(where repoInterface.{{.Mode
 }
 
 //该方法需要自己去完善 GetSearchWhereTx方法内部
-func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetIDByWhere(where repoInterface.{{.Model}}SearchWhere) []uint64 {
-	var id []uint64
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetIDByWhere(where repoInterface.{{.Model}}SearchWhere) []{{.Pk.Type}} {
+	var {{.Pk.Name}} []{{.Pk.Type}}
 	tx := {{.Alias}}Repo.GetSearchWhereTx(where, nil)
-	tx.Select("id").Model(model.{{.Model}}{}).Scan(&id)
-	return id
+	tx.Select("{{.Pk.NameSnake}}").Model(model.{{.Model}}{}).Scan(&{{.Pk.Name}})
+	return {{.Pk.Name}}
 }
 
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) Create({{.Alias}} *[]model.{{.Model}}) error {
@@ -55,11 +55,11 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) deleteByWhere(query string, args ...in
 	return tx.RowsAffected, tx.Error
 }
 
-func ({{.Alias}}Repo *{{.Model}}RepoGorm) DeleteByID(id ...uint64) (rowsAffected int64, err error) {
-	if len(id) == 1 {
-		return {{.Alias}}Repo.deleteByWhere("id", id[0])
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) DeleteByID({{.Pk.Name}} ...{{.Pk.Type}}) (rowsAffected int64, err error) {
+	if len({{.Pk.Name}}) == 1 {
+		return {{.Alias}}Repo.deleteByWhere("{{.Pk.NameSnake}}", {{.Pk.Name}}[0])
 	}
-	return {{.Alias}}Repo.deleteByWhere("id in ?", id)
+	return {{.Alias}}Repo.deleteByWhere("{{.Pk.NameSnake}} in ?", {{.Pk.Name}})
 }
 
 func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) UpdateByWhere(where repoInterface.{{.Model}}SearchWhere, data interface{}) (rowsAffected int64, err error) {
@@ -125,12 +125,9 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetList(where repoInterface.{{.Model}}
 	return {{.Alias}}
 }
 
-func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByID(id uint64, _select ...string) model.{{.Model}} {
-	if id == 0 {
-		return model.{{.Model}}{}
-	}
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByID({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}} {
 	{{.Alias}} := model.{{.Model}}{}
-	tx := {{.Alias}}Repo.Orm.Where("id", id)
+	tx := {{.Alias}}Repo.Orm.Where("{{.Pk.NameSnake}}", {{.Pk.Name}})
 	if len(_select) > 0 {
 		tx = tx.Select(_select)
 	}
@@ -203,15 +200,12 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{
 }
 {{- end}}
 
-func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
-	if id == 0 {
-		panic("{{.Alias}}Repo.GetByIDLock id must > 0")
-	}
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByIDLock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
 	if !orm.IsBeginTransaction({{.Alias}}Repo.Orm) {
 		panic("{{.Alias}}Repo.GetByIDLock is must beginTransaction")
 	}
 	{{.Alias}} := model.{{.Model}}{}
-	tx := orm.LockForUpdate({{.Alias}}Repo.Orm.Where("id", id))
+	tx := orm.LockForUpdate({{.Alias}}Repo.Orm.Where("{{.Pk.NameSnake}}", {{.Pk.Name}}))
 	if len(_select) > 0 {
 		tx = tx.Select(_select)
 	}

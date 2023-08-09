@@ -70,14 +70,11 @@ func ({{.Alias}}Serv {{.Model}}Service) TotalCount(where repoInterface.{{.Model}
 // 获取一条数据根据ctx
 // 这里条件为ID 传入ctx是方便后续修改参数条件
 func ({{.Alias}}Serv {{.Model}}Service) GetItem(ctx iris.Context, _select ...string) model.{{.Model}} {
-	return {{.Alias}}Serv.repo.GetByID(ctx.URLParamUint64("ID"), _select...)
+	return {{.Alias}}Serv.repo.GetByID(ctx.URLParamUint64("{{.Pk.Name}}"), _select...)
 }
 
-func ({{.Alias}}Serv {{.Model}}Service) GetByID(id uint64, _select ...string) model.{{.Model}} {
-    if id == 0 {
-		return model.{{.Model}}{}
-	}
-	return {{.Alias}}Serv.repo.GetByID(id, _select...)
+func ({{.Alias}}Serv {{.Model}}Service) GetByID({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}} {
+	return {{.Alias}}Serv.repo.GetByID({{.Pk.Name}}, _select...)
 }
 
 func ({{.Alias}}Serv {{.Model}}Service) GetByWhere(where repoInterface.{{.Model}}SearchWhere) model.{{.Model}} {
@@ -132,8 +129,8 @@ func ({{$.Alias}}Serv {{$.Model}}Service) DeleteBy{{$key}}({{- range $item}}{{.N
 }
 {{- end}}
 
-func ({{.Alias}}Serv {{.Model}}Service) GetByIDLock(id uint64, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
-	return {{.Alias}}Serv.repo.GetByIDLock(id, _select...)
+func ({{.Alias}}Serv {{.Model}}Service) GetByIDLock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
+	return {{.Alias}}Serv.repo.GetByIDLock({{.Pk.Name}}, _select...)
 }
 
 // 通过请求ctx编辑/新增一条数据
@@ -164,23 +161,17 @@ func ({{.Alias}}Serv {{.Model}}Service) Create({{.Alias}} *[]model.{{.Model}}) e
 }
 
 func ({{.Alias}}Serv {{.Model}}Service) DeleteByCtx(ctx iris.Context) error {
-	return {{.Alias}}Serv.DeleteByID(uint64(ctx.PostValueInt64Default("ID", 0)))
+	return {{.Alias}}Serv.DeleteByID(uint64(ctx.PostValueInt64Default("{{.Pk.Name}}", 0)))
 }
 
 //这个方法目前是与DeleteByID功能一致 主要是用来扩展的 根据model的多条件作删除 需要开发者自己完成业务逻辑
 func ({{.Alias}}Serv {{.Model}}Service) Delete({{.Alias}} model.{{.Model}}) error {
-	if {{.Alias}}.ID == 0 {
-		return nil
-	}
-	_, err := {{.Alias}}Serv.repo.DeleteByID({{.Alias}}.ID)
+	_, err := {{.Alias}}Serv.repo.DeleteByID({{.Alias}}.{{.Pk.Name}})
     return err
 }
 
-func ({{.Alias}}Serv {{.Model}}Service) DeleteByID(id ...uint64) error {
-	if len(id) == 0 {
-		return nil
-	}
-	_, err := {{.Alias}}Serv.repo.DeleteByID(id...)
+func ({{.Alias}}Serv {{.Model}}Service) DeleteByID({{.Pk.Name}} ...{{.Pk.Type}}) error {
+	_, err := {{.Alias}}Serv.repo.DeleteByID({{.Pk.Name}}...)
 	return err
 }
 
@@ -199,10 +190,10 @@ func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Valida
 		return model.{{.Model}}{}, err
 	}
 	var {{.Alias}} model.{{.Model}}
-	if {{.Alias}}Validator.ID > 0 {
-		{{.Alias}} = {{.Alias}}Serv.repo.GetByID({{.Alias}}Validator.ID)
-		if {{.Alias}}.ID == 0 {
-			return {{.Alias}}, sErr.New("无效的ID")
+	if {{.Alias}}Validator.{{.Pk.Name}} > 0 {
+		{{.Alias}} = {{.Alias}}Serv.repo.GetByID({{.Alias}}Validator.{{.Pk.Name}})
+		if {{.Alias}}.{{.Pk.Name}} == 0 {
+			return {{.Alias}}, sErr.New("无效的{{.Pk.Name}}")
 		}
 	} else {
 		{{.Alias}} = model.{{.Model}}{}
