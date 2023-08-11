@@ -67,6 +67,9 @@ func (admServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global.P
 	where := repoInterface.AdmSearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
+	if pager.Size < 0 {
+		return admServ.repo.GetList(where), nil
+	}
 	pager.SetTotal(admServ.repo.GetTotalCount(where))
 	if pager.Total == 0 {
 		return []model.Admin{}, pager

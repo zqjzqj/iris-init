@@ -27,6 +27,9 @@ func (settingsServ *SettingsService) ListPage(ctx iris.Context) ([]model.Setting
 	where := repoInterface.SettingsSearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
+	if pager.Size < 0 {
+		return settingsServ.repo.GetList(where), nil
+	}
 	pager.SetTotal(settingsServ.repo.GetTotalCount(where))
 	if pager.Total == 0 {
 		return []model.Settings{}, pager
