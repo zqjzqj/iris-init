@@ -29,6 +29,9 @@ func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.M
 	where := repoInterface.{{.Model}}SearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
+	if pager.Size < 0 {
+        return {{.Alias}}Serv.repo.GetList(where), pager
+    }
 	pager.SetTotal({{.Alias}}Serv.repo.GetTotalCount(where))
 	if pager.Total == 0 {
 		return []model.{{.Model}}{}, pager

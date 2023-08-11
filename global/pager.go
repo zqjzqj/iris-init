@@ -45,7 +45,7 @@ func NewPager(ctx iris.Context) *Pager {
 	p.CurrentUrl = req.URL.String()
 	p.PrevUrl = ""
 	p.NextUrl = ""
-	if p.Size <= 0 {
+	if p.Size == 0 {
 		p.Size = DefaultPageSize
 	}
 	p.Offset = (p.Current - 1) * p.Size
