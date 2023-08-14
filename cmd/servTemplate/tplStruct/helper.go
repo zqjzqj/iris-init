@@ -102,6 +102,10 @@ func RefStructField(_struct any) []Field {
 				IsNumber: global.IsNumber(ref.Field(i).Type),
 			}
 			_f.NameFirstLower = global.StringFirstLower(_f.Name)
+			//关键字处理
+			if _f.NameFirstLower == "type" {
+				_f.NameFirstLower = "_type"
+			}
 			if _validate != "" && _f.Name != "ID" {
 				_f.ValidateLabel = `validate:"` + _validate + `"`
 			}
