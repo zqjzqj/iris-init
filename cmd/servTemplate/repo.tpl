@@ -104,6 +104,9 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
     if where.{{.Name}}Egt != "" {
       tx.Where("{{.NameSnake}} >= ?", where.{{.Name}}Egt)
     }
+    if len(where.{{.Name}}In) > 0 {
+      tx.Where("{{.NameSnake}} in ?", where.{{.Name}}In)
+    }
     if where.{{.Name}}Sort != "" {
         if where.{{.Name}}Sort == "asc" {
             tx.Order("{{.NameSnake}} asc")

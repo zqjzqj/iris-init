@@ -47,6 +47,7 @@ type {{.Model}}SearchWhere struct {
     {{.Name}}Egt  string // {{.Name}} >= {{.Name}}Egt
     {{.Name}}Sort string // 排序
     {{- end}}
+    {{.Name}}In []{{.Type}} // in查询
     {{- end}}
 	SelectParams repoComm.SelectFrom
 }
