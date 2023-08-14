@@ -68,6 +68,12 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) UpdateByWhere(where repoInterface.{{
 	return r.RowsAffected, r.Error
 }
 
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteByWhere(where repoInterface.{{.Model}}SearchWhere) (rowsAffected int64, err error) {
+	tx := {{$.Alias}}Repo.GetSearchWhereTx(where, nil)
+	r := tx.Delete(model.{{$.Model}}{})
+	return r.RowsAffected, r.Error
+}
+
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{{.Model}}SearchWhere, tx0 *gorm.DB) *gorm.DB {
 	var tx *gorm.DB
 	if tx0 == nil {
