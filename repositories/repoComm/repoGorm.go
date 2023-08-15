@@ -6,11 +6,12 @@ import (
 )
 
 type RepoGorm struct {
-	Orm *gorm.DB //不要直接修改 调用SetOrm方法设置
+	Orm      *gorm.DB //不要直接修改 调用SetOrm方法设置
+	OrmLasts []*gorm.DB
 }
 
 func NewRepoGorm() RepoGorm {
-	return RepoGorm{orm.GetDb()}
+	return RepoGorm{Orm: orm.GetDb(), OrmLasts: make([]*gorm.DB, 0, 3)}
 }
 
 func (repo *RepoGorm) SetOrm(orm any) {
@@ -18,7 +19,18 @@ func (repo *RepoGorm) SetOrm(orm any) {
 	if !ok {
 		panic("orm must is gorm..")
 	}
+	repo.OrmLasts = append(repo.OrmLasts, repo.Orm)
 	repo.Orm = _orm
+}
+
+func (repo *RepoGorm) ResetLastOrm() {
+	if len(repo.OrmLasts) == 0 {
+		repo.Orm = orm.GetDb()
+	} else {
+		_index := len(repo.OrmLasts) - 1
+		repo.Orm = repo.OrmLasts[_index]
+		repo.OrmLasts = repo.OrmLasts[:_index]
+	}
 }
 
 func (repo *RepoGorm) ResetOrm() {
@@ -28,10 +40,10 @@ func (repo *RepoGorm) ResetOrm() {
 func (repo *RepoGorm) Transaction(f func() error, _repos ...RepoInterface) error {
 	return repo.Orm.Transaction(func(tx *gorm.DB) error {
 		repo.SetOrm(tx)
-		defer repo.ResetOrm()
+		defer repo.ResetLastOrm()
 		for _, _vRepo := range _repos {
 			_vRepo.SetOrm(tx)
-			defer _vRepo.ResetOrm()
+			defer _vRepo.ResetLastOrm()
 		}
 		return f()
 	})
