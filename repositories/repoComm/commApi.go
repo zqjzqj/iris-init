@@ -10,7 +10,7 @@ type ReleaseLock func()
 type RepoInterface interface {
 	SetOrm(orm any) //该方法主要是在事务中 修改当前仓库的session
 	ResetOrm()      //该方法用户还原被修改的orm
-
+	ResetLastOrm()  // 还原上一次事务的orm
 	//第一个参数为执行事务的代码func
 	//第二个参数为关联的数据仓库
 	//第三个参数为关联的其他数据仓库 与第二个参与一样 分开是因为必须要求有一个传递一个关联仓库就算是nil值以防开发时忘记
