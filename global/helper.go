@@ -6,7 +6,6 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
-	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/google/uuid"
 	idvalidator "github.com/guanguans/id-validator"
 	"iris-init/sErr"
@@ -36,52 +35,6 @@ type ShuffleType interface {
 
 // 上传文件序号
 var UploadFileNum uint64
-
-// GenerateXLSX 生成xlsx文件，参数titles和data分别对应xlsx文件的标题和内容
-func GenerateXLSX(titles map[string]string, data []map[string]interface{}) (*excelize.File, error) {
-	// 创建xlsx文件
-	f := excelize.NewFile()
-
-	// 设置表头样式
-	titleStyle, err := f.NewStyle(`{"font":{"bold":true,"size":14},"fill":{"type":"pattern","color":["#9FB6CD"],"pattern":1},"alignment":{"horizontal":"center","vertical":"center"},"border":[{"type":"left","color":"#000000","style":1},{"type":"top","color":"#000000","style":1},{"type":"right","color":"#000000","style":1},{"type":"bottom","color":"#000000","style":1}]}`)
-	if err != nil {
-		return nil, err
-	}
-
-	// 设置单元格样式
-	cellStyle, err := f.NewStyle(`{"font":{"size":12},"alignment":{"horizontal":"center","vertical":"center"},"border":[{"type":"left","color":"#000000","style":1},{"type":"top","color":"#000000","style":1},{"type":"right","color":"#000000","style":1},{"type":"bottom","color":"#000000","style":1}]}`)
-	if err != nil {
-		return nil, err
-	}
-
-	// 添加表头
-	for k, v := range titles {
-		cell := fmt.Sprintf("%s1", k)
-		f.SetCellValue("Sheet1", cell, v)
-		f.SetColWidth("Sheet1", k, k, 25)
-		f.SetCellStyle("Sheet1", cell, cell, titleStyle)
-	}
-
-	// 添加表格内容
-	for i, row := range data {
-		for k, v := range row {
-			cell := fmt.Sprintf("%s%d", k, i+2)
-			f.SetCellValue("Sheet1", cell, v)
-			f.SetCellStyle("Sheet1", cell, cell, cellStyle)
-		}
-	}
-
-	// 设置列宽和行高
-	for i := 1; i <= len(titles); i++ {
-		col := excelize.ToAlphaString(i)
-		f.SetColWidth("Sheet1", col, col, 30)
-	}
-	for i := 1; i <= len(data)+1; i++ {
-		f.SetRowHeight("Sheet1", i, 20)
-	}
-
-	return f, nil
-}
 
 func IsNumber(v any) bool {
 	var ref reflect.Type
