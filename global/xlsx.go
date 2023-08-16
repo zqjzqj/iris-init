@@ -3,6 +3,8 @@ package global
 import (
 	"fmt"
 	"github.com/360EntSecGroup-Skylar/excelize"
+	"io"
+	"os"
 )
 
 // GenerateXLSX 生成xlsx文件，参数titles和data分别对应xlsx文件的标题和内容
@@ -51,13 +53,11 @@ func GenerateXLSX(titles map[string]string, data []map[string]interface{}) (*exc
 	return f, nil
 }
 
-func ParseXLSX(path string) ([]map[string]string, error) {
-	// 打开xlsx文件
-	f, err := excelize.OpenFile(path)
+func ParseXLSXByReader(reader io.Reader) ([]map[string]string, error) {
+	f, err := excelize.OpenReader(reader)
 	if err != nil {
 		return nil, err
 	}
-
 	// 获取第一个Sheet
 	sheetName := f.GetSheetName(1)
 	rows := f.GetRows(sheetName)
@@ -81,4 +81,15 @@ func ParseXLSX(path string) ([]map[string]string, error) {
 	}
 
 	return data, nil
+}
+
+func ParseXLSX(path string) ([]map[string]string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = f.Close()
+	}()
+	return ParseXLSXByReader(f)
 }
