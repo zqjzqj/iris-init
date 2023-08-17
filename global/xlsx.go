@@ -2,7 +2,7 @@ package global
 
 import (
 	"fmt"
-	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/xuri/excelize/v2"
 	"io"
 	"os"
 )
@@ -12,14 +12,86 @@ func GenerateXLSX(titles map[string]string, data []map[string]interface{}) (*exc
 	// 创建xlsx文件
 	f := excelize.NewFile()
 
+	header_style := &excelize.Style{
+		Border: []excelize.Border{
+			{
+				Type:  "left",
+				Color: "#000000",
+				Style: 1,
+			},
+			{
+				Type:  "top",
+				Color: "#000000",
+				Style: 1,
+			},
+			{
+				Type:  "right",
+				Color: "#000000",
+				Style: 1,
+			},
+			{
+				Type:  "bottom",
+				Color: "#000000",
+				Style: 1,
+			},
+		},
+		Fill: excelize.Fill{
+			Type:    "pattern",
+			Color:   []string{"#9FB6CD"},
+			Pattern: 1,
+		},
+		Font: &excelize.Font{
+			Bold: true,
+			Size: 14,
+		},
+		Alignment: &excelize.Alignment{
+			Horizontal: "center",
+			Vertical:   "center",
+			WrapText:   true,
+		},
+	}
+	cell_style := &excelize.Style{
+		Border: []excelize.Border{
+			{
+				Type:  "left",
+				Color: "#000000",
+				Style: 1,
+			},
+			{
+				Type:  "top",
+				Color: "#000000",
+				Style: 1,
+			},
+			{
+				Type:  "right",
+				Color: "#000000",
+				Style: 1,
+			},
+			{
+				Type:  "bottom",
+				Color: "#000000",
+				Style: 1,
+			},
+		},
+		Fill: excelize.Fill{},
+		Font: &excelize.Font{
+			Bold: true,
+			Size: 14,
+		},
+		Alignment: &excelize.Alignment{
+			Horizontal: "center",
+			Vertical:   "center",
+			WrapText:   true,
+		},
+	}
 	// 设置表头样式
-	titleStyle, err := f.NewStyle(`{"font":{"bold":true,"size":14},"fill":{"type":"pattern","color":["#9FB6CD"],"pattern":1},"alignment":{"horizontal":"center","vertical":"center"},"border":[{"type":"left","color":"#000000","style":1},{"type":"top","color":"#000000","style":1},{"type":"right","color":"#000000","style":1},{"type":"bottom","color":"#000000","style":1}],"alignment":{"wrap_text":true}}`)
+	titleStyle, err := f.NewStyle(header_style)
 	if err != nil {
 		return nil, err
 	}
 
 	// 设置单元格样式
-	cellStyle, err := f.NewStyle(`{"font":{"size":12},"alignment":{"horizontal":"center","vertical":"center"},"border":[{"type":"left","color":"#000000","style":1},{"type":"top","color":"#000000","style":1},{"type":"right","color":"#000000","style":1},{"type":"bottom","color":"#000000","style":1}],"alignment":{"wrap_text":true}}`)
+	cellStyle, err := f.NewStyle(cell_style)
 	if err != nil {
 		return nil, err
 	}
@@ -27,27 +99,27 @@ func GenerateXLSX(titles map[string]string, data []map[string]interface{}) (*exc
 	// 添加表头
 	for k, v := range titles {
 		cell := fmt.Sprintf("%s1", k)
-		f.SetCellValue("Sheet1", cell, v)
-		f.SetColWidth("Sheet1", k, k, 25)
-		f.SetCellStyle("Sheet1", cell, cell, titleStyle)
+		_ = f.SetCellValue("Sheet1", cell, v)
+		_ = f.SetColWidth("Sheet1", k, k, 25)
+		_ = f.SetCellStyle("Sheet1", cell, cell, titleStyle)
 	}
 
 	// 添加表格内容
 	for i, row := range data {
 		for k, v := range row {
 			cell := fmt.Sprintf("%s%d", k, i+2)
-			f.SetCellValue("Sheet1", cell, v)
-			f.SetCellStyle("Sheet1", cell, cell, cellStyle)
+			_ = f.SetCellValue("Sheet1", cell, v)
+			_ = f.SetCellStyle("Sheet1", cell, cell, cellStyle)
 		}
 	}
 
 	// 设置列宽和行高
 	for i := 1; i <= len(titles); i++ {
-		col := excelize.ToAlphaString(i)
-		f.SetColWidth("Sheet1", col, col, 30)
+		col := fmt.Sprintf("%d", i)
+		_ = f.SetColWidth("Sheet1", col, col, 30)
 	}
 	for i := 1; i <= len(data)+1; i++ {
-		f.SetRowHeight("Sheet1", i, 20)
+		_ = f.SetRowHeight("Sheet1", i, 20)
 	}
 
 	return f, nil
@@ -58,10 +130,15 @@ func ParseXLSXByReader(reader io.Reader) ([]map[string]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer func() {
+		_ = f.Close()
+	}()
 	// 获取第一个Sheet
 	sheetName := f.GetSheetName(1)
-	rows := f.GetRows(sheetName)
-
+	rows, err := f.GetRows(sheetName)
+	if err != nil {
+		return nil, err
+	}
 	// 获取表头
 	var headers []string
 	if len(rows) > 0 {

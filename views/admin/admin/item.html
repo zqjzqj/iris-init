@@ -5,7 +5,7 @@
         <div class="layui-card-body" style="padding: 15px;">
             <form class="layui-form" action="{%if Data.Self == '1'%}/admin/self{%else%}/admin/edit{%endif%}" method="post" data-action="form" data-ifr-index="0" lay-filter="component-form-group">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">账户名</label>
+                    <label class="layui-form-label" style="color: #cfcfcf">账户名</label>
                     <div class="layui-input-block">
                         <input type="text" name="Username" value="{{Data.Adm.Username}}" autocomplete="off" placeholder="账户名" class="layui-input">
                     </div>
