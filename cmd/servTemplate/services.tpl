@@ -29,7 +29,7 @@ func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.M
 	where := repoInterface.{{.Model}}SearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
-	if pager.Size < 0 {
+    if pager.Size < 0 {
         return {{.Alias}}Serv.repo.GetList(where), nil
     }
 	pager.SetTotal({{.Alias}}Serv.repo.GetTotalCount(where))

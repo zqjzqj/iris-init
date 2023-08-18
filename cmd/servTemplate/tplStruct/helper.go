@@ -91,23 +91,26 @@ func RefStructField(_struct any) []Field {
 			fields = append(fields, RefStructField(ref.Field(i).Type)...)
 		} else {
 			_tag := ref.Field(i).Tag
-			_validate, _unique, _index, _pk := GetValidateStrByGormLabel(_tag.Get("gorm"))
+			gormLabelStruct := GetValidateStrByGormLabel(_tag.Get("gorm"))
 			_f := Field{
 				Name:     ref.Field(i).Name,
 				Type:     ref.Field(i).Type.String(),
 				Label:    ref.Field(i).Tag.Get("label"),
-				Unique:   _unique,
-				Index:    _index,
-				IsPk:     _pk,
+				Unique:   gormLabelStruct.Unique,
+				Index:    gormLabelStruct.Index,
+				IsPk:     gormLabelStruct.IsPk,
 				IsNumber: global.IsNumber(ref.Field(i).Type),
+			}
+			if _f.Label == "" {
+				_f.Label = gormLabelStruct.Comment
 			}
 			_f.NameFirstLower = global.StringFirstLower(_f.Name)
 			//关键字处理
 			if _f.NameFirstLower == "type" {
 				_f.NameFirstLower = "_type"
 			}
-			if _validate != "" && _f.Name != "ID" {
-				_f.ValidateLabel = `validate:"` + _validate + `"`
+			if gormLabelStruct.Validate != "" && _f.Name != "ID" {
+				_f.ValidateLabel = `validate:"` + gormLabelStruct.Validate + `"`
 			}
 			_f.NameSnake = global.SnakeString(_f.Name)
 			if _f.Label == "" {
@@ -131,34 +134,46 @@ func RefStructField(_struct any) []Field {
 	return fields
 }
 
-func GetValidateStrByGormLabel(gormLabel string) (validate string, unique string, index string, pk bool) {
+func GetValidateStrByGormLabel(gormLabel string) GormLabelStruct {
 	_gormLabel := strings.Split(gormLabel, ";")
 	var required = true
+	gormLabelStruct := GormLabelStruct{}
 	for _, v := range _gormLabel {
 		if strings.HasPrefix(v, "size:") {
-			validate += "max=" + strings.TrimLeft(v, "size:") + ","
+			gormLabelStruct.Validate += "max=" + strings.TrimLeft(v, "size:") + ","
 		}
 		if strings.HasPrefix(v, "default:") {
 			required = false
 		}
 		if strings.HasPrefix(v, "primarykey") {
-			pk = true
+			gormLabelStruct.IsPk = true
+		}
+		if strings.HasPrefix(v, "comment:") {
+			gormLabelStruct.Comment = strings.TrimLeft(v, "comment:")
 		}
 		//如果包含索引
 		if strings.HasPrefix(v, "index:") {
 			_index := strings.Split(v, ",")
 			if strings.Contains(v, ",unique") { //唯一索引
-				unique = strings.TrimLeft(_index[0], "index:")
+				gormLabelStruct.Unique = strings.TrimLeft(_index[0], "index:")
 			} else { //普通的索引
-				index = strings.TrimLeft(_index[0], "index:")
+				gormLabelStruct.Index = strings.TrimLeft(_index[0], "index:")
 			}
 		}
 	}
 	if required {
-		validate += "required"
+		gormLabelStruct.Validate += "required"
 	}
-	if validate != "" {
-		validate = strings.TrimRight(validate, ",")
+	if gormLabelStruct.Validate != "" {
+		gormLabelStruct.Validate = strings.TrimRight(gormLabelStruct.Validate, ",")
 	}
-	return
+	return gormLabelStruct
+}
+
+type GormLabelStruct struct {
+	Validate string
+	Unique   string
+	Index    string
+	Comment  string
+	IsPk     bool
 }

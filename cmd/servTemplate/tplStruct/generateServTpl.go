@@ -7,6 +7,7 @@ import (
 	"iris-init/sErr"
 	"os"
 	"os/exec"
+	"path"
 	"runtime"
 	"text/template"
 )
@@ -29,6 +30,7 @@ type ServTpl struct {
 	ViewDir              string
 	viewListTplPath      string
 	viewItemTplPath      string
+	Force                bool
 	ModelField           []Field
 	UniqueField          map[string][]Field
 	IndexField           map[string][]Field
@@ -248,8 +250,18 @@ func (servTpl ServTpl) generateFile(tplPath, filePath string, data map[string]an
 	if err != nil {
 		return err
 	}
-	if global.FileExists(filePath) {
-		return sErr.New("tpl file exists " + filePath)
+	if !servTpl.Force {
+		if global.FileExists(filePath) {
+			return sErr.New("tpl file exists " + filePath)
+		}
+	} else {
+		var i = 0
+		for {
+			filePath = fmt.Sprintf("%s/_%d_%s.go", path.Dir(filePath), i+1, path.Base(filePath))
+			if !global.FileExists(filePath) {
+				break
+			}
+		}
 	}
 	f, err := os.Create(filePath)
 	defer func() { _ = f.Close() }()

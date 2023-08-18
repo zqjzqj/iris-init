@@ -16,6 +16,7 @@ var view = flag.String("view", "", "创建view 默认空 不创建")
 var alias = flag.String("alias", "", "alias")
 var appRoot = flag.String("appRoot", "", "appRoot项目路径，默认为当前目录") //rollback
 var ctrDir = flag.String("ctrDir", "", "控制器生成的子目录，默认为空")        //rollback
+var force = flag.Bool("force", false, "重名是否强制生成， 为true则会选择一个新的文件名生成，但不会覆盖已存在的文件")
 
 func init() {
 	flag.Parse()
@@ -51,6 +52,7 @@ func main() {
 	if *view != "" {
 		servTpl.SetViewDir(*view)
 	}
+	servTpl.Force = *force
 	_ = servTpl.GenerateFile(true)
 	if *_model != "" {
 		err := servTpl.GenerateModel()
