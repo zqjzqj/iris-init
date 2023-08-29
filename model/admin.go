@@ -28,7 +28,7 @@ type Admin struct {
 	Sex             uint8          `gorm:"comment:性别;comment:1男性，2女性,0或其他值为未知;default:0"`
 	Password        string         `gorm:"type:char(32);default:'';comment:密码md5"`
 	Salt            string         `gorm:"type:varchar(32);default:'';comment:盐"`
-	Token           sql.NullString `gorm:"size:32;index:idx_token,unique';comment:用户登陆token"`
+	Token           sql.NullString `gorm:"size:32;index:idx_token,unique;comment:用户登陆token"`
 	TokenStatus     uint8          `gorm:"default:0;comment:0禁用 1正常" mapstructure:"token_status"`
 	LastLoginTime   int64          `gorm:"type:int(11) unsigned;comment:最近一次登陆时间;default:0" mapstructure:"last_login_time"`
 
