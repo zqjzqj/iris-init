@@ -19,7 +19,7 @@ func New{{.Model}}Repo() repoInterface.{{.Model}}Repo {
 //该方法需要自己去完善 GetSearchWhereTx方法内部
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByWhere(where repoInterface.{{.Model}}SearchWhere) model.{{.Model}} {
 	{{.Alias}} := model.{{.Model}}{}
-	_ = {{.Alias}}Repo.GetSearchWhereTx(where, nil).Find(&{{.Alias}})
+	_ = {{.Alias}}Repo.GetSearchWhereTx(where, nil).Limit(1).Find(&{{.Alias}})
 	return {{.Alias}}
 }
 
