@@ -20,7 +20,6 @@ func New{{.Model}}Repo() repoInterface.{{.Model}}Repo {
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByWhere(where repoInterface.{{.Model}}SearchWhere) model.{{.Model}} {
 	{{.Alias}} := model.{{.Model}}{}
 	tx := {{.Alias}}Repo.GetSearchWhereTx(where, nil)
-	where.SelectParams.SetTxGorm(tx)
 	_ = tx.Limit(1).Find(&{{.Alias}})
 	return {{.Alias}}
 }
@@ -118,6 +117,7 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
     }
     {{- end}}
    {{- end}}
+    where.SelectParams.SetTxGorm(tx)
 	return tx
 }
 
@@ -132,7 +132,7 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetTotalCount(where repoInterface.{{.M
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetList(where repoInterface.{{.Model}}SearchWhere) []model.{{.Model}} {
 	{{.Alias}} := make([]model.{{.Model}}, 0, where.SelectParams.RetSize)
 	tx := {{.Alias}}Repo.GetSearchWhereTx(where, nil)
-	where.SelectParams.SetTxGorm(tx).Find(&{{.Alias}})
+	tx.Find(&{{.Alias}})
 	return {{.Alias}}
 }
 
