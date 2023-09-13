@@ -14,6 +14,10 @@ func NewRepoGorm() RepoGorm {
 	return RepoGorm{Orm: orm.GetDb(), OrmLasts: make([]*gorm.DB, 0, 3)}
 }
 
+func (repo *RepoGorm) GetOrm() any {
+	return repo.Orm
+}
+
 func (repo *RepoGorm) SetOrm(orm any) {
 	_orm, ok := orm.(*gorm.DB)
 	if !ok {
