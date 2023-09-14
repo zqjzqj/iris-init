@@ -86,6 +86,9 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
    	if where.{{.Name}} != "" {
         tx.Where("{{.NameSnake}}", where.{{.Name}})
    	}
+   	if where.{{.Name}}Neq != "" {
+            tx.Where("{{.NameSnake}} <> ?", where.{{.Name}}Neq)
+    }
    {{- if eq .Type "string"}}
    	if where.{{.Name}}Like != "" {
        tx.Where("{{.NameSnake}} like ?", "%"+where.{{.Name}}Like+"%")
@@ -107,6 +110,9 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
     if len(where.{{.Name}}In) > 0 {
       tx.Where("{{.NameSnake}} in ?", where.{{.Name}}In)
     }
+     if len(where.{{.Name}}NotIn) > 0 {
+      tx.Where("{{.NameSnake}} not in ?", where.{{.Name}}NotIn)
+    }
     if where.{{.Name}}Sort != "" {
         if where.{{.Name}}Sort == "asc" {
             tx.Order("{{.NameSnake}} asc")
@@ -116,7 +122,7 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
     }
     {{- end}}
    {{- end}}
-    where.SelectParams.SetTxGorm(tx)
+   where.SelectParams.SetTxGorm(tx)
 	return tx
 }
 
@@ -223,4 +229,16 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByIDLock({{.Pk.Name}} {{.Pk.Type}},
 
 	//这里返回一个空的释放锁方法 因为gorm在事务提交或回滚后会自动释放
 	return {{.Alias}}, func() {}
+}
+
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByWhere(where repoInterface.QuestionSearchWhere, dest any) error {
+	return {{.Alias}}Repo.GetSearchWhereTx(where, nil).Find(&dest).Error
+}
+
+func (questionRepo *QuestionRepoGorm) ScanByOrWhere(dest any, where ...repoInterface.QuestionSearchWhere) error {
+	tx := {{.Alias}}Repo.Orm.Model(model.{{.Model}}{})
+	for _, v := range where {
+		tx.Or({{.Alias}}Repo.GetSearchWhereTx(v, nil))
+	}
+	return tx.Find(&dest).Error
 }

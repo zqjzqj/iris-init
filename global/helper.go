@@ -361,6 +361,14 @@ func StrArrToUintArr(element []string) []uint64 {
 	return elementUint64
 }
 
+func Int8Arr2IntArr(r []uint8) []int {
+	rr := make([]int, 0, len(r))
+	for _, v := range r {
+		rr = append(rr, int(v))
+	}
+	return rr
+}
+
 func NumberArrToStrArr[T NumberIntType](element []T) []string {
 	elementString := make([]string, 0, len(element))
 	for _, v := range element {

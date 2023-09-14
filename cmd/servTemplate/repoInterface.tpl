@@ -32,11 +32,14 @@ type {{.Model}}Repo interface {
     {{- end}}
     UpdateByWhere(where {{.Model}}SearchWhere, data interface{}) (rowsAffected int64, err error)
     DeleteByWhere(where {{.Model}}SearchWhere) (rowsAffected int64, err error)
+    ScanByWhere(where {{.Model}}SearchWhere, dest any) error
+    ScanByOrWhere(dest any, where ...{{.Model}}SearchWhere) error
 }
 
 type {{.Model}}SearchWhere struct {
     {{- range .ModelField}}
     {{.Name}}     string
+    {{.Name}}Neq string //不等于条件
     {{- if eq .Type "string" }}
     {{.Name}}Like string
     {{- end}}
@@ -47,7 +50,13 @@ type {{.Model}}SearchWhere struct {
     {{.Name}}Egt  string // {{.Name}} >= {{.Name}}Egt
     {{.Name}}Sort string // 排序
     {{- end}}
+    {{- if eq .Type "uint8"}}
+    {{.Name}}NotIn []int // not in查询
+    {{.Name}}In []int // in查询
+    {{- else}}
+    {{.Name}}NotIn []{{.Type}} // not in查询
     {{.Name}}In []{{.Type}} // in查询
+    {{- end}}
     {{- end}}
 	SelectParams repoComm.SelectFrom
 }
