@@ -49,6 +49,7 @@ type OrderByParams struct {
 	Column  string
 	Desc    bool
 	Reorder bool
+	Raw     bool
 }
 
 // 用于关联预加载
@@ -82,7 +83,7 @@ func (selectFrom SelectFrom) SetTxGorm(tx *gorm.DB) *gorm.DB {
 	}
 	if len(selectFrom.OrderBy) > 0 {
 		for _, v := range selectFrom.OrderBy {
-			tx.Order(clause.OrderByColumn{Column: clause.Column{Name: v.Column}, Desc: v.Desc, Reorder: v.Reorder})
+			tx.Order(clause.OrderByColumn{Column: clause.Column{Name: v.Column, Raw: v.Raw}, Desc: v.Desc, Reorder: v.Reorder})
 		}
 	}
 	if len(selectFrom.Select) > 0 {
