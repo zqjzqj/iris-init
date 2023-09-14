@@ -84,11 +84,11 @@ func ({{.Alias}}Serv {{.Model}}Service) GetByWhere(where repoInterface.{{.Model}
 	return {{.Alias}}Serv.repo.GetByWhere(where)
 }
 
-func ({{.Alias}}Serv {{.Model}}Service) ScanByWhere(where repoInterface.QuestionSearchWhere, dest any) error {
+func ({{.Alias}}Serv {{.Model}}Service) ScanByWhere(where repoInterface.{{.Model}}SearchWhere, dest any) error {
     return {{.Alias}}Serv.repo.ScanByWhere(where, dest)
 }
 
-func ({{.Alias}}Serv {{.Model}}Service) ScanByOrWhere(dest any, where ...repoInterface.QuestionSearchWhere) error {
+func ({{.Alias}}Serv {{.Model}}Service) ScanByOrWhere(dest any, where ...repoInterface.{{.Model}}SearchWhere) error {
     return {{.Alias}}Serv.repo.ScanByOrWhere(dest, where...)
 }
 

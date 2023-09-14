@@ -231,11 +231,11 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByIDLock({{.Pk.Name}} {{.Pk.Type}},
 	return {{.Alias}}, func() {}
 }
 
-func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByWhere(where repoInterface.QuestionSearchWhere, dest any) error {
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByWhere(where repoInterface.{{.Model}}SearchWhere, dest any) error {
 	return {{.Alias}}Repo.GetSearchWhereTx(where, nil).Find(&dest).Error
 }
 
-func (questionRepo *QuestionRepoGorm) ScanByOrWhere(dest any, where ...repoInterface.QuestionSearchWhere) error {
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByOrWhere(dest any, where ...repoInterface.{{.Model}}SearchWhere) error {
 	tx := {{.Alias}}Repo.Orm.Model(model.{{.Model}}{})
 	for _, v := range where {
 		tx.Or({{.Alias}}Repo.GetSearchWhereTx(v, nil))
