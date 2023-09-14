@@ -232,7 +232,7 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByIDLock({{.Pk.Name}} {{.Pk.Type}},
 }
 
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByWhere(where repoInterface.{{.Model}}SearchWhere, dest any) error {
-	return {{.Alias}}Repo.GetSearchWhereTx(where, nil).Find(&dest).Error
+	return {{.Alias}}Repo.GetSearchWhereTx(where, nil).Find(dest).Error
 }
 
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByOrWhere(dest any, where ...repoInterface.{{.Model}}SearchWhere) error {
@@ -240,5 +240,5 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByOrWhere(dest any, where ...repoI
 	for _, v := range where {
 		tx.Or({{.Alias}}Repo.GetSearchWhereTx(v, nil))
 	}
-	return tx.Find(&dest).Error
+	return tx.Find(dest).Error
 }
