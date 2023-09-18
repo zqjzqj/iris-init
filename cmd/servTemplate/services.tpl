@@ -21,6 +21,12 @@ func New{{.Model}}Service() {{.Model}}Service {
 	return {{.Model}}Service{repo: repositories.New{{.Model}}Repo()}
 }
 
+func New{{.Model}}ServiceByOrm(orm any) {{.Model}}Service {
+	r := {{.Model}}Service{repo: repositories.New{{.Model}}Repo()}
+	r.repo.SetOrm(orm)
+	return r
+}
+
 type {{.Model}}Service struct {
 	repo repoInterface.{{.Model}}Repo
 }
