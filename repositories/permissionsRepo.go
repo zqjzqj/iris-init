@@ -68,6 +68,11 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.IDNull {
 		tx.Where("id is null")
 	}
+
+	if len(where.IDIn) > 0 {
+		tx.Where("id in ?", where.IDIn)
+	}
+
 	if where.IDNotNull {
 		tx.Where("id is not null")
 	}
@@ -82,9 +87,6 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	}
 	if where.IDEgt != "" {
 		tx.Where("id >= ?", where.IDEgt)
-	}
-	if len(where.IDIn) > 0 {
-		tx.Where("id in ?", where.IDIn)
 	}
 	if len(where.IDNotIn) > 0 {
 		tx.Where("id not in ?", where.IDNotIn)
@@ -106,6 +108,11 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.PidNull {
 		tx.Where("pid is null")
 	}
+
+	if len(where.PidIn) > 0 {
+		tx.Where("pid in ?", where.PidIn)
+	}
+
 	if where.PidNotNull {
 		tx.Where("pid is not null")
 	}
@@ -120,9 +127,6 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	}
 	if where.PidEgt != "" {
 		tx.Where("pid >= ?", where.PidEgt)
-	}
-	if len(where.PidIn) > 0 {
-		tx.Where("pid in ?", where.PidIn)
 	}
 	if len(where.PidNotIn) > 0 {
 		tx.Where("pid not in ?", where.PidNotIn)
@@ -144,6 +148,11 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.LevelNull {
 		tx.Where("level is null")
 	}
+
+	if len(where.LevelIn) > 0 {
+		tx.Where("level in ?", where.LevelIn)
+	}
+
 	if where.LevelNotNull {
 		tx.Where("level is not null")
 	}
@@ -158,9 +167,6 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	}
 	if where.LevelEgt != "" {
 		tx.Where("level >= ?", where.LevelEgt)
-	}
-	if len(where.LevelIn) > 0 {
-		tx.Where("level in ?", where.LevelIn)
 	}
 	if len(where.LevelNotIn) > 0 {
 		tx.Where("level not in ?", where.LevelNotIn)
@@ -182,11 +188,23 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.NameNull {
 		tx.Where("name is null")
 	}
+	if where.NameLike != "" {
+		tx.Where("name like ?", "%"+where.NameLike+"%")
+	}
+
+	if len(where.NameIn) > 0 {
+		tx.Where("name in ?", where.NameIn)
+	}
+
 	if where.NameNotNull {
 		tx.Where("name is not null")
 	}
-	if where.NameLike != "" {
-		tx.Where("name like ?", "%"+where.NameLike+"%")
+	if where.NameSort != "" {
+		if where.NameSort == "asc" {
+			tx.Order("name asc")
+		} else {
+			tx.Order("name desc")
+		}
 	}
 	//需要额外调整
 	if where.Method != "" {
@@ -198,11 +216,23 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.MethodNull {
 		tx.Where("method is null")
 	}
+	if where.MethodLike != "" {
+		tx.Where("method like ?", "%"+where.MethodLike+"%")
+	}
+
+	if len(where.MethodIn) > 0 {
+		tx.Where("method in ?", where.MethodIn)
+	}
+
 	if where.MethodNotNull {
 		tx.Where("method is not null")
 	}
-	if where.MethodLike != "" {
-		tx.Where("method like ?", "%"+where.MethodLike+"%")
+	if where.MethodSort != "" {
+		if where.MethodSort == "asc" {
+			tx.Order("method asc")
+		} else {
+			tx.Order("method desc")
+		}
 	}
 	//需要额外调整
 	if where.Path != "" {
@@ -214,11 +244,23 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.PathNull {
 		tx.Where("path is null")
 	}
+	if where.PathLike != "" {
+		tx.Where("path like ?", "%"+where.PathLike+"%")
+	}
+
+	if len(where.PathIn) > 0 {
+		tx.Where("path in ?", where.PathIn)
+	}
+
 	if where.PathNotNull {
 		tx.Where("path is not null")
 	}
-	if where.PathLike != "" {
-		tx.Where("path like ?", "%"+where.PathLike+"%")
+	if where.PathSort != "" {
+		if where.PathSort == "asc" {
+			tx.Order("path asc")
+		} else {
+			tx.Order("path desc")
+		}
 	}
 	//需要额外调整
 	if where.Sort != "" {
@@ -230,6 +272,11 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.SortNull {
 		tx.Where("sort is null")
 	}
+
+	if len(where.SortIn) > 0 {
+		tx.Where("sort in ?", where.SortIn)
+	}
+
 	if where.SortNotNull {
 		tx.Where("sort is not null")
 	}
@@ -244,9 +291,6 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	}
 	if where.SortEgt != "" {
 		tx.Where("sort >= ?", where.SortEgt)
-	}
-	if len(where.SortIn) > 0 {
-		tx.Where("sort in ?", where.SortIn)
 	}
 	if len(where.SortNotIn) > 0 {
 		tx.Where("sort not in ?", where.SortNotIn)
@@ -268,11 +312,23 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.IdentNull {
 		tx.Where("ident is null")
 	}
+	if where.IdentLike != "" {
+		tx.Where("ident like ?", "%"+where.IdentLike+"%")
+	}
+
+	if len(where.IdentIn) > 0 {
+		tx.Where("ident in ?", where.IdentIn)
+	}
+
 	if where.IdentNotNull {
 		tx.Where("ident is not null")
 	}
-	if where.IdentLike != "" {
-		tx.Where("ident like ?", "%"+where.IdentLike+"%")
+	if where.IdentSort != "" {
+		if where.IdentSort == "asc" {
+			tx.Order("ident asc")
+		} else {
+			tx.Order("ident desc")
+		}
 	}
 	//需要额外调整
 	if where.Children != "" {
@@ -284,8 +340,20 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.ChildrenNull {
 		tx.Where("children is null")
 	}
+
+	if len(where.ChildrenIn) > 0 {
+		tx.Where("children in ?", where.ChildrenIn)
+	}
+
 	if where.ChildrenNotNull {
 		tx.Where("children is not null")
+	}
+	if where.ChildrenSort != "" {
+		if where.ChildrenSort == "asc" {
+			tx.Order("children asc")
+		} else {
+			tx.Order("children desc")
+		}
 	}
 	//需要额外调整
 	if where.CreatedAt != "" {
@@ -297,6 +365,11 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.CreatedAtNull {
 		tx.Where("created_at is null")
 	}
+
+	if len(where.CreatedAtIn) > 0 {
+		tx.Where("created_at in ?", where.CreatedAtIn)
+	}
+
 	if where.CreatedAtNotNull {
 		tx.Where("created_at is not null")
 	}
@@ -311,9 +384,6 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	}
 	if where.CreatedAtEgt != "" {
 		tx.Where("created_at >= ?", where.CreatedAtEgt)
-	}
-	if len(where.CreatedAtIn) > 0 {
-		tx.Where("created_at in ?", where.CreatedAtIn)
 	}
 	if len(where.CreatedAtNotIn) > 0 {
 		tx.Where("created_at not in ?", where.CreatedAtNotIn)
@@ -335,6 +405,11 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	if where.UpdatedAtNull {
 		tx.Where("updated_at is null")
 	}
+
+	if len(where.UpdatedAtIn) > 0 {
+		tx.Where("updated_at in ?", where.UpdatedAtIn)
+	}
+
 	if where.UpdatedAtNotNull {
 		tx.Where("updated_at is not null")
 	}
@@ -349,9 +424,6 @@ func (permissionsRepo *PermissionsRepoGorm) GetSearchWhereTx(where repoInterface
 	}
 	if where.UpdatedAtEgt != "" {
 		tx.Where("updated_at >= ?", where.UpdatedAtEgt)
-	}
-	if len(where.UpdatedAtIn) > 0 {
-		tx.Where("updated_at in ?", where.UpdatedAtIn)
 	}
 	if len(where.UpdatedAtNotIn) > 0 {
 		tx.Where("updated_at not in ?", where.UpdatedAtNotIn)

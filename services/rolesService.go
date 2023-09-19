@@ -61,6 +61,10 @@ func (rolesServ RolesService) ListAvailable(_select ...string) []model.Roles {
 	return rolesServ.repo.GetList(repoInterface.RolesSearchWhere{
 		SelectParams: repoComm.SelectFrom{
 			Select: _select,
+			OrderBy: []repoComm.OrderByParams{{
+				Column: "ID",
+				Desc:   true,
+			}},
 		},
 	})
 }
@@ -258,6 +262,10 @@ func (rolesServ RolesService) Create(roles *[]model.Roles) error {
 
 func (rolesServ RolesService) GetByIDLock(ID uint64, _select ...string) (model.Roles, repoComm.ReleaseLock) {
 	return rolesServ.repo.GetByIDLock(ID, _select...)
+}
+
+func (rolesServ RolesService) GetRolesByID(id ...uint64) []model.Roles {
+	return rolesServ.repo.GetRolesByID(id...)
 }
 
 type RolesValidator struct {

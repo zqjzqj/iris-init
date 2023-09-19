@@ -35,9 +35,9 @@ type SettingsSearchWhere struct {
 	IDGt             string   // ID > IDGt
 	IDElt            string   // ID <= IDElt
 	IDEgt            string   // ID >= IDEgt
-	IDSort           string   // 排序
 	IDNotIn          []uint64 // not in查询
 	IDIn             []uint64 // in查询
+	IDSort           string   // 排序
 	Key              string
 	KeyNeq           string //不等于条件
 	KeyNull          bool
@@ -45,6 +45,7 @@ type SettingsSearchWhere struct {
 	KeyLike          string
 	KeyNotIn         []string // not in查询
 	KeyIn            []string // in查询
+	KeySort          string   // 排序
 	Name             string
 	NameNeq          string //不等于条件
 	NameNull         bool
@@ -52,6 +53,7 @@ type SettingsSearchWhere struct {
 	NameLike         string
 	NameNotIn        []string // not in查询
 	NameIn           []string // in查询
+	NameSort         string   // 排序
 	Desc             string
 	DescNeq          string //不等于条件
 	DescNull         bool
@@ -59,6 +61,7 @@ type SettingsSearchWhere struct {
 	DescLike         string
 	DescNotIn        []string // not in查询
 	DescIn           []string // in查询
+	DescSort         string   // 排序
 	Value            string
 	ValueNeq         string //不等于条件
 	ValueNull        bool
@@ -66,6 +69,7 @@ type SettingsSearchWhere struct {
 	ValueLike        string
 	ValueNotIn       []string // not in查询
 	ValueIn          []string // in查询
+	ValueSort        string   // 排序
 	InputType        string
 	InputTypeNeq     string //不等于条件
 	InputTypeNull    bool
@@ -73,6 +77,7 @@ type SettingsSearchWhere struct {
 	InputTypeLike    string
 	InputTypeNotIn   []string // not in查询
 	InputTypeIn      []string // in查询
+	InputTypeSort    string   // 排序
 	CreatedAt        string
 	CreatedAtNeq     string //不等于条件
 	CreatedAtNull    bool
@@ -81,9 +86,9 @@ type SettingsSearchWhere struct {
 	CreatedAtGt      string  // CreatedAt > CreatedAtGt
 	CreatedAtElt     string  // CreatedAt <= CreatedAtElt
 	CreatedAtEgt     string  // CreatedAt >= CreatedAtEgt
-	CreatedAtSort    string  // 排序
 	CreatedAtNotIn   []int64 // not in查询
 	CreatedAtIn      []int64 // in查询
+	CreatedAtSort    string  // 排序
 	UpdatedAt        string
 	UpdatedAtNeq     string //不等于条件
 	UpdatedAtNull    bool
@@ -92,8 +97,8 @@ type SettingsSearchWhere struct {
 	UpdatedAtGt      string  // UpdatedAt > UpdatedAtGt
 	UpdatedAtElt     string  // UpdatedAt <= UpdatedAtElt
 	UpdatedAtEgt     string  // UpdatedAt >= UpdatedAtEgt
-	UpdatedAtSort    string  // 排序
 	UpdatedAtNotIn   []int64 // not in查询
 	UpdatedAtIn      []int64 // in查询
+	UpdatedAtSort    string  // 排序
 	SelectParams     repoComm.SelectFrom
 }

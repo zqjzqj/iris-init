@@ -92,14 +92,20 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
     if where.{{.Name}}Null {
         tx.Where("{{.NameSnake}} is null")
     }
-    if where.{{.Name}}NotNull {
-        tx.Where("{{.NameSnake}} is not null")
-    }
+
    {{- if eq .Type "string"}}
    	if where.{{.Name}}Like != "" {
        tx.Where("{{.NameSnake}} like ?", "%"+where.{{.Name}}Like+"%")
     }
    {{- end}}
+
+    if len(where.{{.Name}}In) > 0 {
+      tx.Where("{{.NameSnake}} in ?", where.{{.Name}}In)
+    }
+
+    if where.{{.Name}}NotNull {
+        tx.Where("{{.NameSnake}} is not null")
+    }
    {{- if .IsNumber}}
     if where.{{.Name}}Lt != "" {
       tx.Where("{{.NameSnake}} < ?", where.{{.Name}}Lt)
@@ -113,12 +119,10 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
     if where.{{.Name}}Egt != "" {
       tx.Where("{{.NameSnake}} >= ?", where.{{.Name}}Egt)
     }
-    if len(where.{{.Name}}In) > 0 {
-      tx.Where("{{.NameSnake}} in ?", where.{{.Name}}In)
-    }
      if len(where.{{.Name}}NotIn) > 0 {
       tx.Where("{{.NameSnake}} not in ?", where.{{.Name}}NotIn)
     }
+    {{- end}}
     if where.{{.Name}}Sort != "" {
         if where.{{.Name}}Sort == "asc" {
             tx.Order("{{.NameSnake}} asc")
@@ -126,7 +130,6 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
             tx.Order("{{.NameSnake}} desc")
         }
     }
-    {{- end}}
    {{- end}}
    where.SelectParams.SetTxGorm(tx)
 	return tx

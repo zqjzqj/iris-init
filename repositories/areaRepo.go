@@ -91,6 +91,11 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.IDNull {
 		tx.Where("id is null")
 	}
+
+	if len(where.IDIn) > 0 {
+		tx.Where("id in ?", where.IDIn)
+	}
+
 	if where.IDNotNull {
 		tx.Where("id is not null")
 	}
@@ -105,9 +110,6 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	}
 	if where.IDEgt != "" {
 		tx.Where("id >= ?", where.IDEgt)
-	}
-	if len(where.IDIn) > 0 {
-		tx.Where("id in ?", where.IDIn)
 	}
 	if len(where.IDNotIn) > 0 {
 		tx.Where("id not in ?", where.IDNotIn)
@@ -129,6 +131,11 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.PidNull {
 		tx.Where("pid is null")
 	}
+
+	if len(where.PidIn) > 0 {
+		tx.Where("pid in ?", where.PidIn)
+	}
+
 	if where.PidNotNull {
 		tx.Where("pid is not null")
 	}
@@ -143,9 +150,6 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	}
 	if where.PidEgt != "" {
 		tx.Where("pid >= ?", where.PidEgt)
-	}
-	if len(where.PidIn) > 0 {
-		tx.Where("pid in ?", where.PidIn)
 	}
 	if len(where.PidNotIn) > 0 {
 		tx.Where("pid not in ?", where.PidNotIn)
@@ -167,11 +171,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.ShortNameNull {
 		tx.Where("short_name is null")
 	}
+	if where.ShortNameLike != "" {
+		tx.Where("short_name like ?", "%"+where.ShortNameLike+"%")
+	}
+
+	if len(where.ShortNameIn) > 0 {
+		tx.Where("short_name in ?", where.ShortNameIn)
+	}
+
 	if where.ShortNameNotNull {
 		tx.Where("short_name is not null")
 	}
-	if where.ShortNameLike != "" {
-		tx.Where("short_name like ?", "%"+where.ShortNameLike+"%")
+	if where.ShortNameSort != "" {
+		if where.ShortNameSort == "asc" {
+			tx.Order("short_name asc")
+		} else {
+			tx.Order("short_name desc")
+		}
 	}
 	//需要额外调整
 	if where.Name != "" {
@@ -183,11 +199,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.NameNull {
 		tx.Where("name is null")
 	}
+	if where.NameLike != "" {
+		tx.Where("name like ?", "%"+where.NameLike+"%")
+	}
+
+	if len(where.NameIn) > 0 {
+		tx.Where("name in ?", where.NameIn)
+	}
+
 	if where.NameNotNull {
 		tx.Where("name is not null")
 	}
-	if where.NameLike != "" {
-		tx.Where("name like ?", "%"+where.NameLike+"%")
+	if where.NameSort != "" {
+		if where.NameSort == "asc" {
+			tx.Order("name asc")
+		} else {
+			tx.Order("name desc")
+		}
 	}
 	//需要额外调整
 	if where.MergerName != "" {
@@ -199,11 +227,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.MergerNameNull {
 		tx.Where("merger_name is null")
 	}
+	if where.MergerNameLike != "" {
+		tx.Where("merger_name like ?", "%"+where.MergerNameLike+"%")
+	}
+
+	if len(where.MergerNameIn) > 0 {
+		tx.Where("merger_name in ?", where.MergerNameIn)
+	}
+
 	if where.MergerNameNotNull {
 		tx.Where("merger_name is not null")
 	}
-	if where.MergerNameLike != "" {
-		tx.Where("merger_name like ?", "%"+where.MergerNameLike+"%")
+	if where.MergerNameSort != "" {
+		if where.MergerNameSort == "asc" {
+			tx.Order("merger_name asc")
+		} else {
+			tx.Order("merger_name desc")
+		}
 	}
 	//需要额外调整
 	if where.Level != "" {
@@ -215,6 +255,11 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.LevelNull {
 		tx.Where("level is null")
 	}
+
+	if len(where.LevelIn) > 0 {
+		tx.Where("level in ?", where.LevelIn)
+	}
+
 	if where.LevelNotNull {
 		tx.Where("level is not null")
 	}
@@ -229,9 +274,6 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	}
 	if where.LevelEgt != "" {
 		tx.Where("level >= ?", where.LevelEgt)
-	}
-	if len(where.LevelIn) > 0 {
-		tx.Where("level in ?", where.LevelIn)
 	}
 	if len(where.LevelNotIn) > 0 {
 		tx.Where("level not in ?", where.LevelNotIn)
@@ -253,11 +295,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.PinYinNull {
 		tx.Where("pin_yin is null")
 	}
+	if where.PinYinLike != "" {
+		tx.Where("pin_yin like ?", "%"+where.PinYinLike+"%")
+	}
+
+	if len(where.PinYinIn) > 0 {
+		tx.Where("pin_yin in ?", where.PinYinIn)
+	}
+
 	if where.PinYinNotNull {
 		tx.Where("pin_yin is not null")
 	}
-	if where.PinYinLike != "" {
-		tx.Where("pin_yin like ?", "%"+where.PinYinLike+"%")
+	if where.PinYinSort != "" {
+		if where.PinYinSort == "asc" {
+			tx.Order("pin_yin asc")
+		} else {
+			tx.Order("pin_yin desc")
+		}
 	}
 	//需要额外调整
 	if where.Code != "" {
@@ -269,11 +323,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.CodeNull {
 		tx.Where("code is null")
 	}
+	if where.CodeLike != "" {
+		tx.Where("code like ?", "%"+where.CodeLike+"%")
+	}
+
+	if len(where.CodeIn) > 0 {
+		tx.Where("code in ?", where.CodeIn)
+	}
+
 	if where.CodeNotNull {
 		tx.Where("code is not null")
 	}
-	if where.CodeLike != "" {
-		tx.Where("code like ?", "%"+where.CodeLike+"%")
+	if where.CodeSort != "" {
+		if where.CodeSort == "asc" {
+			tx.Order("code asc")
+		} else {
+			tx.Order("code desc")
+		}
 	}
 	//需要额外调整
 	if where.ZipCode != "" {
@@ -285,11 +351,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.ZipCodeNull {
 		tx.Where("zip_code is null")
 	}
+	if where.ZipCodeLike != "" {
+		tx.Where("zip_code like ?", "%"+where.ZipCodeLike+"%")
+	}
+
+	if len(where.ZipCodeIn) > 0 {
+		tx.Where("zip_code in ?", where.ZipCodeIn)
+	}
+
 	if where.ZipCodeNotNull {
 		tx.Where("zip_code is not null")
 	}
-	if where.ZipCodeLike != "" {
-		tx.Where("zip_code like ?", "%"+where.ZipCodeLike+"%")
+	if where.ZipCodeSort != "" {
+		if where.ZipCodeSort == "asc" {
+			tx.Order("zip_code asc")
+		} else {
+			tx.Order("zip_code desc")
+		}
 	}
 	//需要额外调整
 	if where.First != "" {
@@ -301,11 +379,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.FirstNull {
 		tx.Where("first is null")
 	}
+	if where.FirstLike != "" {
+		tx.Where("first like ?", "%"+where.FirstLike+"%")
+	}
+
+	if len(where.FirstIn) > 0 {
+		tx.Where("first in ?", where.FirstIn)
+	}
+
 	if where.FirstNotNull {
 		tx.Where("first is not null")
 	}
-	if where.FirstLike != "" {
-		tx.Where("first like ?", "%"+where.FirstLike+"%")
+	if where.FirstSort != "" {
+		if where.FirstSort == "asc" {
+			tx.Order("first asc")
+		} else {
+			tx.Order("first desc")
+		}
 	}
 	//需要额外调整
 	if where.Lng != "" {
@@ -317,11 +407,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.LngNull {
 		tx.Where("lng is null")
 	}
+	if where.LngLike != "" {
+		tx.Where("lng like ?", "%"+where.LngLike+"%")
+	}
+
+	if len(where.LngIn) > 0 {
+		tx.Where("lng in ?", where.LngIn)
+	}
+
 	if where.LngNotNull {
 		tx.Where("lng is not null")
 	}
-	if where.LngLike != "" {
-		tx.Where("lng like ?", "%"+where.LngLike+"%")
+	if where.LngSort != "" {
+		if where.LngSort == "asc" {
+			tx.Order("lng asc")
+		} else {
+			tx.Order("lng desc")
+		}
 	}
 	//需要额外调整
 	if where.Lat != "" {
@@ -333,11 +435,23 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.LatNull {
 		tx.Where("lat is null")
 	}
+	if where.LatLike != "" {
+		tx.Where("lat like ?", "%"+where.LatLike+"%")
+	}
+
+	if len(where.LatIn) > 0 {
+		tx.Where("lat in ?", where.LatIn)
+	}
+
 	if where.LatNotNull {
 		tx.Where("lat is not null")
 	}
-	if where.LatLike != "" {
-		tx.Where("lat like ?", "%"+where.LatLike+"%")
+	if where.LatSort != "" {
+		if where.LatSort == "asc" {
+			tx.Order("lat asc")
+		} else {
+			tx.Order("lat desc")
+		}
 	}
 	//需要额外调整
 	if where.Children != "" {
@@ -349,8 +463,20 @@ func (areaRepo *AreaRepoGorm) GetSearchWhereTx(where repoInterface.AreaSearchWhe
 	if where.ChildrenNull {
 		tx.Where("children is null")
 	}
+
+	if len(where.ChildrenIn) > 0 {
+		tx.Where("children in ?", where.ChildrenIn)
+	}
+
 	if where.ChildrenNotNull {
 		tx.Where("children is not null")
+	}
+	if where.ChildrenSort != "" {
+		if where.ChildrenSort == "asc" {
+			tx.Order("children asc")
+		} else {
+			tx.Order("children desc")
+		}
 	}
 	where.SelectParams.SetTxGorm(tx)
 	return tx

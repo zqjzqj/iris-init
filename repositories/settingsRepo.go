@@ -91,6 +91,11 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	if where.IDNull {
 		tx.Where("id is null")
 	}
+
+	if len(where.IDIn) > 0 {
+		tx.Where("id in ?", where.IDIn)
+	}
+
 	if where.IDNotNull {
 		tx.Where("id is not null")
 	}
@@ -105,9 +110,6 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	}
 	if where.IDEgt != "" {
 		tx.Where("id >= ?", where.IDEgt)
-	}
-	if len(where.IDIn) > 0 {
-		tx.Where("id in ?", where.IDIn)
 	}
 	if len(where.IDNotIn) > 0 {
 		tx.Where("id not in ?", where.IDNotIn)
@@ -129,11 +131,23 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	if where.KeyNull {
 		tx.Where("key is null")
 	}
+	if where.KeyLike != "" {
+		tx.Where("key like ?", "%"+where.KeyLike+"%")
+	}
+
+	if len(where.KeyIn) > 0 {
+		tx.Where("key in ?", where.KeyIn)
+	}
+
 	if where.KeyNotNull {
 		tx.Where("key is not null")
 	}
-	if where.KeyLike != "" {
-		tx.Where("key like ?", "%"+where.KeyLike+"%")
+	if where.KeySort != "" {
+		if where.KeySort == "asc" {
+			tx.Order("key asc")
+		} else {
+			tx.Order("key desc")
+		}
 	}
 	//需要额外调整
 	if where.Name != "" {
@@ -145,11 +159,23 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	if where.NameNull {
 		tx.Where("name is null")
 	}
+	if where.NameLike != "" {
+		tx.Where("name like ?", "%"+where.NameLike+"%")
+	}
+
+	if len(where.NameIn) > 0 {
+		tx.Where("name in ?", where.NameIn)
+	}
+
 	if where.NameNotNull {
 		tx.Where("name is not null")
 	}
-	if where.NameLike != "" {
-		tx.Where("name like ?", "%"+where.NameLike+"%")
+	if where.NameSort != "" {
+		if where.NameSort == "asc" {
+			tx.Order("name asc")
+		} else {
+			tx.Order("name desc")
+		}
 	}
 	//需要额外调整
 	if where.Desc != "" {
@@ -161,11 +187,23 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	if where.DescNull {
 		tx.Where("desc is null")
 	}
+	if where.DescLike != "" {
+		tx.Where("desc like ?", "%"+where.DescLike+"%")
+	}
+
+	if len(where.DescIn) > 0 {
+		tx.Where("desc in ?", where.DescIn)
+	}
+
 	if where.DescNotNull {
 		tx.Where("desc is not null")
 	}
-	if where.DescLike != "" {
-		tx.Where("desc like ?", "%"+where.DescLike+"%")
+	if where.DescSort != "" {
+		if where.DescSort == "asc" {
+			tx.Order("desc asc")
+		} else {
+			tx.Order("desc desc")
+		}
 	}
 	//需要额外调整
 	if where.Value != "" {
@@ -177,11 +215,23 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	if where.ValueNull {
 		tx.Where("value is null")
 	}
+	if where.ValueLike != "" {
+		tx.Where("value like ?", "%"+where.ValueLike+"%")
+	}
+
+	if len(where.ValueIn) > 0 {
+		tx.Where("value in ?", where.ValueIn)
+	}
+
 	if where.ValueNotNull {
 		tx.Where("value is not null")
 	}
-	if where.ValueLike != "" {
-		tx.Where("value like ?", "%"+where.ValueLike+"%")
+	if where.ValueSort != "" {
+		if where.ValueSort == "asc" {
+			tx.Order("value asc")
+		} else {
+			tx.Order("value desc")
+		}
 	}
 	//需要额外调整
 	if where.InputType != "" {
@@ -193,11 +243,23 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	if where.InputTypeNull {
 		tx.Where("input_type is null")
 	}
+	if where.InputTypeLike != "" {
+		tx.Where("input_type like ?", "%"+where.InputTypeLike+"%")
+	}
+
+	if len(where.InputTypeIn) > 0 {
+		tx.Where("input_type in ?", where.InputTypeIn)
+	}
+
 	if where.InputTypeNotNull {
 		tx.Where("input_type is not null")
 	}
-	if where.InputTypeLike != "" {
-		tx.Where("input_type like ?", "%"+where.InputTypeLike+"%")
+	if where.InputTypeSort != "" {
+		if where.InputTypeSort == "asc" {
+			tx.Order("input_type asc")
+		} else {
+			tx.Order("input_type desc")
+		}
 	}
 	//需要额外调整
 	if where.CreatedAt != "" {
@@ -209,6 +271,11 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	if where.CreatedAtNull {
 		tx.Where("created_at is null")
 	}
+
+	if len(where.CreatedAtIn) > 0 {
+		tx.Where("created_at in ?", where.CreatedAtIn)
+	}
+
 	if where.CreatedAtNotNull {
 		tx.Where("created_at is not null")
 	}
@@ -223,9 +290,6 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	}
 	if where.CreatedAtEgt != "" {
 		tx.Where("created_at >= ?", where.CreatedAtEgt)
-	}
-	if len(where.CreatedAtIn) > 0 {
-		tx.Where("created_at in ?", where.CreatedAtIn)
 	}
 	if len(where.CreatedAtNotIn) > 0 {
 		tx.Where("created_at not in ?", where.CreatedAtNotIn)
@@ -247,6 +311,11 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	if where.UpdatedAtNull {
 		tx.Where("updated_at is null")
 	}
+
+	if len(where.UpdatedAtIn) > 0 {
+		tx.Where("updated_at in ?", where.UpdatedAtIn)
+	}
+
 	if where.UpdatedAtNotNull {
 		tx.Where("updated_at is not null")
 	}
@@ -261,9 +330,6 @@ func (settingsRepo *SettingsRepoGorm) GetSearchWhereTx(where repoInterface.Setti
 	}
 	if where.UpdatedAtEgt != "" {
 		tx.Where("updated_at >= ?", where.UpdatedAtEgt)
-	}
-	if len(where.UpdatedAtIn) > 0 {
-		tx.Where("updated_at in ?", where.UpdatedAtIn)
 	}
 	if len(where.UpdatedAtNotIn) > 0 {
 		tx.Where("updated_at not in ?", where.UpdatedAtNotIn)

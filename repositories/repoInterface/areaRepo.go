@@ -40,9 +40,9 @@ type AreaSearchWhere struct {
 	IDGt              string   // ID > IDGt
 	IDElt             string   // ID <= IDElt
 	IDEgt             string   // ID >= IDEgt
-	IDSort            string   // 排序
 	IDNotIn           []uint64 // not in查询
 	IDIn              []uint64 // in查询
+	IDSort            string   // 排序
 	Pid               string
 	PidNeq            string //不等于条件
 	PidNull           bool
@@ -51,9 +51,9 @@ type AreaSearchWhere struct {
 	PidGt             string // Pid > PidGt
 	PidElt            string // Pid <= PidElt
 	PidEgt            string // Pid >= PidEgt
-	PidSort           string // 排序
 	PidNotIn          []uint // not in查询
 	PidIn             []uint // in查询
+	PidSort           string // 排序
 	ShortName         string
 	ShortNameNeq      string //不等于条件
 	ShortNameNull     bool
@@ -61,6 +61,7 @@ type AreaSearchWhere struct {
 	ShortNameLike     string
 	ShortNameNotIn    []string // not in查询
 	ShortNameIn       []string // in查询
+	ShortNameSort     string   // 排序
 	Name              string
 	NameNeq           string //不等于条件
 	NameNull          bool
@@ -68,6 +69,7 @@ type AreaSearchWhere struct {
 	NameLike          string
 	NameNotIn         []string // not in查询
 	NameIn            []string // in查询
+	NameSort          string   // 排序
 	MergerName        string
 	MergerNameNeq     string //不等于条件
 	MergerNameNull    bool
@@ -75,6 +77,7 @@ type AreaSearchWhere struct {
 	MergerNameLike    string
 	MergerNameNotIn   []string // not in查询
 	MergerNameIn      []string // in查询
+	MergerNameSort    string   // 排序
 	Level             string
 	LevelNeq          string //不等于条件
 	LevelNull         bool
@@ -83,9 +86,9 @@ type AreaSearchWhere struct {
 	LevelGt           string // Level > LevelGt
 	LevelElt          string // Level <= LevelElt
 	LevelEgt          string // Level >= LevelEgt
-	LevelSort         string // 排序
 	LevelNotIn        []int  // not in查询
 	LevelIn           []int  // in查询
+	LevelSort         string // 排序
 	PinYin            string
 	PinYinNeq         string //不等于条件
 	PinYinNull        bool
@@ -93,6 +96,7 @@ type AreaSearchWhere struct {
 	PinYinLike        string
 	PinYinNotIn       []string // not in查询
 	PinYinIn          []string // in查询
+	PinYinSort        string   // 排序
 	Code              string
 	CodeNeq           string //不等于条件
 	CodeNull          bool
@@ -100,6 +104,7 @@ type AreaSearchWhere struct {
 	CodeLike          string
 	CodeNotIn         []string // not in查询
 	CodeIn            []string // in查询
+	CodeSort          string   // 排序
 	ZipCode           string
 	ZipCodeNeq        string //不等于条件
 	ZipCodeNull       bool
@@ -107,6 +112,7 @@ type AreaSearchWhere struct {
 	ZipCodeLike       string
 	ZipCodeNotIn      []string // not in查询
 	ZipCodeIn         []string // in查询
+	ZipCodeSort       string   // 排序
 	First             string
 	FirstNeq          string //不等于条件
 	FirstNull         bool
@@ -114,6 +120,7 @@ type AreaSearchWhere struct {
 	FirstLike         string
 	FirstNotIn        []string // not in查询
 	FirstIn           []string // in查询
+	FirstSort         string   // 排序
 	Lng               string
 	LngNeq            string //不等于条件
 	LngNull           bool
@@ -121,6 +128,7 @@ type AreaSearchWhere struct {
 	LngLike           string
 	LngNotIn          []string // not in查询
 	LngIn             []string // in查询
+	LngSort           string   // 排序
 	Lat               string
 	LatNeq            string //不等于条件
 	LatNull           bool
@@ -128,11 +136,13 @@ type AreaSearchWhere struct {
 	LatLike           string
 	LatNotIn          []string // not in查询
 	LatIn             []string // in查询
+	LatSort           string   // 排序
 	Children          string
 	ChildrenNeq       string //不等于条件
 	ChildrenNull      bool
 	ChildrenNotNull   bool
 	ChildrenNotIn     [][]model.Area // not in查询
 	ChildrenIn        [][]model.Area // in查询
+	ChildrenSort      string         // 排序
 	SelectParams      repoComm.SelectFrom
 }

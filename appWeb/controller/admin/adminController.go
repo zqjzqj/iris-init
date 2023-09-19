@@ -64,7 +64,7 @@ func (admCtrl AdminController) GetItem(ctx iris.Context) mvc.Result {
 	return appWeb.ResponseDataViewForm("admin/item.html", appWeb.DataView{
 		Data: map[string]interface{}{
 			"Adm":   services.NewAdminService().GetItem(ctx).ShowMap(),
-			"Roles": roleServ.ShowMapList(roleServ.List(ctx)),
+			"Roles": roleServ.ShowMapList(roleServ.ListAvailable()),
 		},
 		ResourcePkg: []appWeb.ResourcePkg{resourcePkg.Ueditor{}},
 	}, ctx)

@@ -220,7 +220,9 @@ func (admServ AdminService) DeleteByCtx(ctx iris.Context) error {
 	if err != nil {
 		return err
 	}
-	_, _ = repositories.NewRolesAdmRepo().DeleteByAdmID(admId)
+	rolesAdmRepo := repositories.NewRolesAdmRepo()
+	rolesAdmRepo.SetOrm(admServ.repo.GetOrm())
+	_, _ = rolesAdmRepo.DeleteByAdmID(admId)
 	return nil
 }
 
@@ -247,8 +249,7 @@ func (admServ AdminService) RefreshPermissions(adm *model.Admin, force, onlyRole
 		return
 	}
 	rolesIdUint64 := global.StrArrToUintArr(roleIDSlices)
-	roleRepo := repositories.NewRolesRepo()
-	roles := roleRepo.GetRolesByID(rolesIdUint64...)
+	roles := NewRolesServiceByOrm(admServ.repo.GetOrm()).GetRolesByID(rolesIdUint64...)
 
 	if len(roles) == 0 {
 		//这里因为超级管理员是没有实际数据库ID的 是通过程序内部校验 所以多一步判断
@@ -284,8 +285,8 @@ func (admServ AdminService) RefreshPermissions(adm *model.Admin, force, onlyRole
 	if onlyRolesName {
 		return
 	}
-	rolePermRepo := repositories.NewRolesPermissionsRepo()
-	adm.Permissions = rolePermRepo.GetPermissionsByRoles(rolesIdUint64...)
+	adm.Permissions = repositories.NewRolesPermissionsRepo().
+		GetPermissionsByRoles(rolesIdUint64...)
 }
 
 func (admServ AdminService) LoginSuccess(adm *model.Admin) error {

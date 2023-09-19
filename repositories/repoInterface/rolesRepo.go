@@ -37,9 +37,9 @@ type RolesSearchWhere struct {
 	IDGt              string   // ID > IDGt
 	IDElt             string   // ID <= IDElt
 	IDEgt             string   // ID >= IDEgt
-	IDSort            string   // 排序
 	IDNotIn           []uint64 // not in查询
 	IDIn              []uint64 // in查询
+	IDSort            string   // 排序
 	Name              string
 	NameNeq           string //不等于条件
 	NameNull          bool
@@ -47,6 +47,7 @@ type RolesSearchWhere struct {
 	NameLike          string
 	NameNotIn         []string // not in查询
 	NameIn            []string // in查询
+	NameSort          string   // 排序
 	Remark            string
 	RemarkNeq         string //不等于条件
 	RemarkNull        bool
@@ -54,12 +55,14 @@ type RolesSearchWhere struct {
 	RemarkLike        string
 	RemarkNotIn       []string // not in查询
 	RemarkIn          []string // in查询
+	RemarkSort        string   // 排序
 	PermIdents        string
 	PermIdentsNeq     string //不等于条件
 	PermIdentsNull    bool
 	PermIdentsNotNull bool
 	PermIdentsNotIn   [][]string // not in查询
 	PermIdentsIn      [][]string // in查询
+	PermIdentsSort    string     // 排序
 	CreatedAt         string
 	CreatedAtNeq      string //不等于条件
 	CreatedAtNull     bool
@@ -68,9 +71,9 @@ type RolesSearchWhere struct {
 	CreatedAtGt       string  // CreatedAt > CreatedAtGt
 	CreatedAtElt      string  // CreatedAt <= CreatedAtElt
 	CreatedAtEgt      string  // CreatedAt >= CreatedAtEgt
-	CreatedAtSort     string  // 排序
 	CreatedAtNotIn    []int64 // not in查询
 	CreatedAtIn       []int64 // in查询
+	CreatedAtSort     string  // 排序
 	UpdatedAt         string
 	UpdatedAtNeq      string //不等于条件
 	UpdatedAtNull     bool
@@ -79,8 +82,8 @@ type RolesSearchWhere struct {
 	UpdatedAtGt       string  // UpdatedAt > UpdatedAtGt
 	UpdatedAtElt      string  // UpdatedAt <= UpdatedAtElt
 	UpdatedAtEgt      string  // UpdatedAt >= UpdatedAtEgt
-	UpdatedAtSort     string  // 排序
 	UpdatedAtNotIn    []int64 // not in查询
 	UpdatedAtIn       []int64 // in查询
+	UpdatedAtSort     string  // 排序
 	SelectParams      repoComm.SelectFrom
 }

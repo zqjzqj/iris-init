@@ -91,6 +91,11 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	if where.IDNull {
 		tx.Where("id is null")
 	}
+
+	if len(where.IDIn) > 0 {
+		tx.Where("id in ?", where.IDIn)
+	}
+
 	if where.IDNotNull {
 		tx.Where("id is not null")
 	}
@@ -105,9 +110,6 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	}
 	if where.IDEgt != "" {
 		tx.Where("id >= ?", where.IDEgt)
-	}
-	if len(where.IDIn) > 0 {
-		tx.Where("id in ?", where.IDIn)
 	}
 	if len(where.IDNotIn) > 0 {
 		tx.Where("id not in ?", where.IDNotIn)
@@ -129,11 +131,23 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	if where.NameNull {
 		tx.Where("name is null")
 	}
+	if where.NameLike != "" {
+		tx.Where("name like ?", "%"+where.NameLike+"%")
+	}
+
+	if len(where.NameIn) > 0 {
+		tx.Where("name in ?", where.NameIn)
+	}
+
 	if where.NameNotNull {
 		tx.Where("name is not null")
 	}
-	if where.NameLike != "" {
-		tx.Where("name like ?", "%"+where.NameLike+"%")
+	if where.NameSort != "" {
+		if where.NameSort == "asc" {
+			tx.Order("name asc")
+		} else {
+			tx.Order("name desc")
+		}
 	}
 	//需要额外调整
 	if where.Remark != "" {
@@ -145,11 +159,23 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	if where.RemarkNull {
 		tx.Where("remark is null")
 	}
+	if where.RemarkLike != "" {
+		tx.Where("remark like ?", "%"+where.RemarkLike+"%")
+	}
+
+	if len(where.RemarkIn) > 0 {
+		tx.Where("remark in ?", where.RemarkIn)
+	}
+
 	if where.RemarkNotNull {
 		tx.Where("remark is not null")
 	}
-	if where.RemarkLike != "" {
-		tx.Where("remark like ?", "%"+where.RemarkLike+"%")
+	if where.RemarkSort != "" {
+		if where.RemarkSort == "asc" {
+			tx.Order("remark asc")
+		} else {
+			tx.Order("remark desc")
+		}
 	}
 	//需要额外调整
 	if where.PermIdents != "" {
@@ -161,8 +187,20 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	if where.PermIdentsNull {
 		tx.Where("perm_idents is null")
 	}
+
+	if len(where.PermIdentsIn) > 0 {
+		tx.Where("perm_idents in ?", where.PermIdentsIn)
+	}
+
 	if where.PermIdentsNotNull {
 		tx.Where("perm_idents is not null")
+	}
+	if where.PermIdentsSort != "" {
+		if where.PermIdentsSort == "asc" {
+			tx.Order("perm_idents asc")
+		} else {
+			tx.Order("perm_idents desc")
+		}
 	}
 	//需要额外调整
 	if where.CreatedAt != "" {
@@ -174,6 +212,11 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	if where.CreatedAtNull {
 		tx.Where("created_at is null")
 	}
+
+	if len(where.CreatedAtIn) > 0 {
+		tx.Where("created_at in ?", where.CreatedAtIn)
+	}
+
 	if where.CreatedAtNotNull {
 		tx.Where("created_at is not null")
 	}
@@ -188,9 +231,6 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	}
 	if where.CreatedAtEgt != "" {
 		tx.Where("created_at >= ?", where.CreatedAtEgt)
-	}
-	if len(where.CreatedAtIn) > 0 {
-		tx.Where("created_at in ?", where.CreatedAtIn)
 	}
 	if len(where.CreatedAtNotIn) > 0 {
 		tx.Where("created_at not in ?", where.CreatedAtNotIn)
@@ -212,6 +252,11 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	if where.UpdatedAtNull {
 		tx.Where("updated_at is null")
 	}
+
+	if len(where.UpdatedAtIn) > 0 {
+		tx.Where("updated_at in ?", where.UpdatedAtIn)
+	}
+
 	if where.UpdatedAtNotNull {
 		tx.Where("updated_at is not null")
 	}
@@ -226,9 +271,6 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	}
 	if where.UpdatedAtEgt != "" {
 		tx.Where("updated_at >= ?", where.UpdatedAtEgt)
-	}
-	if len(where.UpdatedAtIn) > 0 {
-		tx.Where("updated_at in ?", where.UpdatedAtIn)
 	}
 	if len(where.UpdatedAtNotIn) > 0 {
 		tx.Where("updated_at not in ?", where.UpdatedAtNotIn)

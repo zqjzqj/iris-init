@@ -50,7 +50,6 @@ type {{.Model}}SearchWhere struct {
     {{.Name}}Gt   string // {{.Name}} > {{.Name}}Gt
     {{.Name}}Elt  string // {{.Name}} <= {{.Name}}Elt
     {{.Name}}Egt  string // {{.Name}} >= {{.Name}}Egt
-    {{.Name}}Sort string // 排序
     {{- end}}
     {{- if eq .Type "uint8"}}
     {{.Name}}NotIn []int // not in查询
@@ -59,6 +58,7 @@ type {{.Model}}SearchWhere struct {
     {{.Name}}NotIn []{{.Type}} // not in查询
     {{.Name}}In []{{.Type}} // in查询
     {{- end}}
+    {{.Name}}Sort string // 排序
     {{- end}}
 	SelectParams repoComm.SelectFrom
 }

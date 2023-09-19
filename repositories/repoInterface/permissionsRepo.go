@@ -44,9 +44,9 @@ type PermissionsSearchWhere struct {
 	IDGt             string   // ID > IDGt
 	IDElt            string   // ID <= IDElt
 	IDEgt            string   // ID >= IDEgt
-	IDSort           string   // 排序
 	IDNotIn          []uint64 // not in查询
 	IDIn             []uint64 // in查询
+	IDSort           string   // 排序
 	Pid              string
 	PidNeq           string //不等于条件
 	PidNull          bool
@@ -55,9 +55,9 @@ type PermissionsSearchWhere struct {
 	PidGt            string   // Pid > PidGt
 	PidElt           string   // Pid <= PidElt
 	PidEgt           string   // Pid >= PidEgt
-	PidSort          string   // 排序
 	PidNotIn         []uint64 // not in查询
 	PidIn            []uint64 // in查询
+	PidSort          string   // 排序
 	Level            string
 	LevelNeq         string //不等于条件
 	LevelNull        bool
@@ -66,9 +66,9 @@ type PermissionsSearchWhere struct {
 	LevelGt          string // Level > LevelGt
 	LevelElt         string // Level <= LevelElt
 	LevelEgt         string // Level >= LevelEgt
-	LevelSort        string // 排序
 	LevelNotIn       []int  // not in查询
 	LevelIn          []int  // in查询
+	LevelSort        string // 排序
 	Name             string
 	NameNeq          string //不等于条件
 	NameNull         bool
@@ -76,6 +76,7 @@ type PermissionsSearchWhere struct {
 	NameLike         string
 	NameNotIn        []string // not in查询
 	NameIn           []string // in查询
+	NameSort         string   // 排序
 	Method           string
 	MethodNeq        string //不等于条件
 	MethodNull       bool
@@ -83,6 +84,7 @@ type PermissionsSearchWhere struct {
 	MethodLike       string
 	MethodNotIn      []string // not in查询
 	MethodIn         []string // in查询
+	MethodSort       string   // 排序
 	Path             string
 	PathNeq          string //不等于条件
 	PathNull         bool
@@ -90,6 +92,7 @@ type PermissionsSearchWhere struct {
 	PathLike         string
 	PathNotIn        []string // not in查询
 	PathIn           []string // in查询
+	PathSort         string   // 排序
 	Sort             string
 	SortNeq          string //不等于条件
 	SortNull         bool
@@ -98,9 +101,9 @@ type PermissionsSearchWhere struct {
 	SortGt           string // Sort > SortGt
 	SortElt          string // Sort <= SortElt
 	SortEgt          string // Sort >= SortEgt
-	SortSort         string // 排序
 	SortNotIn        []uint // not in查询
 	SortIn           []uint // in查询
+	SortSort         string // 排序
 	Ident            string
 	IdentNeq         string //不等于条件
 	IdentNull        bool
@@ -108,12 +111,14 @@ type PermissionsSearchWhere struct {
 	IdentLike        string
 	IdentNotIn       []string // not in查询
 	IdentIn          []string // in查询
+	IdentSort        string   // 排序
 	Children         string
 	ChildrenNeq      string //不等于条件
 	ChildrenNull     bool
 	ChildrenNotNull  bool
 	ChildrenNotIn    [][]model.Permissions // not in查询
 	ChildrenIn       [][]model.Permissions // in查询
+	ChildrenSort     string                // 排序
 	CreatedAt        string
 	CreatedAtNeq     string //不等于条件
 	CreatedAtNull    bool
@@ -122,9 +127,9 @@ type PermissionsSearchWhere struct {
 	CreatedAtGt      string  // CreatedAt > CreatedAtGt
 	CreatedAtElt     string  // CreatedAt <= CreatedAtElt
 	CreatedAtEgt     string  // CreatedAt >= CreatedAtEgt
-	CreatedAtSort    string  // 排序
 	CreatedAtNotIn   []int64 // not in查询
 	CreatedAtIn      []int64 // in查询
+	CreatedAtSort    string  // 排序
 	UpdatedAt        string
 	UpdatedAtNeq     string //不等于条件
 	UpdatedAtNull    bool
@@ -133,8 +138,8 @@ type PermissionsSearchWhere struct {
 	UpdatedAtGt      string  // UpdatedAt > UpdatedAtGt
 	UpdatedAtElt     string  // UpdatedAt <= UpdatedAtElt
 	UpdatedAtEgt     string  // UpdatedAt >= UpdatedAtEgt
-	UpdatedAtSort    string  // 排序
 	UpdatedAtNotIn   []int64 // not in查询
 	UpdatedAtIn      []int64 // in查询
+	UpdatedAtSort    string  // 排序
 	SelectParams     repoComm.SelectFrom
 }
