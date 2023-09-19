@@ -11,6 +11,7 @@ type Field struct {
 	NameSnake      string
 	NameFirstLower string
 	Type           string
+	TypeOrigin     string
 	Label          string
 	ValidateLabel  string //主要用于service的验证标签
 	Unique         string
@@ -93,13 +94,14 @@ func RefStructField(_struct any) []Field {
 			_tag := ref.Field(i).Tag
 			gormLabelStruct := GetValidateStrByGormLabel(_tag.Get("gorm"))
 			_f := Field{
-				Name:     ref.Field(i).Name,
-				Type:     ref.Field(i).Type.String(),
-				Label:    ref.Field(i).Tag.Get("label"),
-				Unique:   gormLabelStruct.Unique,
-				Index:    gormLabelStruct.Index,
-				IsPk:     gormLabelStruct.IsPk,
-				IsNumber: global.IsNumber(ref.Field(i).Type),
+				Name:       ref.Field(i).Name,
+				Type:       ref.Field(i).Type.String(),
+				TypeOrigin: ref.Field(i).Type.String(),
+				Label:      ref.Field(i).Tag.Get("label"),
+				Unique:     gormLabelStruct.Unique,
+				Index:      gormLabelStruct.Index,
+				IsPk:       gormLabelStruct.IsPk,
+				IsNumber:   global.IsNumber(ref.Field(i).Type),
 			}
 			if _f.Label == "" {
 				_f.Label = gormLabelStruct.Comment
@@ -108,6 +110,9 @@ func RefStructField(_struct any) []Field {
 			//关键字处理
 			if _f.NameFirstLower == "type" {
 				_f.NameFirstLower = "_type"
+			}
+			if _f.Type == "sql.NullString" {
+				_f.Type = "string"
 			}
 			if gormLabelStruct.Validate != "" && _f.Name != "ID" {
 				_f.ValidateLabel = `validate:"` + gormLabelStruct.Validate + `"`

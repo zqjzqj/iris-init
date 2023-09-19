@@ -14,8 +14,8 @@ type {{.Model}}Repo interface {
 	Save(_model *model.{{.Model}}, _select ...string) error
 	SaveOmit(_model *model.{{.Model}}, _omit ...string) error
 	Create(_model *[]model.{{.Model}}) error
-	GetByID({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}}
-	GetByIDLock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock)
+	GetBy{{.Pk.Name}}({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}}
+	GetBy{{.Pk.Name}}Lock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock)
 	GetByWhere(where {{.Model}}SearchWhere) model.{{.Model}}
 	GetIDByWhere(where {{.Model}}SearchWhere) []{{.Pk.Type}}
     {{- range $key, $item := .UniqueField}}
@@ -40,6 +40,8 @@ type {{.Model}}SearchWhere struct {
     {{- range .ModelField}}
     {{.Name}}     string
     {{.Name}}Neq string //不等于条件
+    {{.Name}}Null bool
+    {{.Name}}NotNull bool
     {{- if eq .Type "string" }}
     {{.Name}}Like string
     {{- end}}

@@ -63,6 +63,6 @@ func RegisterRoutes(app *iris.Application) {
 	})
 
 	//刷新一下权限表
-	services.NewPermissionService().GenerateAdminPermissionsByRoutes(app)
+	services.NewPermissionsService().GenerateAdminPermissionsByRoutes(app)
 
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"github.com/kataras/iris/v12"
 	"iris-init/global"
 	"iris-init/logs"
@@ -11,15 +12,25 @@ import (
 	"strings"
 )
 
-type PermissionService struct {
+type PermissionsService struct {
 	repo repoInterface.PermissionsRepo
 }
 
-func NewPermissionService() PermissionService {
-	return PermissionService{repo: repositories.NewPermissionsRepo()}
+func NewPermissionsService() PermissionsService {
+	return PermissionsService{repo: repositories.NewPermissionsRepo()}
 }
 
-func (permServ PermissionService) GetPremAsMenu(idents []string) []model.Permissions {
+func NewPermissionsServiceByOrm(orm any) PermissionsService {
+	r := PermissionsService{repo: repositories.NewPermissionsRepo()}
+	r.repo.SetOrm(orm)
+	return r
+}
+
+func NewPermissionsServiceByRepo(repo repoInterface.PermissionsRepo) PermissionsService {
+	return PermissionsService{repo: repo}
+}
+
+func (permServ PermissionsService) GetPremAsMenu(idents []string) []model.Permissions {
 	if len(idents) == 0 {
 		return nil
 	}
@@ -29,7 +40,7 @@ func (permServ PermissionService) GetPremAsMenu(idents []string) []model.Permiss
 	return permServ.repo.GetListAsMenu(idents)
 }
 
-func (permServ PermissionService) GetPermTree(ident ...string) []map[string]interface{} {
+func (permServ PermissionsService) GetPermTree(ident ...string) []map[string]interface{} {
 	if len(ident) == 1 && ident[0] == model.RoleAdmin {
 		ident = nil
 	}
@@ -37,16 +48,16 @@ func (permServ PermissionService) GetPermTree(ident ...string) []map[string]inte
 	return permServ.ShowPermTreeMap(perms, ident...)
 }
 
-func (permServ PermissionService) RefreshChildren(perm *model.Permissions, force bool) {
+func (permServ PermissionsService) RefreshChildren(perm *model.Permissions, force bool) {
 	if !force && perm.Children != nil {
 		return
 	}
 	perm.Children = permServ.repo.GetListPreloadChildren(repoInterface.PermissionsSearchWhere{
-		Pid: int64(perm.ID),
+		Pid: fmt.Sprintf("%d", perm.ID),
 	})
 }
 
-func (permServ PermissionService) ShowPermTreeMap(perms []model.Permissions, ident ...string) []map[string]interface{} {
+func (permServ PermissionsService) ShowPermTreeMap(perms []model.Permissions, ident ...string) []map[string]interface{} {
 	l := len(perms)
 	if l == 0 {
 		return []map[string]interface{}{}
@@ -72,7 +83,7 @@ func (permServ PermissionService) ShowPermTreeMap(perms []model.Permissions, ide
 	return r
 }
 
-func (permServ PermissionService) GenerateAdminPermissionsByRoutes(app *iris.Application) {
+func (permServ PermissionsService) GenerateAdminPermissionsByRoutes(app *iris.Application) {
 	//先截断表
 	permServ.repo.TruncateTable()
 	var pid uint64
@@ -147,7 +158,7 @@ func (permServ PermissionService) GenerateAdminPermissionsByRoutes(app *iris.App
 	logs.PrintlnSuccess("GenerateAdminPermissionsByRoutes OK.")
 }
 
-func (permServ PermissionService) getNameAndSortByName(name string) (newName string, sort uint) {
+func (permServ PermissionsService) getNameAndSortByName(name string) (newName string, sort uint) {
 	if strings.Contains(name, ".Sort{") {
 		_mBtn := strings.Split(name, ".Sort{")
 		newName = _mBtn[0]
@@ -162,13 +173,13 @@ func (permServ PermissionService) getNameAndSortByName(name string) (newName str
 	return name, 100
 }
 
-func (permServ PermissionService) GeneratePermissionAuthIdentify(method, path string) string {
+func (permServ PermissionsService) GeneratePermissionAuthIdentify(method, path string) string {
 	p := model.Permissions{Method: method, Path: path}
 	p.GenerateIdent()
 	return p.Ident
 }
 
-func (permServ PermissionService) IdentifyExists(ident string) bool {
+func (permServ PermissionsService) IdentifyExists(ident string) bool {
 	perm := permServ.repo.GetByIdent(ident, "id")
 	if perm.ID > 0 {
 		return true
@@ -176,15 +187,15 @@ func (permServ PermissionService) IdentifyExists(ident string) bool {
 	return false
 }
 
-func (permServ PermissionService) GetByIdent(ident string, _select ...string) model.Permissions {
+func (permServ PermissionsService) GetByIdent(ident string, _select ...string) model.Permissions {
 	return permServ.repo.GetByIdent(ident, _select...)
 }
 
-func (permServ PermissionService) GetByID(id uint64, _select ...string) model.Permissions {
+func (permServ PermissionsService) GetByID(id uint64, _select ...string) model.Permissions {
 	return permServ.repo.GetByID(id, _select...)
 }
 
-func (permServ PermissionService) GetPermParentsByIdent(ident string) []model.Permissions {
+func (permServ PermissionsService) GetPermParentsByIdent(ident string) []model.Permissions {
 	permIdent := permServ.GetByIdent(ident)
 	if permIdent.Pid == 0 {
 		return nil

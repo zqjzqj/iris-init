@@ -87,7 +87,13 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
         tx.Where("{{.NameSnake}}", where.{{.Name}})
    	}
    	if where.{{.Name}}Neq != "" {
-            tx.Where("{{.NameSnake}} <> ?", where.{{.Name}}Neq)
+        tx.Where("{{.NameSnake}} <> ?", where.{{.Name}}Neq)
+    }
+    if where.{{.Name}}Null {
+        tx.Where("{{.NameSnake}} is null")
+    }
+    if where.{{.Name}}NotNull {
+        tx.Where("{{.NameSnake}} is not null")
     }
    {{- if eq .Type "string"}}
    	if where.{{.Name}}Like != "" {
@@ -141,7 +147,7 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetList(where repoInterface.{{.Model}}
 	return {{.Alias}}
 }
 
-func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByID({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}} {
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetBy{{.Pk.Name}}({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}} {
 	{{.Alias}} := model.{{.Model}}{}
 	tx := {{.Alias}}Repo.Orm.Where("{{.Pk.NameSnake}}", {{.Pk.Name}})
 	if len(_select) > 0 {
@@ -216,9 +222,9 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{
 }
 {{- end}}
 
-func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetByIDLock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetBy{{.Pk.Name}}Lock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
 	if !orm.IsBeginTransaction({{.Alias}}Repo.Orm) {
-		panic("{{.Alias}}Repo.GetByIDLock is must beginTransaction")
+		panic("{{.Alias}}Repo.GetBy{{.Pk.Name}}Lock is must beginTransaction")
 	}
 	{{.Alias}} := model.{{.Model}}{}
 	tx := orm.LockForUpdate({{.Alias}}Repo.Orm.Where("{{.Pk.NameSnake}}", {{.Pk.Name}}))

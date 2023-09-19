@@ -15,8 +15,62 @@ func NewRolesService() RolesService {
 	return RolesService{repo: repositories.NewRolesRepo()}
 }
 
+func NewRolesServiceByOrm(orm any) RolesService {
+	r := RolesService{repo: repositories.NewRolesRepo()}
+	r.repo.SetOrm(orm)
+	return r
+}
+
+func NewRolesServiceByRepo(repo repoInterface.RolesRepo) RolesService {
+	return RolesService{repo: repo}
+}
+
 type RolesService struct {
 	repo repoInterface.RolesRepo
+}
+
+func (rolesServ RolesService) ListPage(ctx iris.Context) ([]model.Roles, *global.Pager) {
+	where := repoInterface.RolesSearchWhere{}
+	_ = ctx.ReadQuery(&where)
+	pager := global.NewPager(ctx)
+	if pager.Size < 0 {
+		return rolesServ.repo.GetList(where), nil
+	}
+	pager.SetTotal(rolesServ.repo.GetTotalCount(where))
+	if pager.Total == 0 {
+		return []model.Roles{}, pager
+	}
+	where.SelectParams = repoComm.SelectFrom{
+		Offset:  pager.Offset,
+		Limit:   pager.Size,
+		RetSize: pager.Size,
+		OrderBy: []repoComm.OrderByParams{
+			{
+				Column: "ID",
+				Desc:   true,
+			},
+		},
+	}
+	return rolesServ.repo.GetList(where), pager
+}
+
+func (rolesServ RolesService) ListAvailable(_select ...string) []model.Roles {
+	if len(_select) == 0 {
+		_select = nil
+	}
+	return rolesServ.repo.GetList(repoInterface.RolesSearchWhere{
+		SelectParams: repoComm.SelectFrom{
+			Select: _select,
+		},
+	})
+}
+
+func (rolesServ RolesService) ListByWhere(where repoInterface.RolesSearchWhere) []model.Roles {
+	return rolesServ.repo.GetList(where)
+}
+
+func (rolesServ RolesService) TotalCount(where repoInterface.RolesSearchWhere) int64 {
+	return rolesServ.repo.GetTotalCount(where)
 }
 
 func (roleServ RolesService) GetItem(ctx iris.Context) model.Roles {
@@ -145,7 +199,7 @@ func (roleServ RolesService) GetRoleByValidate(roleValidator RolesValidator) (mo
 
 // 在cmd/updateSysRoles.go中调用
 func (roleServ RolesService) UpdateSysRole() {
-	permissionServ := NewPermissionService()
+	permissionServ := NewPermissionsServiceByOrm(roleServ.repo.GetOrm())
 	for _, v := range model.GetSysRoles() {
 		role := roleServ.repo.GetByID(v.ID)
 		permIdents := make([]string, 0, 5)
@@ -167,6 +221,43 @@ func (roleServ RolesService) UpdateSysRole() {
 			_ = roleServ.Save(&v)
 		}
 	}
+}
+
+func (rolesServ RolesService) GetByWhere(where repoInterface.RolesSearchWhere) model.Roles {
+	return rolesServ.repo.GetByWhere(where)
+}
+
+func (rolesServ RolesService) ScanByWhere(where repoInterface.RolesSearchWhere, dest any) error {
+	return rolesServ.repo.ScanByWhere(where, dest)
+}
+
+func (rolesServ RolesService) ScanByOrWhere(dest any, where ...repoInterface.RolesSearchWhere) error {
+	return rolesServ.repo.ScanByOrWhere(dest, where...)
+}
+
+func (rolesServ RolesService) UpdateByWhere(where repoInterface.RolesSearchWhere, data interface{}) (rowsAffected int64, err error) {
+	return rolesServ.repo.UpdateByWhere(where, data)
+}
+func (rolesServ RolesService) GetByName(name string, _select ...string) []model.Roles {
+	return rolesServ.repo.GetByName(name, _select...)
+}
+
+func (rolesServ RolesService) DeleteByName(name string) error {
+	_, err := rolesServ.repo.DeleteByName(name)
+	return err
+}
+
+func (rolesServ RolesService) DeleteByID(ID ...uint64) error {
+	_, err := rolesServ.repo.DeleteByID(ID...)
+	return err
+}
+
+func (rolesServ RolesService) Create(roles *[]model.Roles) error {
+	return rolesServ.repo.Create(roles)
+}
+
+func (rolesServ RolesService) GetByIDLock(ID uint64, _select ...string) (model.Roles, repoComm.ReleaseLock) {
+	return rolesServ.repo.GetByIDLock(ID, _select...)
 }
 
 type RolesValidator struct {

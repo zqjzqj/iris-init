@@ -15,6 +15,16 @@ func NewSettingsService() SettingsService {
 	return SettingsService{repo: repositories.NewSettingsRepo()}
 }
 
+func NewSettingsServiceByOrm(orm any) SettingsService {
+	r := SettingsService{repo: repositories.NewSettingsRepo()}
+	r.repo.SetOrm(orm)
+	return r
+}
+
+func NewSettingsServiceByRepo(repo repoInterface.SettingsRepo) SettingsService {
+	return SettingsService{repo: repo}
+}
+
 type SettingsService struct {
 	repo repoInterface.SettingsRepo
 }
@@ -23,7 +33,7 @@ func (settingsServ SettingsService) GetWebsiteTitle() string {
 	return settingsServ.GetByKey(model.SettingsKeyWebsiteTitle).Value
 }
 
-func (settingsServ *SettingsService) ListPage(ctx iris.Context) ([]model.Settings, *global.Pager) {
+func (settingsServ SettingsService) ListPage(ctx iris.Context) ([]model.Settings, *global.Pager) {
 	where := repoInterface.SettingsSearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
@@ -48,7 +58,7 @@ func (settingsServ *SettingsService) ListPage(ctx iris.Context) ([]model.Setting
 	return settingsServ.repo.GetList(where), pager
 }
 
-func (settingsServ *SettingsService) ListAvailable(_select ...string) []model.Settings {
+func (settingsServ SettingsService) ListAvailable(_select ...string) []model.Settings {
 	if len(_select) == 0 {
 		_select = nil
 	}
@@ -61,6 +71,22 @@ func (settingsServ *SettingsService) ListAvailable(_select ...string) []model.Se
 
 func (settingsServ *SettingsService) ListByWhere(where repoInterface.SettingsSearchWhere) []model.Settings {
 	return settingsServ.repo.GetList(where)
+}
+
+func (settingsServ SettingsService) GetByWhere(where repoInterface.SettingsSearchWhere) model.Settings {
+	return settingsServ.repo.GetByWhere(where)
+}
+
+func (settingsServ SettingsService) ScanByWhere(where repoInterface.SettingsSearchWhere, dest any) error {
+	return settingsServ.repo.ScanByWhere(where, dest)
+}
+
+func (settingsServ SettingsService) ScanByOrWhere(dest any, where ...repoInterface.SettingsSearchWhere) error {
+	return settingsServ.repo.ScanByOrWhere(dest, where...)
+}
+
+func (settingsServ SettingsService) UpdateByWhere(where repoInterface.SettingsSearchWhere, data interface{}) (rowsAffected int64, err error) {
+	return settingsServ.repo.UpdateByWhere(where, data)
 }
 
 func (settingsServ *SettingsService) TotalCount(where repoInterface.SettingsSearchWhere) int64 {
@@ -80,9 +106,6 @@ func (settingsServ *SettingsService) GetByID(id uint64, _select ...string) model
 	return settingsServ.repo.GetByID(id, _select...)
 }
 
-func (settingsServ *SettingsService) UpdateByWhere(where repoInterface.SettingsSearchWhere, data interface{}) (rowsAffected int64, err error) {
-	return settingsServ.repo.UpdateByWhere(where, data)
-}
 func (settingsServ *SettingsService) GetByKey(key string, _select ...string) model.Settings {
 	var v reflect.Value
 	v = reflect.ValueOf(key)

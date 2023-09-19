@@ -35,7 +35,7 @@ func (rolesCtrl RolesController) GetItem(ctx iris.Context) mvc.Result {
 	rolesServ := services.NewRolesService()
 	role := rolesServ.GetItem(ctx)
 	rolesServ.RefreshPermission(&role, true)
-	permsTreeJson, _ := json.Marshal(services.NewPermissionService().GetPermTree(role.PermIdents...))
+	permsTreeJson, _ := json.Marshal(services.NewPermissionsService().GetPermTree(role.PermIdents...))
 	return appWeb.ResponseDataViewForm("roles/item.html", appWeb.DataView{
 		PageJs: []string{"roles/item.js"},
 		Data: map[string]interface{}{

@@ -83,11 +83,11 @@ func ({{.Alias}}Serv {{.Model}}Service) TotalCount(where repoInterface.{{.Model}
 // 获取一条数据根据ctx
 // 这里条件为ID 传入ctx是方便后续修改参数条件
 func ({{.Alias}}Serv {{.Model}}Service) GetItem(ctx iris.Context, _select ...string) model.{{.Model}} {
-	return {{.Alias}}Serv.repo.GetByID(ctx.URLParamUint64("{{.Pk.Name}}"), _select...)
+	return {{.Alias}}Serv.repo.GetBy{{.Pk.Name}}(ctx.URLParamUint64("{{.Pk.Name}}"), _select...)
 }
 
-func ({{.Alias}}Serv {{.Model}}Service) GetByID({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}} {
-	return {{.Alias}}Serv.repo.GetByID({{.Pk.Name}}, _select...)
+func ({{.Alias}}Serv {{.Model}}Service) GetBy{{.Pk.Name}}({{.Pk.Name}} {{.Pk.Type}}, _select ...string) model.{{.Model}} {
+	return {{.Alias}}Serv.repo.GetBy{{.Pk.Name}}({{.Pk.Name}}, _select...)
 }
 
 func ({{.Alias}}Serv {{.Model}}Service) GetByWhere(where repoInterface.{{.Model}}SearchWhere) model.{{.Model}} {
@@ -126,7 +126,7 @@ func ({{$.Alias}}Serv {{$.Model}}Service) Check{{$key}}Valid({{$.Alias}} model.{
          return sErr.New("无效的{{.Label}}")
     }
     {{- end}}
-    _{{$.Alias}} := {{$.Alias}}Serv.GetBy{{$key}}({{- range $item}}{{$.Alias}}.{{.Name}}, {{- end}} "id")
+    _{{$.Alias}} := {{$.Alias}}Serv.GetBy{{$key}}({{- range $item}}{{- if eq .TypeOrigin "sql.NullString" }}{{$.Alias}}.{{.Name}}.String{{- else}}{{$.Alias}}.{{.Name}}{{- end}}, {{- end}} "id")
     if _{{$.Alias}}.ID > 0 && {{$.Alias}}.ID != _{{$.Alias}}.ID {
         return sErr.NewFmt("{{- range $item}}{{.Label}}.{{- end}}已存在: {{- range $item}}%s.{{- end}}", {{- range $item}}{{$.Alias}}.{{.Name}},{{- end}})
     }
@@ -150,8 +150,8 @@ func ({{$.Alias}}Serv {{$.Model}}Service) DeleteBy{{$key}}({{- range $item}}{{.N
 }
 {{- end}}
 
-func ({{.Alias}}Serv {{.Model}}Service) GetByIDLock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
-	return {{.Alias}}Serv.repo.GetByIDLock({{.Pk.Name}}, _select...)
+func ({{.Alias}}Serv {{.Model}}Service) GetBy{{.Pk.Name}}Lock({{.Pk.Name}} {{.Pk.Type}}, _select ...string) (model.{{.Model}}, repoComm.ReleaseLock) {
+	return {{.Alias}}Serv.repo.GetBy{{.Pk.Name}}Lock({{.Pk.Name}}, _select...)
 }
 
 // 通过请求ctx编辑/新增一条数据
@@ -212,7 +212,7 @@ func ({{.Alias}}Serv {{.Model}}Service) Get{{.Model}}ByValidate({{.Alias}}Valida
 	}
 	var {{.Alias}} model.{{.Model}}
 	if {{.Alias}}Validator.{{.Pk.Name}} > 0 {
-		{{.Alias}} = {{.Alias}}Serv.repo.GetByID({{.Alias}}Validator.{{.Pk.Name}})
+		{{.Alias}} = {{.Alias}}Serv.repo.GetBy{{.Pk.Name}}({{.Alias}}Validator.{{.Pk.Name}})
 		if {{.Alias}}.{{.Pk.Name}} == 0 {
 			return {{.Alias}}, sErr.New("无效的{{.Pk.Name}}")
 		}

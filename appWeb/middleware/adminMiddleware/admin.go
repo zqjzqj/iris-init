@@ -60,7 +60,7 @@ func AdminPermission(ctx iris.Context) {
 	}
 	//不是超级管理员
 	if !adm.IsRootRole() {
-		permServ := services.NewPermissionService()
+		permServ := services.NewPermissionsService()
 		ident := permServ.GeneratePermissionAuthIdentify(ctx.Method(), ctx.Path())
 		//这里判断一下此路径是否需要判断权限 不在权限表里 默认通过
 		if permServ.IdentifyExists(ident) {

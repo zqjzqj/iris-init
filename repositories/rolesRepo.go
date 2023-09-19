@@ -3,6 +3,7 @@ package repositories
 import (
 	"gorm.io/gorm"
 	"iris-init/model"
+	"iris-init/orm"
 	"iris-init/repositories/repoComm"
 	"iris-init/repositories/repoInterface"
 )
@@ -15,62 +16,301 @@ func NewRolesRepo() repoInterface.RolesRepo {
 	return &RolesRepoGorm{repoComm.NewRepoGorm()}
 }
 
-func (rolesRepo RolesRepoGorm) Save(role *model.Roles, _select ...string) error {
-	return repoComm.SaveModel(rolesRepo.Orm, role, _select...)
+// 该方法需要自己去完善 GetSearchWhereTx方法内部
+func (rolesRepo *RolesRepoGorm) GetByWhere(where repoInterface.RolesSearchWhere) model.Roles {
+	roles := model.Roles{}
+	_ = rolesRepo.GetSearchWhereTx(where, nil).Limit(1).Find(&roles)
+	return roles
 }
 
-func (rolesRepo RolesRepoGorm) DeleteByID(id ...uint64) (rowsAffected int64, err error) {
-	if len(id) == 1 {
-		return rolesRepo.Delete("id", id[0])
+// 该方法需要自己去完善 GetSearchWhereTx方法内部
+func (rolesRepo *RolesRepoGorm) GetIDByWhere(where repoInterface.RolesSearchWhere) []uint64 {
+	var ID []uint64
+	tx := rolesRepo.GetSearchWhereTx(where, nil)
+	tx.Select("id").Model(model.Roles{}).Scan(&ID)
+	return ID
+}
+
+func (rolesRepo *RolesRepoGorm) Create(roles *[]model.Roles) error {
+	return rolesRepo.Orm.Create(roles).Error
+}
+
+func (rolesRepo *RolesRepoGorm) Save(roles *model.Roles, _select ...string) error {
+	return repoComm.SaveModel(rolesRepo.Orm, roles, _select...)
+}
+
+func (rolesRepo *RolesRepoGorm) SaveOmit(roles *model.Roles, _omit ...string) error {
+	return repoComm.SaveModelOmit(rolesRepo.Orm, roles, _omit...)
+}
+
+// 这里因为gorm的缘故 传入的roles主键必须不为空
+func (rolesRepo *RolesRepoGorm) Delete(roles model.Roles) (rowsAffected int64, err error) {
+	tx := rolesRepo.Orm.Delete(roles)
+	return tx.RowsAffected, tx.Error
+}
+
+// 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构RolesRepoGorm以外使用
+func (rolesRepo *RolesRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
+	tx := rolesRepo.Orm.Where(query, args...).Delete(model.Roles{})
+	return tx.RowsAffected, tx.Error
+}
+
+func (rolesRepo *RolesRepoGorm) DeleteByID(ID ...uint64) (rowsAffected int64, err error) {
+	if len(ID) == 1 {
+		return rolesRepo.deleteByWhere("id", ID[0])
 	}
-	return rolesRepo.Delete("id in ?", id)
+	return rolesRepo.deleteByWhere("id in ?", ID)
 }
 
-func (rolesRepo RolesRepoGorm) Delete(query string, args ...interface{}) (rowsAffected int64, err error) {
-	r := rolesRepo.Orm.Where(query, args...).Delete(model.Roles{})
+func (rolesRepo *RolesRepoGorm) UpdateByWhere(where repoInterface.RolesSearchWhere, data interface{}) (rowsAffected int64, err error) {
+	tx := rolesRepo.GetSearchWhereTx(where, nil)
+	r := tx.Updates(data)
 	return r.RowsAffected, r.Error
 }
 
-func (rolesRepo RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearchWhere, tx0 *gorm.DB) *gorm.DB {
+func (rolesRepo *RolesRepoGorm) DeleteByWhere(where repoInterface.RolesSearchWhere) (rowsAffected int64, err error) {
+	tx := rolesRepo.GetSearchWhereTx(where, nil)
+	r := tx.Delete(model.Roles{})
+	return r.RowsAffected, r.Error
+}
+
+func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearchWhere, tx0 *gorm.DB) *gorm.DB {
 	var tx *gorm.DB
 	if tx0 == nil {
 		tx = rolesRepo.Orm.Model(model.Roles{})
 	} else {
 		tx = tx0.Model(model.Roles{})
 	}
-	if where.RoleID > 0 {
-		tx.Where("id", where.RoleID)
+	//需要额外调整
+	if where.ID != "" {
+		tx.Where("id", where.ID)
 	}
+	if where.IDNeq != "" {
+		tx.Where("id <> ?", where.IDNeq)
+	}
+	if where.IDNull {
+		tx.Where("id is null")
+	}
+	if where.IDNotNull {
+		tx.Where("id is not null")
+	}
+	if where.IDLt != "" {
+		tx.Where("id < ?", where.IDLt)
+	}
+	if where.IDElt != "" {
+		tx.Where("id <= ?", where.IDElt)
+	}
+	if where.IDGt != "" {
+		tx.Where("id > ?", where.IDGt)
+	}
+	if where.IDEgt != "" {
+		tx.Where("id >= ?", where.IDEgt)
+	}
+	if len(where.IDIn) > 0 {
+		tx.Where("id in ?", where.IDIn)
+	}
+	if len(where.IDNotIn) > 0 {
+		tx.Where("id not in ?", where.IDNotIn)
+	}
+	if where.IDSort != "" {
+		if where.IDSort == "asc" {
+			tx.Order("id asc")
+		} else {
+			tx.Order("id desc")
+		}
+	}
+	//需要额外调整
 	if where.Name != "" {
-		tx.Where("name like ?", where.Name+"%")
+		tx.Where("name", where.Name)
 	}
+	if where.NameNeq != "" {
+		tx.Where("name <> ?", where.NameNeq)
+	}
+	if where.NameNull {
+		tx.Where("name is null")
+	}
+	if where.NameNotNull {
+		tx.Where("name is not null")
+	}
+	if where.NameLike != "" {
+		tx.Where("name like ?", "%"+where.NameLike+"%")
+	}
+	//需要额外调整
+	if where.Remark != "" {
+		tx.Where("remark", where.Remark)
+	}
+	if where.RemarkNeq != "" {
+		tx.Where("remark <> ?", where.RemarkNeq)
+	}
+	if where.RemarkNull {
+		tx.Where("remark is null")
+	}
+	if where.RemarkNotNull {
+		tx.Where("remark is not null")
+	}
+	if where.RemarkLike != "" {
+		tx.Where("remark like ?", "%"+where.RemarkLike+"%")
+	}
+	//需要额外调整
+	if where.PermIdents != "" {
+		tx.Where("perm_idents", where.PermIdents)
+	}
+	if where.PermIdentsNeq != "" {
+		tx.Where("perm_idents <> ?", where.PermIdentsNeq)
+	}
+	if where.PermIdentsNull {
+		tx.Where("perm_idents is null")
+	}
+	if where.PermIdentsNotNull {
+		tx.Where("perm_idents is not null")
+	}
+	//需要额外调整
+	if where.CreatedAt != "" {
+		tx.Where("created_at", where.CreatedAt)
+	}
+	if where.CreatedAtNeq != "" {
+		tx.Where("created_at <> ?", where.CreatedAtNeq)
+	}
+	if where.CreatedAtNull {
+		tx.Where("created_at is null")
+	}
+	if where.CreatedAtNotNull {
+		tx.Where("created_at is not null")
+	}
+	if where.CreatedAtLt != "" {
+		tx.Where("created_at < ?", where.CreatedAtLt)
+	}
+	if where.CreatedAtElt != "" {
+		tx.Where("created_at <= ?", where.CreatedAtElt)
+	}
+	if where.CreatedAtGt != "" {
+		tx.Where("created_at > ?", where.CreatedAtGt)
+	}
+	if where.CreatedAtEgt != "" {
+		tx.Where("created_at >= ?", where.CreatedAtEgt)
+	}
+	if len(where.CreatedAtIn) > 0 {
+		tx.Where("created_at in ?", where.CreatedAtIn)
+	}
+	if len(where.CreatedAtNotIn) > 0 {
+		tx.Where("created_at not in ?", where.CreatedAtNotIn)
+	}
+	if where.CreatedAtSort != "" {
+		if where.CreatedAtSort == "asc" {
+			tx.Order("created_at asc")
+		} else {
+			tx.Order("created_at desc")
+		}
+	}
+	//需要额外调整
+	if where.UpdatedAt != "" {
+		tx.Where("updated_at", where.UpdatedAt)
+	}
+	if where.UpdatedAtNeq != "" {
+		tx.Where("updated_at <> ?", where.UpdatedAtNeq)
+	}
+	if where.UpdatedAtNull {
+		tx.Where("updated_at is null")
+	}
+	if where.UpdatedAtNotNull {
+		tx.Where("updated_at is not null")
+	}
+	if where.UpdatedAtLt != "" {
+		tx.Where("updated_at < ?", where.UpdatedAtLt)
+	}
+	if where.UpdatedAtElt != "" {
+		tx.Where("updated_at <= ?", where.UpdatedAtElt)
+	}
+	if where.UpdatedAtGt != "" {
+		tx.Where("updated_at > ?", where.UpdatedAtGt)
+	}
+	if where.UpdatedAtEgt != "" {
+		tx.Where("updated_at >= ?", where.UpdatedAtEgt)
+	}
+	if len(where.UpdatedAtIn) > 0 {
+		tx.Where("updated_at in ?", where.UpdatedAtIn)
+	}
+	if len(where.UpdatedAtNotIn) > 0 {
+		tx.Where("updated_at not in ?", where.UpdatedAtNotIn)
+	}
+	if where.UpdatedAtSort != "" {
+		if where.UpdatedAtSort == "asc" {
+			tx.Order("updated_at asc")
+		} else {
+			tx.Order("updated_at desc")
+		}
+	}
+	where.SelectParams.SetTxGorm(tx)
 	return tx
 }
 
-func (rolesRepo RolesRepoGorm) GetList(where repoInterface.RolesSearchWhere) []model.Roles {
+// 返回数据总数
+func (rolesRepo *RolesRepoGorm) GetTotalCount(where repoInterface.RolesSearchWhere) int64 {
+	tx := rolesRepo.GetSearchWhereTx(where, nil)
+	var r int64
+	tx.Count(&r)
+	return r
+}
+
+func (rolesRepo *RolesRepoGorm) GetList(where repoInterface.RolesSearchWhere) []model.Roles {
 	roles := make([]model.Roles, 0, where.SelectParams.RetSize)
 	tx := rolesRepo.GetSearchWhereTx(where, nil)
-	where.SelectParams.SetTxGorm(tx).Find(&roles)
+	tx.Find(&roles)
 	return roles
 }
 
-func (rolesRepo RolesRepoGorm) GetByWhere(query string, args ...any) model.Roles {
-	role := model.Roles{}
-	rolesRepo.Orm.Where(query, args...).First(&role)
-	return role
-}
-
-func (rolesRepo RolesRepoGorm) GetByID(id uint64, _select ...string) model.Roles {
-	if id == 0 {
-		return model.Roles{}
-	}
+func (rolesRepo *RolesRepoGorm) GetByID(ID uint64, _select ...string) model.Roles {
 	roles := model.Roles{}
-	tx := rolesRepo.Orm.Where("id", id)
+	tx := rolesRepo.Orm.Where("id", ID)
 	if len(_select) > 0 {
 		tx = tx.Select(_select)
 	}
-	tx.First(&roles)
+	tx.Find(&roles)
 	return roles
+}
+func (rolesRepo *RolesRepoGorm) GetByName(name string, _select ...string) []model.Roles {
+	roles := make([]model.Roles, 0)
+	tx := rolesRepo.Orm.
+		Where("name", name)
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	tx.Find(&roles)
+	return roles
+}
+
+func (rolesRepo *RolesRepoGorm) DeleteByName(name string) (rowsAffected int64, err error) {
+	tx := rolesRepo.Orm.
+		Where("name", name)
+	r := tx.Delete(model.Roles{})
+	return r.RowsAffected, r.Error
+}
+
+func (rolesRepo *RolesRepoGorm) GetByIDLock(ID uint64, _select ...string) (model.Roles, repoComm.ReleaseLock) {
+	if !orm.IsBeginTransaction(rolesRepo.Orm) {
+		panic("rolesRepo.GetByIDLock is must beginTransaction")
+	}
+	roles := model.Roles{}
+	tx := orm.LockForUpdate(rolesRepo.Orm.Where("id", ID))
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	tx.Find(&roles)
+
+	//这里返回一个空的释放锁方法 因为gorm在事务提交或回滚后会自动释放
+	return roles, func() {}
+}
+
+func (rolesRepo *RolesRepoGorm) ScanByWhere(where repoInterface.RolesSearchWhere, dest any) error {
+	return rolesRepo.GetSearchWhereTx(where, nil).Find(dest).Error
+}
+
+func (rolesRepo *RolesRepoGorm) ScanByOrWhere(dest any, where ...repoInterface.RolesSearchWhere) error {
+	tx := rolesRepo.Orm.Model(model.Roles{})
+	for _, v := range where {
+		tx.Or(rolesRepo.GetSearchWhereTx(v, nil))
+	}
+	return tx.Find(dest).Error
 }
 
 func (rolesRepo RolesRepoGorm) GetRolesByID(id ...uint64) []model.Roles {

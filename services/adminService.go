@@ -10,11 +10,22 @@ import (
 	"iris-init/repositories/repoComm"
 	"iris-init/repositories/repoInterface"
 	"iris-init/sErr"
+	"reflect"
 	"time"
 )
 
 func NewAdminService() AdminService {
 	return AdminService{repo: repositories.NewAdminRepo()}
+}
+
+func NewAdminServiceByOrm(orm any) AdminService {
+	r := AdminService{repo: repositories.NewAdminRepo()}
+	r.repo.SetOrm(orm)
+	return r
+}
+
+func NewAdminServiceByRepo(repo repoInterface.AdminRepo) AdminService {
+	return AdminService{repo: repo}
 }
 
 type AdminService struct {
@@ -63,14 +74,14 @@ func (admServ AdminService) InitAdminAccount() (model.Admin, error) {
 	return admin, err
 }
 
-func (admServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global.Pager) {
-	where := repoInterface.AdmSearchWhere{}
+func (adminServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global.Pager) {
+	where := repoInterface.AdminSearchWhere{}
 	_ = ctx.ReadQuery(&where)
 	pager := global.NewPager(ctx)
 	if pager.Size < 0 {
-		return admServ.repo.GetList(where), nil
+		return adminServ.repo.GetList(where), nil
 	}
-	pager.SetTotal(admServ.repo.GetTotalCount(where))
+	pager.SetTotal(adminServ.repo.GetTotalCount(where))
 	if pager.Total == 0 {
 		return []model.Admin{}, pager
 	}
@@ -78,12 +89,49 @@ func (admServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global.P
 		Offset:  pager.Offset,
 		Limit:   pager.Size,
 		RetSize: pager.Size,
-		OrderBy: []repoComm.OrderByParams{{
-			Column: "ID",
-			Desc:   false,
-		}},
+		OrderBy: []repoComm.OrderByParams{
+			{
+				Column: "ID",
+				Desc:   true,
+			},
+		},
 	}
-	return admServ.repo.GetList(where), pager
+	return adminServ.repo.GetList(where), pager
+}
+
+func (adminServ AdminService) ListAvailable(_select ...string) []model.Admin {
+	if len(_select) == 0 {
+		_select = nil
+	}
+	return adminServ.repo.GetList(repoInterface.AdminSearchWhere{
+		SelectParams: repoComm.SelectFrom{
+			Select: _select,
+		},
+	})
+}
+
+func (adminServ AdminService) GetByWhere(where repoInterface.AdminSearchWhere) model.Admin {
+	return adminServ.repo.GetByWhere(where)
+}
+
+func (adminServ AdminService) ScanByWhere(where repoInterface.AdminSearchWhere, dest any) error {
+	return adminServ.repo.ScanByWhere(where, dest)
+}
+
+func (adminServ AdminService) ScanByOrWhere(dest any, where ...repoInterface.AdminSearchWhere) error {
+	return adminServ.repo.ScanByOrWhere(dest, where...)
+}
+
+func (adminServ AdminService) UpdateByWhere(where repoInterface.AdminSearchWhere, data interface{}) (rowsAffected int64, err error) {
+	return adminServ.repo.UpdateByWhere(where, data)
+}
+
+func (adminServ AdminService) ListByWhere(where repoInterface.AdminSearchWhere) []model.Admin {
+	return adminServ.repo.GetList(where)
+}
+
+func (adminServ AdminService) TotalCount(where repoInterface.AdminSearchWhere) int64 {
+	return adminServ.repo.GetTotalCount(where)
 }
 
 // 获取一条数据根据ctx
@@ -94,6 +142,38 @@ func (admServ AdminService) GetItem(ctx iris.Context, _select ...string) model.A
 
 func (admServ AdminService) GetByID(id uint64, _select ...string) model.Admin {
 	return admServ.repo.GetByID(id, _select...)
+}
+
+func (adminServ AdminService) DeleteByPhone(phone string) error {
+	_, err := adminServ.repo.DeleteByPhone(phone)
+	return err
+}
+
+func (adminServ AdminService) GetByToken(token string, _select ...string) model.Admin {
+	var v reflect.Value
+	v = reflect.ValueOf(token)
+	if !v.IsValid() { // 值不存在
+		return model.Admin{}
+	}
+	return adminServ.repo.GetByToken(token, _select...)
+}
+
+func (adminServ AdminService) CheckTokenValid(admin model.Admin) error {
+	var v reflect.Value
+	v = reflect.ValueOf(admin.Token)
+	if !v.IsValid() { // 值不存在
+		return sErr.New("无效的用户登陆token")
+	}
+	_admin := adminServ.GetByToken(admin.Token.String, "id")
+	if _admin.ID > 0 && admin.ID != _admin.ID {
+		return sErr.NewFmt("用户登陆token.已存在:%s.", admin.Token)
+	}
+	return nil
+}
+
+func (adminServ AdminService) DeleteByToken(token string) error {
+	_, err := adminServ.repo.DeleteByToken(token)
+	return err
 }
 
 // 通过请求ctx编辑/新增一条数据
@@ -252,7 +332,8 @@ func (admServ AdminService) CheckPermissionByRoute(r *router.Route, ctx iris.Con
 	if !ok {
 		return false
 	}
-	return admServ.HasPermission(adm, NewPermissionService().GeneratePermissionAuthIdentify(r.Method, r.Path))
+	return admServ.HasPermission(adm, NewPermissionsServiceByOrm(admServ.repo.GetOrm()).
+		GeneratePermissionAuthIdentify(r.Method, r.Path))
 }
 
 func (admServ AdminService) HasPermission(adm model.Admin, permIdent string) bool {
