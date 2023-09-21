@@ -45,12 +45,10 @@ type {{.Model}}SearchWhere struct {
     {{- if eq .Type "string" }}
     {{.Name}}Like string
     {{- end}}
-    {{- if .IsNumber }}
     {{.Name}}Lt   string // {{.Name}} < {{.Name}}Lt
     {{.Name}}Gt   string // {{.Name}} > {{.Name}}Gt
     {{.Name}}Elt  string // {{.Name}} <= {{.Name}}Elt
     {{.Name}}Egt  string // {{.Name}} >= {{.Name}}Egt
-    {{- end}}
     {{- if eq .Type "uint8"}}
     {{.Name}}NotIn []int // not in查询
     {{.Name}}In []int // in查询

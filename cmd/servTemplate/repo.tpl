@@ -106,7 +106,6 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
     if where.{{.Name}}NotNull {
         tx.Where("{{.NameSnake}} is not null")
     }
-   {{- if .IsNumber}}
     if where.{{.Name}}Lt != "" {
       tx.Where("{{.NameSnake}} < ?", where.{{.Name}}Lt)
     }
@@ -122,7 +121,6 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
      if len(where.{{.Name}}NotIn) > 0 {
       tx.Where("{{.NameSnake}} not in ?", where.{{.Name}}NotIn)
     }
-    {{- end}}
     if where.{{.Name}}Sort != "" {
         if where.{{.Name}}Sort == "asc" {
             tx.Order("{{.NameSnake}} asc")
