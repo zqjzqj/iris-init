@@ -134,7 +134,7 @@ func ParseXLSXByReader(reader io.Reader) ([]map[string]string, error) {
 		_ = f.Close()
 	}()
 	// 获取第一个Sheet
-	sheetName := f.GetSheetName(1)
+	sheetName := f.GetSheetName(0)
 	rows, err := f.GetRows(sheetName)
 	if err != nil {
 		return nil, err
