@@ -94,6 +94,7 @@ func main() {
 func ListenWeb(appWeb *iris.Application) error {
 	cOption := cors.Options{
 		AllowedOrigins:   []string{"*"},
+		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,
 	}
 	if config.EnvIsDev() {
