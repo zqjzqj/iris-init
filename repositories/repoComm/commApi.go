@@ -68,6 +68,7 @@ type SelectFrom struct {
 	RetSize int // 用来控制切片初始化容量
 	Offset  int
 	Limit   int
+	Omit    []string
 	Select  []string
 	OrderBy []OrderByParams
 	Preload []PreloadParams
@@ -88,6 +89,9 @@ func (selectFrom SelectFrom) SetTxGorm(tx *gorm.DB) *gorm.DB {
 	}
 	if len(selectFrom.Select) > 0 {
 		tx.Select(selectFrom.Select)
+	}
+	if len(selectFrom.Omit) > 0 {
+		tx.Omit(selectFrom.Omit...)
 	}
 	if len(selectFrom.Preload) > 0 {
 		for _, v := range selectFrom.Preload {
