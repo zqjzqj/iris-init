@@ -68,11 +68,12 @@ type SelectFrom struct {
 	RetSize int // 用来控制切片初始化容量
 	Offset  int
 	Limit   int
-	Omit    []string
 	Select  []string
+	Omit    []string
 	OrderBy []OrderByParams
 	Preload []PreloadParams
 	Where   []WhereParams
+	Group   string
 }
 
 func (selectFrom SelectFrom) SetTxGorm(tx *gorm.DB) *gorm.DB {
@@ -86,6 +87,9 @@ func (selectFrom SelectFrom) SetTxGorm(tx *gorm.DB) *gorm.DB {
 		for _, v := range selectFrom.OrderBy {
 			tx.Order(clause.OrderByColumn{Column: clause.Column{Name: v.Column, Raw: v.Raw}, Desc: v.Desc, Reorder: v.Reorder})
 		}
+	}
+	if selectFrom.Group != "" {
+		tx.Group(selectFrom.Group)
 	}
 	if len(selectFrom.Select) > 0 {
 		tx.Select(selectFrom.Select)
