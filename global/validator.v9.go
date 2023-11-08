@@ -53,6 +53,22 @@ func ValidateV9Struct(s interface{}) error {
 	return nil
 }
 
+func ValidateV9Struct_FieldErrors(s interface{}) []sErr.FieldErr {
+	err := ValidateV9.Struct(s)
+	if err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+		_errors := make([]sErr.FieldErr, 0, len(validationErrors))
+		for _, errVal := range validationErrors {
+			_errors = append(_errors, sErr.FieldErr{
+				Field: errVal.Field(),
+				Err:   errVal.Translate(ZhTrans),
+			})
+		}
+		return _errors
+	}
+	return nil
+}
+
 type ValidatorV9Interface interface {
 	Validate() error //这里只做 不操作orm 的基础验证
 }
