@@ -21,3 +21,13 @@ type Area struct {
 func (area Area) TableName() string {
 	return "area"
 }
+
+func (area Area) ShowMap() map[string]interface{} {
+	return map[string]interface{}{
+		"ID":         area.ID,
+		"PID":        area.Pid,
+		"Name":       area.Name,
+		"ShortName":  area.ShortName,
+		"MergerName": area.MergerName,
+	}
+}
