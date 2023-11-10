@@ -135,7 +135,7 @@ func (areaServ AreaService) CheckAreaID(proID, cityID, regionID uint) error {
 		return sErr.ErrInvalidRegionID
 	}
 	if area.Pid != cityID {
-		return sErr.ErrInvalidRegionID
+		return sErr.ErrInvalidCityID
 	}
 	area = areaServ.GetByID(cityID)
 	if area.Pid != proID {
