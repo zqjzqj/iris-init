@@ -38,6 +38,14 @@ type {{.Model}}Service struct {
 func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.Model}}, *global.Pager) {
 	where := repoInterface.{{.Model}}SearchWhere{}
 	_ = ctx.ReadQuery(&where)
+	where.SelectParams = repoComm.SelectFrom{
+        OrderBy: []repoComm.OrderByParams{
+            {
+                Column: "ID",
+                Desc:   true,
+            },
+        },
+    }
 	pager := global.NewPager(ctx)
     if pager.Size < 0 {
         return {{.Alias}}Serv.repo.GetList(where), nil
@@ -46,17 +54,9 @@ func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.M
 	if pager.Total == 0 {
 		return []model.{{.Model}}{}, pager
 	}
-	where.SelectParams = repoComm.SelectFrom{
-		Offset:  pager.Offset,
-		Limit:   pager.Size,
-		RetSize: pager.Size,
-		OrderBy: []repoComm.OrderByParams{
-            {
-                Column: "ID",
-                Desc:   true,
-            },
-		},
-	}
+	where.SelectParams.Offset = pager.Offset
+    where.SelectParams.Limit = pager.Size
+    where.SelectParams.RetSize = pager.Size
 	return {{.Alias}}Serv.repo.GetList(where), pager
 }
 
