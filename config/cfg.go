@@ -137,6 +137,7 @@ func loadDbCfg() error {
 			dbConf.Get("password").String(),
 			maxIdleCounts,
 			int(dbConf.Get("max_open_counts").Int()),
+			int(dbConf.Get("max_lifetime").Int()),
 			loggerLevel,
 		)
 		if err != nil {
@@ -150,7 +151,7 @@ func loadDbCfg() error {
 		}
 	}
 	if orm.GetMysqlDef() == nil {
-		iDB, ok := orm.GetMysql("iris-init")
+		iDB, ok := orm.GetMysql("cs-message")
 		if !ok {
 			return sErr.New("not default database")
 		}

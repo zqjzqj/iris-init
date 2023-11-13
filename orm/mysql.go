@@ -21,6 +21,7 @@ type MysqlDb struct {
 	UserName      string
 	Password      string
 	MaxIdleCounts int
+	MaxLifetime   int
 	DB            *gorm.DB
 }
 
@@ -44,7 +45,11 @@ func GetMysqlDef() *MysqlDb {
 	return mysqlDefDb
 }
 
-func NewDatabaseMysql(host, port, database, charset, username, password string, maxIdleCounts int, maxOpenCounts int, loggerLevel logger.LogLevel) (*MysqlDb, error) {
+func NewDatabaseMysql(host, port, database, charset, username, password string,
+	maxIdleCounts int,
+	maxOpenCounts int,
+	maxLifetime int,
+	loggerLevel logger.LogLevel) (*MysqlDb, error) {
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容）
 		logger.Config{
@@ -73,7 +78,9 @@ func NewDatabaseMysql(host, port, database, charset, username, password string, 
 	if maxOpenCounts > 0 {
 		sqlDB.SetMaxOpenConns(maxOpenCounts)
 	}
-	//sqlDB.SetConnMaxLifetime(3 * time.Minute)
+	if maxLifetime > 0 {
+		sqlDB.SetConnMaxLifetime(time.Duration(maxLifetime) * time.Second)
+	}
 	if err = sqlDB.Ping(); err != nil {
 		return nil, err
 	}
@@ -86,6 +93,7 @@ func NewDatabaseMysql(host, port, database, charset, username, password string, 
 		UserName:      username,
 		Password:      password,
 		MaxIdleCounts: maxIdleCounts,
+		MaxLifetime:   maxLifetime,
 		DB:            db,
 	}, nil
 }
