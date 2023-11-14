@@ -50,7 +50,7 @@ $(function(){
 
 function setAresSelectOption(el, data, id) {
     el.empty()
-    el.append("<option value='0'>请选择</option>")
+    el.append("<option value=''>请选择</option>")
     data.forEach(function(v){
         if (v.ID == id) {
             el.append("<option value='"+v.ID+"' selected>"+v.Name+"</option>")
