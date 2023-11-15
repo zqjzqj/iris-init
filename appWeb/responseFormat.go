@@ -1,6 +1,13 @@
 package appWeb
 
-import "iris-init/global"
+import (
+	"bytes"
+	"fmt"
+	"github.com/kataras/iris/v12"
+	"io"
+	"iris-init/global"
+	"net/url"
+)
 
 const (
 	ResponseSuccessCode  = 0
@@ -62,6 +69,17 @@ func NewNotAuthResponse(msg string, data interface{}) ResponseFormat {
 
 func NewNotLoginResponse(msg string, data interface{}) ResponseFormat {
 	return NewResponse(ResponseNotLoginCode, msg, data)
+}
+
+func RespDownloadFile(ctx iris.Context, filename string, buf *bytes.Buffer) error {
+	//ctx.Header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	ctx.Header("X-Filename", url.QueryEscape(filename))
+	ctx.Header("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filename))
+	ctx.Header("Content-Length", fmt.Sprintf("%d", buf.Len()))
+	if _, err := io.Copy(ctx.ResponseWriter(), bytes.NewReader(buf.Bytes())); err != nil {
+		return err
+	}
+	return nil
 }
 
 type AjaxLocationLayerOpenParams struct {
