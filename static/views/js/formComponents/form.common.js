@@ -384,8 +384,67 @@ $(function(){
                 checkbox.prop('checked', false)
             }
             checkbox.trigger('change');
-            return false
         });
+
+        $("[data-action=checked-with-submit]").click(function(){
+            var url = $(this).attr('data-href')
+            var requestData = $(this).attr('data-params') || {};
+            var method = $(this).attr("data-method") || "POST";
+            var ident_name = $(this).attr("data-ident-name") || "ID";
+            var warning = $(this).attr('data-warning')
+            var ident = [];
+            var itemSelect = $(this).attr("data-item-selector")
+            $(itemSelect).each(function(k,v){
+                var value = $(v).prop("value")
+                if (value) {
+                    ident.push(value)
+                }
+            })
+            requestData[ident_name] = ident.join(",")
+            var funcCallback = $(this).attr("data-callback") || "";
+            var funcSuccess = $(this).attr("data-success") || 'successCallback(response.Msg, response.Data, ifrIndex)';
+            var funcError = $(this).attr("data-error") || 'errorCallback(response.Msg, response.Data, ifrIndex)';
+            var beforeFun = $(this).attr("data-before") || "";
+
+            if ( beforeFun ) {
+                eval(beforeFun);
+            }
+            if (warning) {
+                alertWarning("警告", warning, function(){
+                    loadingShow();
+                    $.ajax({
+                        type:method,
+                        url: url,
+                        data:requestData,
+                        dataType:'json',
+                        success: function (response) {
+                            loadingClose();
+                            if ( response.Code == ReqStatusSuccess ) {
+                                successCallback(response.Msg, response.Data)
+                            } else {
+                                errorCallback(response.Msg, response.Data)
+                            }
+                        }
+                    })
+                });
+            } else {
+                loadingShow();
+                $.ajax({
+                    type:method,
+                    url: url,
+                    data:requestData,
+                    dataType:'json',
+                    success: function (response) {
+                        loadingClose();
+                        if ( response.Code == ReqStatusSuccess ) {
+                            successCallback(response.Msg, response.Data)
+                        } else {
+                            errorCallback(response.Msg, response.Data)
+                        }
+                    }
+                })
+            }
+        })
 
         var laydate = layui.laydate;
         $('#date-range').find('input').each(function(){
