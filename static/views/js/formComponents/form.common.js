@@ -340,45 +340,51 @@ $(function(){
             return false;
         });
 
-        $("[data-action=checkboxAll]").click(function () {
+        $("[data-action=checkboxAll]").change(function () {
             var mark = $(this).attr("data-main-mark");
             var items = $("[data-mark=" + mark + "]");
-
             if ( $("[data-mark=" + mark + "]:checked").length === items.length ) {
-                items.removeAttr("checked");
-                $(this).removeAttr("checked");;
+                items.prop("checked", false);
+                $(this).removeProp("checked", false);
             } else {
-                $(this).prop("checked");
-                items.prop("checked", "checked")
+                $(this).prop("checked", true);
+                items.prop("checked", true)
             }
         });
 
         var dataCheckbox = $("[data-action=checkbox]")
-        dataCheckbox.click(function () {
+        dataCheckbox.change(function () {
             var mark = $(this).attr("data-mark");
             var main = $("[data-main-mark=" + mark + "]");
             if ( $("[data-mark=" + mark + "]:checked").length === $("[data-mark=" + mark + "]").length ) {
-                main.prop("checked", "checked")
+                main.prop("checked", true)
             } else {
-                main.removeAttr("checked");
+                main.prop("checked", false);
             }
         });
         if ( dataCheckbox.length > 0 ) {
-            $.each($("[data-action=checkbox]"), function(){
+            $.each(dataCheckbox, function(){
                 var mark = $(this).attr("data-mark");
                 if ( mark ) {
                     var main = $("[data-main-mark=" + mark + "]");
                     if ( $("[data-mark=" + mark + "]:checked").length === $("[data-mark=" + mark + "]").length ) {
-                        main.prop("checked", "checked")
+                        main.prop("checked", true)
                     } else {
-                        main.removeAttr("checked");
+                        main.prop("checked", false);
                     }
                 }
             })
         }
 
-        $(".checked-with-tr").click(function () {
-            $(this).find(".checked-td").click();
+        $(".checked-with-main").click(function () {
+            var checkbox = $(this).find(".checked-with-item")
+            if (!checkbox.prop("checked")) {
+                checkbox.prop('checked', true)
+            } else {
+                checkbox.prop('checked', false)
+            }
+            checkbox.trigger('change');
+            return false
         });
 
         var laydate = layui.laydate;
