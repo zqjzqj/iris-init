@@ -648,5 +648,40 @@ $(function(){
                 })
             })
         }, 300)
+
+        $("[data-action=upload-one]").each(function(k, v){
+            var fileName = $(v).attr("data-file-name") || "File"
+            var uploadUrl = $(v).attr("data-url")
+            var accept = $(v).attr("data-accept") || "file"
+            var refresh = $(v).attr("data-refresh") || ""
+            layui.upload.render({
+                elem: $(v)
+                ,url: uploadUrl
+                ,accept: accept
+                ,multiple: false
+                ,auto: true
+                ,field: fileName
+                ,before: function(){
+                    loadingShow()
+                }
+                ,done: function(res, index, upload){
+                    loadingClose()
+                    if(res.Code === 0){ //上传成功
+                        alertSuccess(res.Msg)
+                        if (refresh === "1") {
+                            setTimeout(function (){
+                                location.href = ''
+                            }, 1000)
+                        }
+                        return
+                    }
+                    this.error(res, index, upload);
+                }
+                ,error: function(res, index, upload){
+                    loadingClose()
+                    alertError(res.Msg)
+                }
+            });
+        })
     })
 })
