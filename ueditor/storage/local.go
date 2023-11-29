@@ -24,7 +24,7 @@ func (lf LocalFile) SaveFileFromLocalPath(srcPath string, dstAbsPath, dstRelativ
 保存文件到本地
 */
 func (lf LocalFile) SaveFile(srcFile io.Reader, srcFileSize int64, dstAbsPath, dstRelativePath string) (url string, err error) {
-	err = global.UploadLocalByReader(srcFile, dstAbsPath)
+	_, err = global.UploadLocalByReader(srcFile, dstAbsPath)
 	if err != nil {
 		return
 	}

@@ -21,7 +21,7 @@ func UploadLocalByUrl(url, path, filename string) (filePath string, err error) {
 		filename = GetNewFilename(_url[len(_url)-1])
 	}
 	filename = strings.TrimRight(path, "/") + "/" + filename
-	err = UploadLocalByReader(resp.Body, filename)
+	_, err = UploadLocalByReader(resp.Body, filename)
 	if err != nil {
 		return "", err
 	}
@@ -40,7 +40,7 @@ func UploadLocalByCtx(ctx iris.Context, field, path, filename string) (filePath 
 		//filename = Md5(uuid.New().String()) + GetFileSuffix(info.Filename)
 	}
 	filename = strings.TrimRight(path, "/") + "/" + filename
-	err = UploadLocalByReader(file, filename)
+	_, err = UploadLocalByReader(file, filename)
 	if err != nil {
 		return "", err
 	}
@@ -48,25 +48,26 @@ func UploadLocalByCtx(ctx iris.Context, field, path, filename string) (filePath 
 }
 
 func UploadLocalByBytes(_byte []byte, filename string) error {
-	return UploadLocalByReader(bytes.NewReader(_byte), filename)
+	_, err := UploadLocalByReader(bytes.NewReader(_byte), filename)
+	return err
 }
 
-func UploadLocalByReader(file io.Reader, filename string) error {
+func UploadLocalByReader(file io.Reader, filename string) (int64, error) {
 	fileDir := filepath.Dir(filename)
 	if !FileExists(fileDir) {
 		// 文件夹不存在，创建
 		if err := os.MkdirAll(fileDir, 0766); err != nil {
-			return err
+			return 0, err
 		}
 	}
 	dstFile, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	defer func() { _ = dstFile.Close() }()
-	_, err = io.Copy(dstFile, file)
+	written, err := io.Copy(dstFile, file)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return written, nil
 }
