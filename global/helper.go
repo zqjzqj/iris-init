@@ -36,6 +36,26 @@ type ShuffleType interface {
 // 上传文件序号
 var UploadFileNum uint64
 
+func SizeToString(size int64) string {
+	const (
+		B  = 1
+		KB = 1024 * B
+		MB = 1024 * KB
+		GB = 1024 * MB
+	)
+
+	switch {
+	case size < KB:
+		return fmt.Sprintf("%d B", size)
+	case size < MB:
+		return fmt.Sprintf("%.2f KB", float64(size)/float64(KB))
+	case size < GB:
+		return fmt.Sprintf("%.2f MB", float64(size)/float64(MB))
+	default:
+		return fmt.Sprintf("%.2f GB", float64(size)/float64(GB))
+	}
+}
+
 func IsNumber(v any) bool {
 	var ref reflect.Type
 	_v, ok := v.(reflect.Type)
