@@ -453,7 +453,7 @@ func (permRepo PermissionsRepoGorm) GetListPreloadChildren_2() []model.Permissio
 			}},
 			Preload: []repoComm.PreloadParams{
 				{
-					Query: "Children.Children",
+					Query: "Children.Children.Children.Children",
 				},
 			},
 		},
