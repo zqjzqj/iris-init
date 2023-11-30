@@ -29,7 +29,8 @@
                     </div>
 
                     <div style="padding-bottom: 10px;">
-                        <button data-action="open" href="/{{.Alias}}/item" data-title="添加" class="layui-btn layuiadmin-btn-list" >
+                        <button data-perm data-perm-val="POST@/{{.Alias}}/edit"
+                         data-action="open" href="/{{.Alias}}/item" data-title="添加" class="layui-btn layuiadmin-btn-list" >
                             添加
                         </button>
                     </div>
