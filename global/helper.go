@@ -11,6 +11,7 @@ import (
 	"iris-init/sErr"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -35,6 +36,31 @@ type ShuffleType interface {
 
 // 上传文件序号
 var UploadFileNum uint64
+
+func RemoveFile(path string, level int) error {
+	err := os.Remove(path)
+	if err != nil {
+		return err
+	}
+	_path := path
+	for i := 0; i < level; i++ {
+		dir := filepath.Dir(_path)
+		if !IsDirEmpty(dir) {
+			break
+		}
+		err = os.RemoveAll(dir)
+		if err != nil {
+			return err
+		}
+		_path = dir
+	}
+	return nil
+}
+
+func IsDirEmpty(dir string) bool {
+	entries, _ := os.ReadDir(dir)
+	return len(entries) == 0
+}
 
 func SizeToString(size int64) string {
 	const (
