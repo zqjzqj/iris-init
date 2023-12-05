@@ -32,6 +32,14 @@ type RolesService struct {
 func (rolesServ RolesService) ListPage(ctx iris.Context) ([]model.Roles, *global.Pager) {
 	where := repoInterface.RolesSearchWhere{}
 	_ = ctx.ReadQuery(&where)
+	where.SelectParams = repoComm.SelectFrom{
+		OrderBy: []repoComm.OrderByParams{
+			{
+				Column: "ID",
+				Desc:   true,
+			},
+		},
+	}
 	pager := global.NewPager(ctx)
 	if pager.Size < 0 {
 		return rolesServ.repo.GetList(where), nil
@@ -40,17 +48,9 @@ func (rolesServ RolesService) ListPage(ctx iris.Context) ([]model.Roles, *global
 	if pager.Total == 0 {
 		return []model.Roles{}, pager
 	}
-	where.SelectParams = repoComm.SelectFrom{
-		Offset:  pager.Offset,
-		Limit:   pager.Size,
-		RetSize: pager.Size,
-		OrderBy: []repoComm.OrderByParams{
-			{
-				Column: "ID",
-				Desc:   true,
-			},
-		},
-	}
+	where.SelectParams.Offset = pager.Offset
+	where.SelectParams.Limit = pager.Size
+	where.SelectParams.RetSize = pager.Size
 	return rolesServ.repo.GetList(where), pager
 }
 
