@@ -36,6 +36,14 @@ func (settingsServ SettingsService) GetWebsiteTitle() string {
 func (settingsServ SettingsService) ListPage(ctx iris.Context) ([]model.Settings, *global.Pager) {
 	where := repoInterface.SettingsSearchWhere{}
 	_ = ctx.ReadQuery(&where)
+	where.SelectParams = repoComm.SelectFrom{
+		OrderBy: []repoComm.OrderByParams{
+			{
+				Column: "ID",
+				Desc:   true,
+			},
+		},
+	}
 	pager := global.NewPager(ctx)
 	if pager.Size < 0 {
 		return settingsServ.repo.GetList(where), nil
@@ -44,17 +52,9 @@ func (settingsServ SettingsService) ListPage(ctx iris.Context) ([]model.Settings
 	if pager.Total == 0 {
 		return []model.Settings{}, pager
 	}
-	where.SelectParams = repoComm.SelectFrom{
-		Offset:  pager.Offset,
-		Limit:   pager.Size,
-		RetSize: pager.Size,
-		OrderBy: []repoComm.OrderByParams{
-			{
-				Column: "ID",
-				Desc:   true,
-			},
-		},
-	}
+	where.SelectParams.Offset = pager.Offset
+	where.SelectParams.Limit = pager.Size
+	where.SelectParams.RetSize = pager.Size
 	return settingsServ.repo.GetList(where), pager
 }
 

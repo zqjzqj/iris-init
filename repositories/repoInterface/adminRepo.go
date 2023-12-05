@@ -51,6 +51,10 @@ type AdminSearchWhere struct {
 	UsernameNull         bool
 	UsernameNotNull      bool
 	UsernameLike         string
+	UsernameLt           string   // Username < UsernameLt
+	UsernameGt           string   // Username > UsernameGt
+	UsernameElt          string   // Username <= UsernameElt
+	UsernameEgt          string   // Username >= UsernameEgt
 	UsernameNotIn        []string // not in查询
 	UsernameIn           []string // in查询
 	UsernameSort         string   // 排序
@@ -59,6 +63,10 @@ type AdminSearchWhere struct {
 	PhoneNull            bool
 	PhoneNotNull         bool
 	PhoneLike            string
+	PhoneLt              string   // Phone < PhoneLt
+	PhoneGt              string   // Phone > PhoneGt
+	PhoneElt             string   // Phone <= PhoneElt
+	PhoneEgt             string   // Phone >= PhoneEgt
 	PhoneNotIn           []string // not in查询
 	PhoneIn              []string // in查询
 	PhoneSort            string   // 排序
@@ -67,6 +75,10 @@ type AdminSearchWhere struct {
 	QQNull               bool
 	QQNotNull            bool
 	QQLike               string
+	QQLt                 string   // QQ < QQLt
+	QQGt                 string   // QQ > QQGt
+	QQElt                string   // QQ <= QQElt
+	QQEgt                string   // QQ >= QQEgt
 	QQNotIn              []string // not in查询
 	QQIn                 []string // in查询
 	QQSort               string   // 排序
@@ -86,6 +98,10 @@ type AdminSearchWhere struct {
 	RealNameNull         bool
 	RealNameNotNull      bool
 	RealNameLike         string
+	RealNameLt           string   // RealName < RealNameLt
+	RealNameGt           string   // RealName > RealNameGt
+	RealNameElt          string   // RealName <= RealNameElt
+	RealNameEgt          string   // RealName >= RealNameEgt
 	RealNameNotIn        []string // not in查询
 	RealNameIn           []string // in查询
 	RealNameSort         string   // 排序
@@ -94,6 +110,10 @@ type AdminSearchWhere struct {
 	AvatarNull           bool
 	AvatarNotNull        bool
 	AvatarLike           string
+	AvatarLt             string   // Avatar < AvatarLt
+	AvatarGt             string   // Avatar > AvatarGt
+	AvatarElt            string   // Avatar <= AvatarElt
+	AvatarEgt            string   // Avatar >= AvatarEgt
 	AvatarNotIn          []string // not in查询
 	AvatarIn             []string // in查询
 	AvatarSort           string   // 排序
@@ -113,6 +133,10 @@ type AdminSearchWhere struct {
 	PasswordNull         bool
 	PasswordNotNull      bool
 	PasswordLike         string
+	PasswordLt           string   // Password < PasswordLt
+	PasswordGt           string   // Password > PasswordGt
+	PasswordElt          string   // Password <= PasswordElt
+	PasswordEgt          string   // Password >= PasswordEgt
 	PasswordNotIn        []string // not in查询
 	PasswordIn           []string // in查询
 	PasswordSort         string   // 排序
@@ -121,6 +145,10 @@ type AdminSearchWhere struct {
 	SaltNull             bool
 	SaltNotNull          bool
 	SaltLike             string
+	SaltLt               string   // Salt < SaltLt
+	SaltGt               string   // Salt > SaltGt
+	SaltElt              string   // Salt <= SaltElt
+	SaltEgt              string   // Salt >= SaltEgt
 	SaltNotIn            []string // not in查询
 	SaltIn               []string // in查询
 	SaltSort             string   // 排序
@@ -129,6 +157,10 @@ type AdminSearchWhere struct {
 	TokenNull            bool
 	TokenNotNull         bool
 	TokenLike            string
+	TokenLt              string   // Token < TokenLt
+	TokenGt              string   // Token > TokenGt
+	TokenElt             string   // Token <= TokenElt
+	TokenEgt             string   // Token >= TokenEgt
 	TokenNotIn           []string // not in查询
 	TokenIn              []string // in查询
 	TokenSort            string   // 排序
@@ -154,19 +186,27 @@ type AdminSearchWhere struct {
 	LastLoginTimeNotIn   []int64 // not in查询
 	LastLoginTimeIn      []int64 // in查询
 	LastLoginTimeSort    string  // 排序
-	RolesID              string
-	RolesIDNeq           string //不等于条件
-	RolesIDNull          bool
-	RolesIDNotNull       bool
-	RolesIDLike          string
-	RolesIDNotIn         []string // not in查询
-	RolesIDIn            []string // in查询
-	RolesIDSort          string   // 排序
+	RolesId              string
+	RolesIdNeq           string //不等于条件
+	RolesIdNull          bool
+	RolesIdNotNull       bool
+	RolesIdLike          string
+	RolesIdLt            string   // RolesId < RolesIdLt
+	RolesIdGt            string   // RolesId > RolesIdGt
+	RolesIdElt           string   // RolesId <= RolesIdElt
+	RolesIdEgt           string   // RolesId >= RolesIdEgt
+	RolesIdNotIn         []string // not in查询
+	RolesIdIn            []string // in查询
+	RolesIdSort          string   // 排序
 	Desc                 string
 	DescNeq              string //不等于条件
 	DescNull             bool
 	DescNotNull          bool
 	DescLike             string
+	DescLt               string   // Desc < DescLt
+	DescGt               string   // Desc > DescGt
+	DescElt              string   // Desc <= DescElt
+	DescEgt              string   // Desc >= DescEgt
 	DescNotIn            []string // not in查询
 	DescIn               []string // in查询
 	DescSort             string   // 排序
@@ -192,17 +232,14 @@ type AdminSearchWhere struct {
 	UpdatedAtNotIn       []int64 // not in查询
 	UpdatedAtIn          []int64 // in查询
 	UpdatedAtSort        string  // 排序
-	RolesIDSlices        string
-	RolesIDSlicesNeq     string //不等于条件
-	RolesIDSlicesNull    bool
-	RolesIDSlicesNotNull bool
-	RolesIDSlicesNotIn   [][]string // not in查询
-	RolesIDSlicesIn      [][]string // in查询
-	RolesIDSlicesSort    string     // 排序
 	Permissions          string
 	PermissionsNeq       string //不等于条件
 	PermissionsNull      bool
 	PermissionsNotNull   bool
+	PermissionsLt        string     // Permissions < PermissionsLt
+	PermissionsGt        string     // Permissions > PermissionsGt
+	PermissionsElt       string     // Permissions <= PermissionsElt
+	PermissionsEgt       string     // Permissions >= PermissionsEgt
 	PermissionsNotIn     [][]string // not in查询
 	PermissionsIn        [][]string // in查询
 	PermissionsSort      string     // 排序
@@ -210,6 +247,10 @@ type AdminSearchWhere struct {
 	RolesNameNeq         string //不等于条件
 	RolesNameNull        bool
 	RolesNameNotNull     bool
+	RolesNameLt          string     // RolesName < RolesNameLt
+	RolesNameGt          string     // RolesName > RolesNameGt
+	RolesNameElt         string     // RolesName <= RolesNameElt
+	RolesNameEgt         string     // RolesName >= RolesNameEgt
 	RolesNameNotIn       [][]string // not in查询
 	RolesNameIn          [][]string // in查询
 	RolesNameSort        string     // 排序

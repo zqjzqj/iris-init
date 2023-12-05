@@ -45,6 +45,10 @@ type RolesSearchWhere struct {
 	NameNull          bool
 	NameNotNull       bool
 	NameLike          string
+	NameLt            string   // Name < NameLt
+	NameGt            string   // Name > NameGt
+	NameElt           string   // Name <= NameElt
+	NameEgt           string   // Name >= NameEgt
 	NameNotIn         []string // not in查询
 	NameIn            []string // in查询
 	NameSort          string   // 排序
@@ -53,6 +57,10 @@ type RolesSearchWhere struct {
 	RemarkNull        bool
 	RemarkNotNull     bool
 	RemarkLike        string
+	RemarkLt          string   // Remark < RemarkLt
+	RemarkGt          string   // Remark > RemarkGt
+	RemarkElt         string   // Remark <= RemarkElt
+	RemarkEgt         string   // Remark >= RemarkEgt
 	RemarkNotIn       []string // not in查询
 	RemarkIn          []string // in查询
 	RemarkSort        string   // 排序
@@ -60,6 +68,10 @@ type RolesSearchWhere struct {
 	PermIdentsNeq     string //不等于条件
 	PermIdentsNull    bool
 	PermIdentsNotNull bool
+	PermIdentsLt      string     // PermIdents < PermIdentsLt
+	PermIdentsGt      string     // PermIdents > PermIdentsGt
+	PermIdentsElt     string     // PermIdents <= PermIdentsElt
+	PermIdentsEgt     string     // PermIdents >= PermIdentsEgt
 	PermIdentsNotIn   [][]string // not in查询
 	PermIdentsIn      [][]string // in查询
 	PermIdentsSort    string     // 排序
