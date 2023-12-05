@@ -1,10 +1,10 @@
 package admin
 
 import (
-	"big_data_new/appWeb"
-	"big_data_new/model"
-	"big_data_new/services"
 	"github.com/kataras/iris/v12"
+	"iris-init/appWeb"
+	"iris-init/model"
+	"iris-init/services"
 )
 
 type LoginController struct {

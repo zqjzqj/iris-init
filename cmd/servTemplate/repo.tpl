@@ -2,10 +2,10 @@ package repositories
 
 import (
 	"gorm.io/gorm"
-	"big_data_new/model"
-	"big_data_new/orm"
-	"big_data_new/repositories/repoComm"
-	"big_data_new/repositories/repoInterface"
+	"iris-init/model"
+	"iris-init/orm"
+	"iris-init/repositories/repoComm"
+	"iris-init/repositories/repoInterface"
 )
 
 type {{.Model}}RepoGorm struct {

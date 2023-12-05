@@ -1,6 +1,6 @@
 package model
 
-import "big_data_new/model/mField"
+import "iris-init/model/mField"
 
 type Area struct {
 	mField.FieldsPk

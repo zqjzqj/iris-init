@@ -1,13 +1,13 @@
 package migrates
 
 import (
-	"big_data_new/logs"
-	"big_data_new/model"
-	"big_data_new/orm"
-	"big_data_new/services"
 	"fmt"
 	"github.com/go-gormigrate/gormigrate/v2"
 	"gorm.io/gorm"
+	"iris-init/logs"
+	"iris-init/model"
+	"iris-init/orm"
+	"iris-init/services"
 	"strings"
 )
 

@@ -1,12 +1,6 @@
 package main
 
 import (
-	"big_data_new/appWeb/routes"
-	"big_data_new/config"
-	"big_data_new/cron"
-	"big_data_new/global"
-	"big_data_new/logs"
-	"big_data_new/migrates"
 	"flag"
 	"fmt"
 	"github.com/kataras/iris/v12"
@@ -14,6 +8,12 @@ import (
 	recover2 "github.com/kataras/iris/v12/middleware/recover"
 	"github.com/rs/cors"
 	"github.com/zqjzqj/pRuntime"
+	"iris-init/appWeb/routes"
+	"iris-init/config"
+	"iris-init/cron"
+	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/migrates"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -51,7 +51,7 @@ func main() {
 	if config.RunBackground() {
 		if runtime.GOOS != "windows" {
 			//设置一下pid文件
-			pRuntime.SetPidFile("./big_data_new.pid")
+			pRuntime.SetPidFile("./iris-init.pid")
 			pRuntime.RunBackground()
 		} else {
 			logs.PrintlnWarning("windows不支持后台运行模式")

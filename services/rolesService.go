@@ -1,14 +1,14 @@
 package services
 
 import (
-	"big_data_new/global"
-	"big_data_new/logs"
-	"big_data_new/model"
-	"big_data_new/repositories"
-	"big_data_new/repositories/repoComm"
-	"big_data_new/repositories/repoInterface"
-	"big_data_new/sErr"
 	"github.com/kataras/iris/v12"
+	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/model"
+	"iris-init/repositories"
+	"iris-init/repositories/repoComm"
+	"iris-init/repositories/repoInterface"
+	"iris-init/sErr"
 )
 
 func NewRolesService() RolesService {

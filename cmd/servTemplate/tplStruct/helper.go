@@ -1,7 +1,7 @@
 package tplStruct
 
 import (
-	"big_data_new/global"
+	"iris-init/global"
 	"reflect"
 	"strings"
 )

@@ -1,8 +1,8 @@
 package repoInterface
 
 import (
-	"big_data_new/model"
-	"big_data_new/repositories/repoComm"
+	"iris-init/model"
+	"iris-init/repositories/repoComm"
 )
 
 type RolesPermissionsRepo interface {

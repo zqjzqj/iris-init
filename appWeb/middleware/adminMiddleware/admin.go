@@ -1,13 +1,13 @@
 package adminMiddleware
 
 import (
-	"big_data_new/appWeb"
-	"big_data_new/global"
-	"big_data_new/model"
-	"big_data_new/repositories"
-	"big_data_new/services"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/core/router"
+	"iris-init/appWeb"
+	"iris-init/global"
+	"iris-init/model"
+	"iris-init/repositories"
+	"iris-init/services"
 	"net/http"
 )
 

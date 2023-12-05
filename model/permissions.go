@@ -1,9 +1,9 @@
 package model
 
 import (
-	"big_data_new/global"
-	"big_data_new/model/mField"
 	"fmt"
+	"iris-init/global"
+	"iris-init/model/mField"
 )
 
 const (

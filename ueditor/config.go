@@ -1,10 +1,10 @@
 package ueditor
 
 import (
-	"big_data_new/ueditor/ueditorCommon"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"iris-init/ueditor/ueditorCommon"
 	"os"
 	"strings"
 )

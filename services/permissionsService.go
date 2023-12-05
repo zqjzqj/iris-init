@@ -1,13 +1,13 @@
 package services
 
 import (
-	"big_data_new/global"
-	"big_data_new/logs"
-	"big_data_new/model"
-	"big_data_new/repositories"
-	"big_data_new/repositories/repoInterface"
 	"fmt"
 	"github.com/kataras/iris/v12"
+	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/model"
+	"iris-init/repositories"
+	"iris-init/repositories/repoInterface"
 	"strconv"
 	"strings"
 )

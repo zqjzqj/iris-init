@@ -1,8 +1,8 @@
 package ueditor
 
 import (
-	"big_data_new/ueditor/storage"
 	"errors"
+	"iris-init/ueditor/storage"
 	"net/http"
 )
 

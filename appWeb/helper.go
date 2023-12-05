@@ -1,12 +1,12 @@
 package appWeb
 
 import (
-	"big_data_new/global"
-	"big_data_new/model"
-	"big_data_new/services"
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
+	"iris-init/global"
+	"iris-init/model"
+	"iris-init/services"
 	"net/url"
 	"strings"
 )
@@ -86,7 +86,7 @@ func ResponseDataView(view string, dataView DataView, ctx iris.Context) mvc.Resu
 	}
 	dataView.Title = services.NewSettingsService().GetWebsiteTitle()
 	if dataView.Title == "" {
-		dataView.Title = "big_data_new"
+		dataView.Title = "iris-init"
 	}
 	dataView.LoadStaticResource()
 	//模板注入公共参数

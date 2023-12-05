@@ -1,11 +1,11 @@
 package appWeb
 
 import (
-	"big_data_new/global"
 	"bytes"
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"io"
+	"iris-init/global"
 	"net/url"
 )
 

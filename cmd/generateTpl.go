@@ -1,9 +1,9 @@
 package main
 
 import (
-	"big_data_new/cmd/servTemplate/tplStruct"
-	"big_data_new/logs"
 	"flag"
+	"iris-init/cmd/servTemplate/tplStruct"
+	"iris-init/logs"
 	"strings"
 )
 

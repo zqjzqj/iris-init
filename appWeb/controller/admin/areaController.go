@@ -1,9 +1,9 @@
 package admin
 
 import (
-	"big_data_new/appWeb"
-	"big_data_new/services"
 	"github.com/kataras/iris/v12"
+	"iris-init/appWeb"
+	"iris-init/services"
 )
 
 type AreaController struct {

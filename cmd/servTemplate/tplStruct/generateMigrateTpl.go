@@ -1,11 +1,11 @@
 package tplStruct
 
 import (
-	"big_data_new/global"
-	"big_data_new/logs"
-	"big_data_new/migrates"
-	"big_data_new/sErr"
 	"fmt"
+	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/migrates"
+	"iris-init/sErr"
 	"os"
 	"reflect"
 	"strings"
