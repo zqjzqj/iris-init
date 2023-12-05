@@ -142,6 +142,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 	if where.UsernameNotNull {
 		tx.Where("username is not null")
 	}
+	if where.UsernameLt != "" {
+		tx.Where("username < ?", where.UsernameLt)
+	}
+	if where.UsernameElt != "" {
+		tx.Where("username <= ?", where.UsernameElt)
+	}
+	if where.UsernameGt != "" {
+		tx.Where("username > ?", where.UsernameGt)
+	}
+	if where.UsernameEgt != "" {
+		tx.Where("username >= ?", where.UsernameEgt)
+	}
+	if len(where.UsernameNotIn) > 0 {
+		tx.Where("username not in ?", where.UsernameNotIn)
+	}
 	if where.UsernameSort != "" {
 		if where.UsernameSort == "asc" {
 			tx.Order("username asc")
@@ -170,6 +185,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 	if where.PhoneNotNull {
 		tx.Where("phone is not null")
 	}
+	if where.PhoneLt != "" {
+		tx.Where("phone < ?", where.PhoneLt)
+	}
+	if where.PhoneElt != "" {
+		tx.Where("phone <= ?", where.PhoneElt)
+	}
+	if where.PhoneGt != "" {
+		tx.Where("phone > ?", where.PhoneGt)
+	}
+	if where.PhoneEgt != "" {
+		tx.Where("phone >= ?", where.PhoneEgt)
+	}
+	if len(where.PhoneNotIn) > 0 {
+		tx.Where("phone not in ?", where.PhoneNotIn)
+	}
 	if where.PhoneSort != "" {
 		if where.PhoneSort == "asc" {
 			tx.Order("phone asc")
@@ -197,6 +227,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 
 	if where.QQNotNull {
 		tx.Where("q_q is not null")
+	}
+	if where.QQLt != "" {
+		tx.Where("q_q < ?", where.QQLt)
+	}
+	if where.QQElt != "" {
+		tx.Where("q_q <= ?", where.QQElt)
+	}
+	if where.QQGt != "" {
+		tx.Where("q_q > ?", where.QQGt)
+	}
+	if where.QQEgt != "" {
+		tx.Where("q_q >= ?", where.QQEgt)
+	}
+	if len(where.QQNotIn) > 0 {
+		tx.Where("q_q not in ?", where.QQNotIn)
 	}
 	if where.QQSort != "" {
 		if where.QQSort == "asc" {
@@ -266,6 +311,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 	if where.RealNameNotNull {
 		tx.Where("real_name is not null")
 	}
+	if where.RealNameLt != "" {
+		tx.Where("real_name < ?", where.RealNameLt)
+	}
+	if where.RealNameElt != "" {
+		tx.Where("real_name <= ?", where.RealNameElt)
+	}
+	if where.RealNameGt != "" {
+		tx.Where("real_name > ?", where.RealNameGt)
+	}
+	if where.RealNameEgt != "" {
+		tx.Where("real_name >= ?", where.RealNameEgt)
+	}
+	if len(where.RealNameNotIn) > 0 {
+		tx.Where("real_name not in ?", where.RealNameNotIn)
+	}
 	if where.RealNameSort != "" {
 		if where.RealNameSort == "asc" {
 			tx.Order("real_name asc")
@@ -293,6 +353,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 
 	if where.AvatarNotNull {
 		tx.Where("avatar is not null")
+	}
+	if where.AvatarLt != "" {
+		tx.Where("avatar < ?", where.AvatarLt)
+	}
+	if where.AvatarElt != "" {
+		tx.Where("avatar <= ?", where.AvatarElt)
+	}
+	if where.AvatarGt != "" {
+		tx.Where("avatar > ?", where.AvatarGt)
+	}
+	if where.AvatarEgt != "" {
+		tx.Where("avatar >= ?", where.AvatarEgt)
+	}
+	if len(where.AvatarNotIn) > 0 {
+		tx.Where("avatar not in ?", where.AvatarNotIn)
 	}
 	if where.AvatarSort != "" {
 		if where.AvatarSort == "asc" {
@@ -362,6 +437,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 	if where.PasswordNotNull {
 		tx.Where("password is not null")
 	}
+	if where.PasswordLt != "" {
+		tx.Where("password < ?", where.PasswordLt)
+	}
+	if where.PasswordElt != "" {
+		tx.Where("password <= ?", where.PasswordElt)
+	}
+	if where.PasswordGt != "" {
+		tx.Where("password > ?", where.PasswordGt)
+	}
+	if where.PasswordEgt != "" {
+		tx.Where("password >= ?", where.PasswordEgt)
+	}
+	if len(where.PasswordNotIn) > 0 {
+		tx.Where("password not in ?", where.PasswordNotIn)
+	}
 	if where.PasswordSort != "" {
 		if where.PasswordSort == "asc" {
 			tx.Order("password asc")
@@ -390,6 +480,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 	if where.SaltNotNull {
 		tx.Where("salt is not null")
 	}
+	if where.SaltLt != "" {
+		tx.Where("salt < ?", where.SaltLt)
+	}
+	if where.SaltElt != "" {
+		tx.Where("salt <= ?", where.SaltElt)
+	}
+	if where.SaltGt != "" {
+		tx.Where("salt > ?", where.SaltGt)
+	}
+	if where.SaltEgt != "" {
+		tx.Where("salt >= ?", where.SaltEgt)
+	}
+	if len(where.SaltNotIn) > 0 {
+		tx.Where("salt not in ?", where.SaltNotIn)
+	}
 	if where.SaltSort != "" {
 		if where.SaltSort == "asc" {
 			tx.Order("salt asc")
@@ -417,6 +522,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 
 	if where.TokenNotNull {
 		tx.Where("token is not null")
+	}
+	if where.TokenLt != "" {
+		tx.Where("token < ?", where.TokenLt)
+	}
+	if where.TokenElt != "" {
+		tx.Where("token <= ?", where.TokenElt)
+	}
+	if where.TokenGt != "" {
+		tx.Where("token > ?", where.TokenGt)
+	}
+	if where.TokenEgt != "" {
+		tx.Where("token >= ?", where.TokenEgt)
+	}
+	if len(where.TokenNotIn) > 0 {
+		tx.Where("token not in ?", where.TokenNotIn)
 	}
 	if where.TokenSort != "" {
 		if where.TokenSort == "asc" {
@@ -506,28 +626,43 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 		}
 	}
 	//需要额外调整
-	if where.RolesID != "" {
-		tx.Where("roles_id", where.RolesID)
+	if where.RolesId != "" {
+		tx.Where("roles_id", where.RolesId)
 	}
-	if where.RolesIDNeq != "" {
-		tx.Where("roles_id <> ?", where.RolesIDNeq)
+	if where.RolesIdNeq != "" {
+		tx.Where("roles_id <> ?", where.RolesIdNeq)
 	}
-	if where.RolesIDNull {
+	if where.RolesIdNull {
 		tx.Where("roles_id is null")
 	}
-	if where.RolesIDLike != "" {
-		tx.Where("roles_id like ?", "%"+where.RolesIDLike+"%")
+	if where.RolesIdLike != "" {
+		tx.Where("roles_id like ?", "%"+where.RolesIdLike+"%")
 	}
 
-	if len(where.RolesIDIn) > 0 {
-		tx.Where("roles_id in ?", where.RolesIDIn)
+	if len(where.RolesIdIn) > 0 {
+		tx.Where("roles_id in ?", where.RolesIdIn)
 	}
 
-	if where.RolesIDNotNull {
+	if where.RolesIdNotNull {
 		tx.Where("roles_id is not null")
 	}
-	if where.RolesIDSort != "" {
-		if where.RolesIDSort == "asc" {
+	if where.RolesIdLt != "" {
+		tx.Where("roles_id < ?", where.RolesIdLt)
+	}
+	if where.RolesIdElt != "" {
+		tx.Where("roles_id <= ?", where.RolesIdElt)
+	}
+	if where.RolesIdGt != "" {
+		tx.Where("roles_id > ?", where.RolesIdGt)
+	}
+	if where.RolesIdEgt != "" {
+		tx.Where("roles_id >= ?", where.RolesIdEgt)
+	}
+	if len(where.RolesIdNotIn) > 0 {
+		tx.Where("roles_id not in ?", where.RolesIdNotIn)
+	}
+	if where.RolesIdSort != "" {
+		if where.RolesIdSort == "asc" {
 			tx.Order("roles_id asc")
 		} else {
 			tx.Order("roles_id desc")
@@ -553,6 +688,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 
 	if where.DescNotNull {
 		tx.Where("desc is not null")
+	}
+	if where.DescLt != "" {
+		tx.Where("desc < ?", where.DescLt)
+	}
+	if where.DescElt != "" {
+		tx.Where("desc <= ?", where.DescElt)
+	}
+	if where.DescGt != "" {
+		tx.Where("desc > ?", where.DescGt)
+	}
+	if where.DescEgt != "" {
+		tx.Where("desc >= ?", where.DescEgt)
+	}
+	if len(where.DescNotIn) > 0 {
+		tx.Where("desc not in ?", where.DescNotIn)
 	}
 	if where.DescSort != "" {
 		if where.DescSort == "asc" {
@@ -642,31 +792,6 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 		}
 	}
 	//需要额外调整
-	if where.RolesIDSlices != "" {
-		tx.Where("roles_id_slices", where.RolesIDSlices)
-	}
-	if where.RolesIDSlicesNeq != "" {
-		tx.Where("roles_id_slices <> ?", where.RolesIDSlicesNeq)
-	}
-	if where.RolesIDSlicesNull {
-		tx.Where("roles_id_slices is null")
-	}
-
-	if len(where.RolesIDSlicesIn) > 0 {
-		tx.Where("roles_id_slices in ?", where.RolesIDSlicesIn)
-	}
-
-	if where.RolesIDSlicesNotNull {
-		tx.Where("roles_id_slices is not null")
-	}
-	if where.RolesIDSlicesSort != "" {
-		if where.RolesIDSlicesSort == "asc" {
-			tx.Order("roles_id_slices asc")
-		} else {
-			tx.Order("roles_id_slices desc")
-		}
-	}
-	//需要额外调整
 	if where.Permissions != "" {
 		tx.Where("permissions", where.Permissions)
 	}
@@ -683,6 +808,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 
 	if where.PermissionsNotNull {
 		tx.Where("permissions is not null")
+	}
+	if where.PermissionsLt != "" {
+		tx.Where("permissions < ?", where.PermissionsLt)
+	}
+	if where.PermissionsElt != "" {
+		tx.Where("permissions <= ?", where.PermissionsElt)
+	}
+	if where.PermissionsGt != "" {
+		tx.Where("permissions > ?", where.PermissionsGt)
+	}
+	if where.PermissionsEgt != "" {
+		tx.Where("permissions >= ?", where.PermissionsEgt)
+	}
+	if len(where.PermissionsNotIn) > 0 {
+		tx.Where("permissions not in ?", where.PermissionsNotIn)
 	}
 	if where.PermissionsSort != "" {
 		if where.PermissionsSort == "asc" {
@@ -708,6 +848,21 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 
 	if where.RolesNameNotNull {
 		tx.Where("roles_name is not null")
+	}
+	if where.RolesNameLt != "" {
+		tx.Where("roles_name < ?", where.RolesNameLt)
+	}
+	if where.RolesNameElt != "" {
+		tx.Where("roles_name <= ?", where.RolesNameElt)
+	}
+	if where.RolesNameGt != "" {
+		tx.Where("roles_name > ?", where.RolesNameGt)
+	}
+	if where.RolesNameEgt != "" {
+		tx.Where("roles_name >= ?", where.RolesNameEgt)
+	}
+	if len(where.RolesNameNotIn) > 0 {
+		tx.Where("roles_name not in ?", where.RolesNameNotIn)
 	}
 	if where.RolesNameSort != "" {
 		if where.RolesNameSort == "asc" {

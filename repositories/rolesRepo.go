@@ -142,6 +142,21 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	if where.NameNotNull {
 		tx.Where("name is not null")
 	}
+	if where.NameLt != "" {
+		tx.Where("name < ?", where.NameLt)
+	}
+	if where.NameElt != "" {
+		tx.Where("name <= ?", where.NameElt)
+	}
+	if where.NameGt != "" {
+		tx.Where("name > ?", where.NameGt)
+	}
+	if where.NameEgt != "" {
+		tx.Where("name >= ?", where.NameEgt)
+	}
+	if len(where.NameNotIn) > 0 {
+		tx.Where("name not in ?", where.NameNotIn)
+	}
 	if where.NameSort != "" {
 		if where.NameSort == "asc" {
 			tx.Order("name asc")
@@ -170,6 +185,21 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 	if where.RemarkNotNull {
 		tx.Where("remark is not null")
 	}
+	if where.RemarkLt != "" {
+		tx.Where("remark < ?", where.RemarkLt)
+	}
+	if where.RemarkElt != "" {
+		tx.Where("remark <= ?", where.RemarkElt)
+	}
+	if where.RemarkGt != "" {
+		tx.Where("remark > ?", where.RemarkGt)
+	}
+	if where.RemarkEgt != "" {
+		tx.Where("remark >= ?", where.RemarkEgt)
+	}
+	if len(where.RemarkNotIn) > 0 {
+		tx.Where("remark not in ?", where.RemarkNotIn)
+	}
 	if where.RemarkSort != "" {
 		if where.RemarkSort == "asc" {
 			tx.Order("remark asc")
@@ -194,6 +224,21 @@ func (rolesRepo *RolesRepoGorm) GetSearchWhereTx(where repoInterface.RolesSearch
 
 	if where.PermIdentsNotNull {
 		tx.Where("perm_idents is not null")
+	}
+	if where.PermIdentsLt != "" {
+		tx.Where("perm_idents < ?", where.PermIdentsLt)
+	}
+	if where.PermIdentsElt != "" {
+		tx.Where("perm_idents <= ?", where.PermIdentsElt)
+	}
+	if where.PermIdentsGt != "" {
+		tx.Where("perm_idents > ?", where.PermIdentsGt)
+	}
+	if where.PermIdentsEgt != "" {
+		tx.Where("perm_idents >= ?", where.PermIdentsEgt)
+	}
+	if len(where.PermIdentsNotIn) > 0 {
+		tx.Where("perm_idents not in ?", where.PermIdentsNotIn)
 	}
 	if where.PermIdentsSort != "" {
 		if where.PermIdentsSort == "asc" {

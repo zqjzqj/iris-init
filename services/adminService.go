@@ -77,6 +77,14 @@ func (admServ AdminService) InitAdminAccount() (model.Admin, error) {
 func (adminServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global.Pager) {
 	where := repoInterface.AdminSearchWhere{}
 	_ = ctx.ReadQuery(&where)
+	where.SelectParams = repoComm.SelectFrom{
+		OrderBy: []repoComm.OrderByParams{
+			{
+				Column: "ID",
+				Desc:   true,
+			},
+		},
+	}
 	pager := global.NewPager(ctx)
 	if pager.Size < 0 {
 		return adminServ.repo.GetList(where), nil
@@ -85,17 +93,9 @@ func (adminServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global
 	if pager.Total == 0 {
 		return []model.Admin{}, pager
 	}
-	where.SelectParams = repoComm.SelectFrom{
-		Offset:  pager.Offset,
-		Limit:   pager.Size,
-		RetSize: pager.Size,
-		OrderBy: []repoComm.OrderByParams{
-			{
-				Column: "ID",
-				Desc:   true,
-			},
-		},
-	}
+	where.SelectParams.Offset = pager.Offset
+	where.SelectParams.Limit = pager.Size
+	where.SelectParams.RetSize = pager.Size
 	return adminServ.repo.GetList(where), pager
 }
 
