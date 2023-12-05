@@ -4,7 +4,6 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"iris-init/appWeb"
-	"iris-init/appWeb/resourcePkg"
 	"iris-init/model"
 	"iris-init/services"
 	"net/http"
@@ -26,56 +25,30 @@ func (admCtrl AdminController) GetPerms() appWeb.ResponseFormat {
 	return appWeb.NewSuccessResponse("", admCtrl.Admin.Permissions)
 }
 
-func (admCtrl AdminController) GetSelf(ctx iris.Context) mvc.Result {
-	roleServ := services.NewRolesService()
-	return appWeb.ResponseDataViewForm("admin/item.html", appWeb.DataView{
-		Data: map[string]interface{}{
-			"Adm":   admCtrl.Admin.ShowMap(),
-			"Roles": roleServ.ShowMapList(roleServ.List(ctx)),
-			"Self":  "1",
-		},
-		ResourcePkg: []appWeb.ResourcePkg{resourcePkg.Ueditor{}},
-	}, ctx)
-}
-
-func (admCtrl AdminController) PostSelf(ctx iris.Context) appWeb.ResponseFormat {
-	_adm, err := services.NewAdminService().SaveByCtx(ctx, admCtrl.Admin.ID)
-	if err != nil {
-		return appWeb.NewFailErrResponse(err, nil)
-	}
-	return appWeb.NewSuccessResponse("", _adm.ShowMap())
-}
-
 // 获取数据列表
-func (admCtrl AdminController) GetList(ctx iris.Context) mvc.Result {
+func (admCtrl AdminController) GetList(ctx iris.Context) appWeb.ResponseFormat {
 	admServ := services.NewAdminService()
 	adm, page := admServ.ListPage(ctx)
-	return appWeb.ResponseDataViewForm("admin/list.html", appWeb.DataView{
-		Pager: page,
-		Data: map[string]interface{}{
-			"List": admServ.ShowMapList(adm),
-		},
-	}, ctx)
+	return appWeb.NewPagerResponse(admServ.ShowMapList(adm), page)
 }
 
 // 获取一条详细数据
-func (admCtrl AdminController) GetItem(ctx iris.Context) mvc.Result {
-	roleServ := services.NewRolesService()
-	return appWeb.ResponseDataViewForm("admin/item.html", appWeb.DataView{
-		Data: map[string]interface{}{
-			"Adm":   services.NewAdminService().GetItem(ctx).ShowMap(),
-			"Roles": roleServ.ShowMapList(roleServ.ListAvailable()),
-		},
-		ResourcePkg: []appWeb.ResourcePkg{resourcePkg.Ueditor{}},
-	}, ctx)
+func (admCtrl AdminController) GetItem(ctx iris.Context) appWeb.ResponseFormat {
+	adm := services.NewAdminService().GetItem(ctx)
+	if adm.ID == 0 {
+		return appWeb.NewFailResponse("无效的数据", nil)
+	}
+	services.NewAdminService().RefreshPermissions(&adm, false, false)
+	return appWeb.NewSuccessResponse("", adm.ShowMap())
 }
 
 func (admCtrl AdminController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
-	_adm, err := services.NewAdminService().SaveByCtx(ctx, 0)
+	adm, err := services.NewAdminService().SaveByCtx(ctx, admCtrl.Admin.ID)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}
-	return appWeb.NewSuccessResponse("", _adm.ShowMap())
+	services.NewAdminService().RefreshPermissions(&adm, false, false)
+	return appWeb.NewSuccessResponse("", adm.ShowMap())
 }
 
 func (admCtrl AdminController) PostDelete(ctx iris.Context) appWeb.ResponseFormat {
@@ -95,7 +68,5 @@ func (admCtrl AdminController) GetLogout() appWeb.ResponseFormat {
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}
-	return appWeb.NewSuccessResponse("", map[string]string{
-		appWeb.AjaxLocationKey: "/login",
-	})
+	return appWeb.NewSuccessResponse("", nil)
 }

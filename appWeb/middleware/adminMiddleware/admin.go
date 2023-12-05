@@ -87,20 +87,10 @@ func CheckPermissionByRouteFunc(r *router.Route) func(ctx iris.Context) {
 }
 
 func NotAuthHandle(ctx iris.Context) {
-	if ctx.IsAjax() || global.IsApiReq(ctx) {
-		_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotAuthResponse("", nil))
-	} else {
-		ctx.Redirect("/err?Msg=无权访问")
-	}
+	_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotAuthResponse("", nil))
 	return
 }
 
 func NotLoginHandle(ctx iris.Context) {
-	if ctx.IsAjax() || global.IsApiReq(ctx) {
-		_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotLoginResponse("", map[string]string{
-			appWeb.AjaxLocationKey: "/login",
-		}))
-	} else {
-		ctx.Redirect("/login")
-	}
+	_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotLoginResponse("", nil))
 }
