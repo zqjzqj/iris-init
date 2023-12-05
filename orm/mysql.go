@@ -1,10 +1,10 @@
 package orm
 
 import (
+	"big_data_new/sErr"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"iris-init/sErr"
 	"log"
 	"os"
 	"time"

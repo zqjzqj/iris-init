@@ -1,10 +1,10 @@
 package admin
 
 import (
+	"big_data_new/appWeb"
+	"big_data_new/global"
+	"big_data_new/ueditor"
 	"github.com/kataras/iris/v12"
-	"iris-init/appWeb"
-	"iris-init/global"
-	"iris-init/ueditor"
 	"strings"
 )
 

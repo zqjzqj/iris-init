@@ -1,6 +1,6 @@
 package tplStruct
 
-import "iris-init/model"
+import "big_data_new/model"
 
 var Str2ModelMap = map[string]any{
     {{- range $k, $v := .Str2ModelMap}}

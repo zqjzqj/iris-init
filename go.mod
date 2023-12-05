@@ -1,4 +1,4 @@
-module iris-init
+module big_data_new
 
 go 1.20
 

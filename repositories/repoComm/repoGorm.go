@@ -1,8 +1,8 @@
 package repoComm
 
 import (
+	"big_data_new/orm"
 	"gorm.io/gorm"
-	"iris-init/orm"
 )
 
 type RepoGorm struct {

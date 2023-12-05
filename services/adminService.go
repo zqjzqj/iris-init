@@ -1,15 +1,15 @@
 package services
 
 import (
+	"big_data_new/global"
+	"big_data_new/model"
+	"big_data_new/repositories"
+	"big_data_new/repositories/repoComm"
+	"big_data_new/repositories/repoInterface"
+	"big_data_new/sErr"
 	"database/sql"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/core/router"
-	"iris-init/global"
-	"iris-init/model"
-	"iris-init/repositories"
-	"iris-init/repositories/repoComm"
-	"iris-init/repositories/repoInterface"
-	"iris-init/sErr"
 	"reflect"
 	"time"
 )

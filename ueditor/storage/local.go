@@ -1,10 +1,10 @@
 package storage
 
 import (
+	"big_data_new/global"
+	"big_data_new/ueditor/ueditorCommon"
 	"errors"
 	"io"
-	"iris-init/global"
-	"iris-init/ueditor/ueditorCommon"
 )
 
 type LocalFile struct {

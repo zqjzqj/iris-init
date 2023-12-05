@@ -1,13 +1,13 @@
 package global
 
 import (
+	"big_data_new/sErr"
 	"fmt"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/kataras/iris/v12"
 	"gopkg.in/go-playground/validator.v9"
 	zh2 "gopkg.in/go-playground/validator.v9/translations/zh"
-	"iris-init/sErr"
 	"reflect"
 )
 

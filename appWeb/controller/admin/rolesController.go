@@ -1,12 +1,11 @@
 package admin
 
 import (
-	"encoding/json"
+	"big_data_new/appWeb"
+	"big_data_new/model"
+	"big_data_new/services"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"iris-init/appWeb"
-	"iris-init/model"
-	"iris-init/services"
 	"net/http"
 )
 
@@ -22,27 +21,19 @@ func (rolesCtrl RolesController) BeforeActivation(b mvc.BeforeActivation) {
 
 }
 
-func (rolesCtrl RolesController) GetList(ctx iris.Context) mvc.Result {
+func (rolesCtrl RolesController) GetList(ctx iris.Context) appWeb.ResponseFormat {
 	roleServ := services.NewRolesService()
-	return appWeb.ResponseDataViewForm("roles/list.html", appWeb.DataView{
-		Data: map[string]interface{}{
-			"List": roleServ.ShowMapList(roleServ.List(ctx)),
-		},
-	}, ctx)
+	return appWeb.NewSuccessResponse("", roleServ.ShowMapList(roleServ.List(ctx)))
 }
 
-func (rolesCtrl RolesController) GetItem(ctx iris.Context) mvc.Result {
+func (rolesCtrl RolesController) GetItem(ctx iris.Context) appWeb.ResponseFormat {
 	rolesServ := services.NewRolesService()
 	role := rolesServ.GetItem(ctx)
 	rolesServ.RefreshPermission(&role, true)
-	permsTreeJson, _ := json.Marshal(services.NewPermissionsService().GetPermTree(role.PermIdents...))
-	return appWeb.ResponseDataViewForm("roles/item.html", appWeb.DataView{
-		PageJs: []string{"roles/item.js"},
-		Data: map[string]interface{}{
-			"Role":          role,
-			"PermsTreeJson": string(permsTreeJson),
-		},
-	}, ctx)
+	return appWeb.NewSuccessResponse("", map[string]interface{}{
+		"Role":      role,
+		"PermsTree": services.NewPermissionsService().GetPermTree(role.PermIdents...),
+	})
 }
 
 func (rolesCtrl RolesController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {

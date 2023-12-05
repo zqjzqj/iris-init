@@ -1,7 +1,7 @@
 package model
 
 import (
-	"iris-init/model/mField"
+	"big_data_new/model/mField"
 )
 
 type RolesAdmin struct {

@@ -1,13 +1,13 @@
 package adminMiddleware
 
 import (
+	"big_data_new/appWeb"
+	"big_data_new/global"
+	"big_data_new/model"
+	"big_data_new/repositories"
+	"big_data_new/services"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/core/router"
-	"iris-init/appWeb"
-	"iris-init/global"
-	"iris-init/model"
-	"iris-init/repositories"
-	"iris-init/services"
 	"net/http"
 )
 
@@ -87,20 +87,10 @@ func CheckPermissionByRouteFunc(r *router.Route) func(ctx iris.Context) {
 }
 
 func NotAuthHandle(ctx iris.Context) {
-	if ctx.IsAjax() || global.IsApiReq(ctx) {
-		_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotAuthResponse("", nil))
-	} else {
-		ctx.Redirect("/err?Msg=无权访问")
-	}
+	_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotAuthResponse("", nil))
 	return
 }
 
 func NotLoginHandle(ctx iris.Context) {
-	if ctx.IsAjax() || global.IsApiReq(ctx) {
-		_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotLoginResponse("", map[string]string{
-			appWeb.AjaxLocationKey: "/login",
-		}))
-	} else {
-		ctx.Redirect("/login")
-	}
+	_ = ctx.StopWithJSON(http.StatusOK, appWeb.NewNotLoginResponse("", nil))
 }

@@ -1,8 +1,8 @@
 package repoInterface
 
 import (
-	"iris-init/model"
-	"iris-init/repositories/repoComm"
+	"big_data_new/model"
+	"big_data_new/repositories/repoComm"
 )
 
 type {{.Model}}Repo interface {

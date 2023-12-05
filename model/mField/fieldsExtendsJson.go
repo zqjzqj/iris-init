@@ -1,9 +1,9 @@
 package mField
 
 import (
+	"big_data_new/global"
 	"encoding/json"
 	"github.com/tidwall/gjson"
-	"iris-init/global"
 )
 
 type FieldsExtendsJsonType struct {

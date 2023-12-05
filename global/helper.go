@@ -1,6 +1,7 @@
 package global
 
 import (
+	"big_data_new/sErr"
 	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
@@ -8,7 +9,6 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	idvalidator "github.com/guanguans/id-validator"
-	"iris-init/sErr"
 	"math/rand"
 	"os"
 	"path/filepath"

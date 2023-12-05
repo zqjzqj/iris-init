@@ -1,11 +1,11 @@
 package repositories
 
 import (
+	"big_data_new/global"
+	"big_data_new/model"
+	"big_data_new/repositories/repoComm"
+	"big_data_new/repositories/repoInterface"
 	"gorm.io/gorm"
-	"iris-init/global"
-	"iris-init/model"
-	"iris-init/repositories/repoComm"
-	"iris-init/repositories/repoInterface"
 	"strconv"
 )
 

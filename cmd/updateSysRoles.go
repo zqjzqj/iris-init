@@ -1,10 +1,10 @@
 package main
 
 import (
+	"big_data_new/config"
+	"big_data_new/logs"
+	"big_data_new/services"
 	"flag"
-	"iris-init/config"
-	"iris-init/logs"
-	"iris-init/services"
 	"os"
 )
 
