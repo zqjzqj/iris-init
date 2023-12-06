@@ -60,6 +60,7 @@ func RegisterRoutes(app *iris.Application) {
 
 		application.Party("/roles", adminMiddleware.AdminLogin, adminMiddleware.AdminPermission).
 			Register(adminMiddleware.RegisterAdmin).Handle(&admin.RolesController{})
+
 	})
 
 	//刷新一下权限表

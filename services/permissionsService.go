@@ -96,20 +96,34 @@ func (permServ PermissionsService) GenerateAdminPermissionsByRoutes(app *iris.Ap
 		}
 		//拆分失败 则跳过
 		pName := strings.Split(r.Name, "@")
-		if len(pName) != 2 {
+		pName_len := len(pName)
+		//分为目录和菜单
+		var dirs []string
+		var mBtn string
+		if pName_len == 2 {
+			dirs = []string{pName[0]}
+			mBtn = pName[1]
+		} else if pName_len > 2 {
+			//拿出最后一个作为菜单
+			mBtn = pName[pName_len-1]
+			//其余的作为目录创建
+			dirs = pName[:pName_len-1]
+		} else {
 			logs.PrintlnWarning("continue Split  .... ", r.Name, r.Method, r.Path, pName)
 			continue
 		}
-		//分为目录和菜单
-		dir, mBtn := pName[0], pName[1]
-		if dir != "" {
-			_dir, sort := permServ.getNameAndSortByName(dir)
-			perm, err := permServ.repo.GetOrCreatePermissionByName(_dir, 0, model.PermissionsLevelDir, sort)
-			pid = perm.ID
-			if err != nil {
-				logs.PrintErr("get dir pid fail ", _dir, err)
-				continue
+		if len(dirs) > 0 {
+			var _pid uint64 = 0
+			for _, dir := range dirs {
+				_dir, sort := permServ.getNameAndSortByName(dir)
+				perm, err := permServ.repo.GetOrCreatePermissionByName(_dir, _pid, model.PermissionsLevelDir, sort)
+				_pid = perm.ID
+				if err != nil {
+					logs.PrintErr("get dir pid fail ", _dir, err)
+					return
+				}
 			}
+			pid = _pid
 		}
 		//这里要查找一下菜单下是否有按钮
 		mBts := strings.Split(mBtn, ":")

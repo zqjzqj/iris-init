@@ -14,7 +14,16 @@
         <dl class="layui-nav-child">
           {% for _item in item.Children %}
           <dd data-name="console">
+            {% if _item.Children %}
+            <a href="javascript:;">{{_item.Name}}</a>
+            <dl class="layui-nav-child">
+              {% for __item in _item.Children %}
+              <dd data-name="console{{__item.ID}}"><a lay-href="{{__item.Path}}">{{__item.Name}}</a></dd>
+              {% endfor %}
+            </dl>
+            {% else %}
             <a lay-href="{{_item.Path}}">{{_item.Name}}</a>
+            {% endif %}
           </dd>
           {% endfor %}
         </dl>
