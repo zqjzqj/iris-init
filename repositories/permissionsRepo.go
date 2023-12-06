@@ -501,6 +501,36 @@ func (permRepo PermissionsRepoGorm) GetListAsMenu(idents []string) []model.Permi
 							}}
 					},
 				},
+				{
+					Query: "Children.Children",
+					Args: func() repoComm.SelectFrom {
+						var where []repoComm.WhereParams
+						where = []repoComm.WhereParams{
+							{
+								Query: "level = ?",
+								Args:  []interface{}{1},
+							},
+						}
+						if len(idents) > 0 {
+							where = append(where, repoComm.WhereParams{
+								Query: "ident in ?",
+								Args:  []interface{}{idents},
+							})
+						}
+						return repoComm.SelectFrom{
+							Where: where,
+							OrderBy: []repoComm.OrderByParams{
+								{
+									Column: "sort",
+									Desc:   false,
+								},
+								{
+									Column: "id",
+									Desc:   false,
+								},
+							}}
+					},
+				},
 			},
 		},
 	})
