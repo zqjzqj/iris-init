@@ -34,7 +34,6 @@ const DefaultPageSize = 20
 func NewPager(ctx iris.Context) *Pager {
 	p := &Pager{}
 	p.Current = ctx.URLParamIntDefault("Page", 1)
-	p.Size = ctx.URLParamIntDefault("Size", DefaultPageSize)
 	if p.Current <= 0 {
 		p.Current = 1
 	}
@@ -45,11 +44,20 @@ func NewPager(ctx iris.Context) *Pager {
 	p.CurrentUrl = req.URL.String()
 	p.PrevUrl = ""
 	p.NextUrl = ""
+	p.SetSize(ctx.URLParamIntDefault("Size", DefaultPageSize))
+	return p
+}
+
+func (p *Pager) SetSize(size int) {
+	p.Size = size
 	if p.Size == 0 {
 		p.Size = DefaultPageSize
 	}
+	if p.Size < 0 {
+		p.Offset = 0
+		return
+	}
 	p.Offset = (p.Current - 1) * p.Size
-	return p
 }
 
 func (p *Pager) SetTotal(total int64) {
