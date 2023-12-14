@@ -67,7 +67,7 @@ func (admServ AdminService) InitAdminAccount() (model.Admin, error) {
 		Token:         sql.NullString{},
 		TokenStatus:   global.IsNo,
 		LastLoginTime: 0,
-		RolesId:       model.RoleAdmin,
+		RolesID:       model.RoleAdmin,
 	}
 	admin.ID = model.AdminRootId
 	err := admServ.repo.Save(&admin)
@@ -248,8 +248,8 @@ func (admServ AdminService) RefreshPermissions(adm *model.Admin, force, onlyRole
 		adm.RolesName = []string{model.RoleAdminName}
 		return
 	}
-	rolesIdUint64 := global.StrArrToUintArr(roleIDSlices)
-	roles := NewRolesServiceByOrm(admServ.repo.GetOrm()).GetRolesByID(rolesIdUint64...)
+	RolesIDUint64 := global.StrArrToUintArr(roleIDSlices)
+	roles := NewRolesServiceByOrm(admServ.repo.GetOrm()).GetRolesByID(RolesIDUint64...)
 
 	if len(roles) == 0 {
 		//这里因为超级管理员是没有实际数据库ID的 是通过程序内部校验 所以多一步判断
@@ -258,7 +258,7 @@ func (admServ AdminService) RefreshPermissions(adm *model.Admin, force, onlyRole
 			adm.Permissions = []string{model.RoleAdmin}
 			adm.RolesName = []string{model.RoleAdminName}
 			adm.SetRoleID([]string{model.RoleAdmin})
-			_ = admServ.Save(adm, "RolesId")
+			_ = admServ.Save(adm, "RolesID")
 		} else {
 			adm.Permissions = []string{}
 			adm.RolesName = []string{}
@@ -275,10 +275,10 @@ func (admServ AdminService) RefreshPermissions(adm *model.Admin, force, onlyRole
 		}
 		return
 	}
-	rolesIdUint64 = rolesIdUint64[:0]
+	RolesIDUint64 = RolesIDUint64[:0]
 	for _, rr := range roles {
 		adm.RolesName = append(adm.RolesName, rr.Name)
-		rolesIdUint64 = append(rolesIdUint64, rr.ID)
+		RolesIDUint64 = append(RolesIDUint64, rr.ID)
 	}
 
 	//这里不进行db查询了
@@ -286,7 +286,7 @@ func (admServ AdminService) RefreshPermissions(adm *model.Admin, force, onlyRole
 		return
 	}
 	adm.Permissions = repositories.NewRolesPermissionsRepo().
-		GetPermissionsByRoles(rolesIdUint64...)
+		GetPermissionsByRoles(RolesIDUint64...)
 }
 
 func (admServ AdminService) LoginSuccess(adm *model.Admin) error {
@@ -407,7 +407,7 @@ func (admServ AdminService) GetAdmByValidate(aValidator AdminValidator) (model.A
 			adm.Status = global.IsNo
 			adm.TokenStatus = global.IsNo
 		}
-		adm.SetRoleID(aValidator.RolesId)
+		adm.SetRoleID(aValidator.RolesID)
 	}
 
 	//这里默认的系统超级管理员 不能被修改角色权限
@@ -441,7 +441,7 @@ type AdminValidator struct {
 	Password string `label:"密码"`
 	Sex      uint8  `validate:"oneof=0 1 2" label:"性别"`
 	Desc     string `label:"简介"`
-	RolesId  []string
+	RolesID  []string
 	Self     string //用于请求的时候在控制器区分一下是否是编辑当前用户的资料
 }
 

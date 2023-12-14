@@ -33,12 +33,12 @@ type Admin struct {
 	LastLoginTime   int64          `gorm:"type:int(11) unsigned;comment:最近一次登陆时间;default:0" mapstructure:"last_login_time"`
 
 	//为防止其他异常 使用SetRoleID进行修改
-	RolesId                      string `gorm:"type:text;comment:角色id ','分割" mapstructure:"roles_id"`
+	RolesID                      string `gorm:"type:text;comment:角色id ','分割" mapstructure:"roles_id"`
 	Desc                         string `gorm:"type:text;comment:描述简介"`
 	mField.FieldsTimeUnixModel   `mapstructure:",squash"`
 	mField.FieldsExtendsJsonType `mapstructure:",squash"`
 
-	rolesIDSlices []string `gorm:"-"`
+	RolesIDSlices []string `gorm:"-"`
 	Permissions   []string `gorm:"-"`
 	RolesName     []string `gorm:"-"`
 }
@@ -56,27 +56,27 @@ func (adm Admin) IsRootAccount() bool {
 }
 
 func (adm *Admin) SetRoleID(roleID []string) {
-	adm.rolesIDSlices = global.RemoveDuplicateElement(roleID)
-	adm.RolesId = strings.Join(adm.rolesIDSlices, ",")
+	adm.RolesIDSlices = global.RemoveDuplicateElement(roleID)
+	adm.RolesID = strings.Join(adm.RolesIDSlices, ",")
 }
 
 func (adm Admin) GetRoleIDSlices() []string {
-	return adm.rolesIDSlices
+	return adm.RolesIDSlices
 }
 
 func (adm *Admin) RefreshRoleIDSlices() []string {
-	if adm.RolesId == "" {
+	if adm.RolesID == "" {
 		return nil
 	}
-	adm.rolesIDSlices = strings.Split(adm.RolesId, ",")
-	return adm.rolesIDSlices
+	adm.RolesIDSlices = strings.Split(adm.RolesID, ",")
+	return adm.RolesIDSlices
 }
 
 func (adm *Admin) IsRootRole() bool {
-	if adm.rolesIDSlices == nil {
+	if adm.RolesIDSlices == nil {
 		adm.RefreshRoleIDSlices()
 	}
-	return global.InSlice(RoleAdmin, adm.rolesIDSlices)
+	return global.InSlice(RoleAdmin, adm.RolesIDSlices)
 }
 
 func (adm Admin) CheckPwd(pwd string) bool {
@@ -105,7 +105,7 @@ func (adm Admin) ShowMap() map[string]interface{} {
 		"LastLoginTime": "",
 		"CreatedAt":     time.Unix(adm.CreatedAt, 0).Format(time.DateTime),
 		"UpdatedAt":     time.Unix(adm.UpdatedAt, 0).Format(time.DateTime),
-		"RolesId":       adm.RolesId,
+		"RolesID":       adm.RolesID,
 		"Status":        adm.Status,
 		"StatusDesc":    AdmStatusDescMap[adm.Status],
 		"QQ":            adm.QQ,

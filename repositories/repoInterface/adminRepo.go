@@ -186,18 +186,18 @@ type AdminSearchWhere struct {
 	LastLoginTimeNotIn   []int64 // not in查询
 	LastLoginTimeIn      []int64 // in查询
 	LastLoginTimeSort    string  // 排序
-	RolesId              string
-	RolesIdNeq           string //不等于条件
-	RolesIdNull          bool
-	RolesIdNotNull       bool
-	RolesIdLike          string
-	RolesIdLt            string   // RolesId < RolesIdLt
-	RolesIdGt            string   // RolesId > RolesIdGt
-	RolesIdElt           string   // RolesId <= RolesIdElt
-	RolesIdEgt           string   // RolesId >= RolesIdEgt
-	RolesIdNotIn         []string // not in查询
-	RolesIdIn            []string // in查询
-	RolesIdSort          string   // 排序
+	RolesID              string
+	RolesIDNeq           string //不等于条件
+	RolesIDNull          bool
+	RolesIDNotNull       bool
+	RolesIDLike          string
+	RolesIDLt            string   // RolesID < RolesIDLt
+	RolesIDGt            string   // RolesID > RolesIDGt
+	RolesIDElt           string   // RolesID <= RolesIDElt
+	RolesIDEgt           string   // RolesID >= RolesIDEgt
+	RolesIDNotIn         []string // not in查询
+	RolesIDIn            []string // in查询
+	RolesIDSort          string   // 排序
 	Desc                 string
 	DescNeq              string //不等于条件
 	DescNull             bool
