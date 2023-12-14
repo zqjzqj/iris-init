@@ -43,10 +43,10 @@
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色</label>
-                    <div class="layui-input-block" data-action="checkboxChecked" data-value="{{Data.Adm.RolesId}}">
-                        <input type="checkbox" value="*" {%if Data.Self == "1"%}disabled{%endif%}   name="RolesId" title="超级管理员">
+                    <div class="layui-input-block" data-action="checkboxChecked" data-value="{{Data.Adm.RolesID}}">
+                        <input type="checkbox" value="*" {%if Data.Self == "1"%}disabled{%endif%}   name="RolesID" title="超级管理员">
                         {% for item in Data.Roles %}
-                        <input type="checkbox"  {%if Data.Self == "1"%}disabled{%endif%} name="RolesId" value="{{item.ID}}" title="{{item.Name}}">
+                        <input type="checkbox"  {%if Data.Self == "1"%}disabled{%endif%} name="RolesID" value="{{item.ID}}" title="{{item.Name}}">
                         {% endfor %}
                     </div>
                 </div>

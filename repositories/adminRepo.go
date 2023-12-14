@@ -626,43 +626,43 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 		}
 	}
 	//需要额外调整
-	if where.RolesId != "" {
-		tx.Where("roles_id", where.RolesId)
+	if where.RolesID != "" {
+		tx.Where("roles_id", where.RolesID)
 	}
-	if where.RolesIdNeq != "" {
-		tx.Where("roles_id <> ?", where.RolesIdNeq)
+	if where.RolesIDNeq != "" {
+		tx.Where("roles_id <> ?", where.RolesIDNeq)
 	}
-	if where.RolesIdNull {
+	if where.RolesIDNull {
 		tx.Where("roles_id is null")
 	}
-	if where.RolesIdLike != "" {
-		tx.Where("roles_id like ?", "%"+where.RolesIdLike+"%")
+	if where.RolesIDLike != "" {
+		tx.Where("roles_id like ?", "%"+where.RolesIDLike+"%")
 	}
 
-	if len(where.RolesIdIn) > 0 {
-		tx.Where("roles_id in ?", where.RolesIdIn)
+	if len(where.RolesIDIn) > 0 {
+		tx.Where("roles_id in ?", where.RolesIDIn)
 	}
 
-	if where.RolesIdNotNull {
+	if where.RolesIDNotNull {
 		tx.Where("roles_id is not null")
 	}
-	if where.RolesIdLt != "" {
-		tx.Where("roles_id < ?", where.RolesIdLt)
+	if where.RolesIDLt != "" {
+		tx.Where("roles_id < ?", where.RolesIDLt)
 	}
-	if where.RolesIdElt != "" {
-		tx.Where("roles_id <= ?", where.RolesIdElt)
+	if where.RolesIDElt != "" {
+		tx.Where("roles_id <= ?", where.RolesIDElt)
 	}
-	if where.RolesIdGt != "" {
-		tx.Where("roles_id > ?", where.RolesIdGt)
+	if where.RolesIDGt != "" {
+		tx.Where("roles_id > ?", where.RolesIDGt)
 	}
-	if where.RolesIdEgt != "" {
-		tx.Where("roles_id >= ?", where.RolesIdEgt)
+	if where.RolesIDEgt != "" {
+		tx.Where("roles_id >= ?", where.RolesIDEgt)
 	}
-	if len(where.RolesIdNotIn) > 0 {
-		tx.Where("roles_id not in ?", where.RolesIdNotIn)
+	if len(where.RolesIDNotIn) > 0 {
+		tx.Where("roles_id not in ?", where.RolesIDNotIn)
 	}
-	if where.RolesIdSort != "" {
-		if where.RolesIdSort == "asc" {
+	if where.RolesIDSort != "" {
+		if where.RolesIDSort == "asc" {
 			tx.Order("roles_id asc")
 		} else {
 			tx.Order("roles_id desc")

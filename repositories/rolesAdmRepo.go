@@ -40,7 +40,7 @@ func (rAdmRepo RolesAdmRepoGorm) SaveByAdm(adm model.Admin) error {
 	if adm.ID == 0 {
 		panic("SaveByAdm adm.ID is 0")
 	}
-	if adm.RolesId == "" || adm.RolesId == model.RoleAdmin {
+	if adm.RolesID == "" || adm.RolesID == model.RoleAdmin {
 		return rAdmRepo.Orm.Where("admin_id", adm.ID).Delete(model.RolesAdmin{}).Error
 	}
 	return rAdmRepo.Orm.Transaction(func(tx *gorm.DB) error {
@@ -48,10 +48,10 @@ func (rAdmRepo RolesAdmRepoGorm) SaveByAdm(adm model.Admin) error {
 		if err != nil {
 			return err
 		}
-		rolesId := adm.RefreshRoleIDSlices()
-		rolesId = global.RemoveDuplicateElement(rolesId)
-		rAdm := make([]model.RolesAdmin, 0, len(rolesId))
-		for _, v := range rolesId {
+		RolesID := adm.RefreshRoleIDSlices()
+		RolesID = global.RemoveDuplicateElement(RolesID)
+		rAdm := make([]model.RolesAdmin, 0, len(RolesID))
+		for _, v := range RolesID {
 			i, err := strconv.ParseUint(v, 10, 64)
 			if err != nil {
 				continue

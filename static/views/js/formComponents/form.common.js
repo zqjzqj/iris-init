@@ -97,6 +97,9 @@ $(function(){
             var funcSuccess = $(this).attr("data-success") || 'successCallback(response.Msg, response.Data, ifrIndex)';
             var funcError = $(this).attr("data-error") || 'errorCallback(response.Msg, response.Data, ifrIndex)';
             var requestData = $(this).attr('data-params') || {};
+            if ( typeof requestData !== "object" ) {
+                requestData = JSON.parse(requestData)
+            }
             var beforeFun = $(this).attr("data-before") || "";
 
             if ( beforeFun ) {
@@ -389,6 +392,9 @@ $(function(){
         $("[data-action=checked-with-submit]").click(function(){
             var url = $(this).attr('data-href')
             var requestData = $(this).attr('data-params') || {};
+            if ( typeof requestData !== "object" ) {
+                requestData = JSON.parse(requestData)
+            }
             var method = $(this).attr("data-method") || "POST";
             var ident_name = $(this).attr("data-ident-name") || "ID";
             var warning = $(this).attr('data-warning')
