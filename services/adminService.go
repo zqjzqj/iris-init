@@ -69,7 +69,7 @@ func (admServ AdminService) InitAdminAccount() (model.Admin, error) {
 		LastLoginTime: 0,
 		RolesID:       model.RoleAdmin,
 	}
-	admin.ID = model.AdminRootId
+	admin.ID = model.AdminRootID
 	err := admServ.repo.Save(&admin)
 	return admin, err
 }
@@ -213,7 +213,7 @@ func (admServ AdminService) Save(admin *model.Admin, _select ...string) error {
 
 func (admServ AdminService) DeleteByCtx(ctx iris.Context) error {
 	admId := uint64(ctx.PostValueInt64Default("ID", 0))
-	if admId == model.AdminRootId {
+	if admId == model.AdminRootID {
 		return sErr.New("不能删除默认账户")
 	}
 	_, err := admServ.repo.DeleteByID(admId)
