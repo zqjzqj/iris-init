@@ -184,7 +184,7 @@ func (admServ AdminService) SaveByCtx(ctx iris.Context, admID uint64) (model.Adm
 		return model.Admin{}, err
 	}
 	//用于固定adm
-	if admID > 0 {
+	if admID > 0 && admValidator.Self == "1" {
 		admValidator.ID = admID
 	}
 	return admServ.SaveByValidator(admValidator)
