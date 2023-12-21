@@ -38,25 +38,27 @@ type {{.Model}}Repo interface {
 
 type {{.Model}}SearchWhere struct {
     {{- range .ModelField}}
-    {{.Name}}     string
-    {{.Name}}Neq string //不等于条件
-    {{.Name}}Null bool
-    {{.Name}}NotNull bool
-    {{- if eq .Type "string" }}
-    {{.Name}}Like string
-    {{- end}}
-    {{.Name}}Lt   string // {{.Name}} < {{.Name}}Lt
-    {{.Name}}Gt   string // {{.Name}} > {{.Name}}Gt
-    {{.Name}}Elt  string // {{.Name}} <= {{.Name}}Elt
-    {{.Name}}Egt  string // {{.Name}} >= {{.Name}}Egt
-    {{- if eq .Type "uint8"}}
-    {{.Name}}NotIn []int // not in查询
-    {{.Name}}In []int // in查询
-    {{- else}}
-    {{.Name}}NotIn []{{.Type}} // not in查询
-    {{.Name}}In []{{.Type}} // in查询
-    {{- end}}
-    {{.Name}}Sort string // 排序
+        {{- if eq .IsStruct false}}
+            {{.Name}}     string
+            {{.Name}}Neq string //不等于条件
+            {{.Name}}Null bool
+            {{.Name}}NotNull bool
+            {{- if eq .Type "string" }}
+                {{.Name}}Like string
+            {{- end}}
+            {{.Name}}Lt   string // {{.Name}} < {{.Name}}Lt
+            {{.Name}}Gt   string // {{.Name}} > {{.Name}}Gt
+            {{.Name}}Elt  string // {{.Name}} <= {{.Name}}Elt
+            {{.Name}}Egt  string // {{.Name}} >= {{.Name}}Egt
+            {{- if eq .Type "uint8"}}
+                {{.Name}}NotIn []int // not in查询
+                {{.Name}}In []int // in查询
+            {{- else}}
+                {{.Name}}NotIn []{{.Type}} // not in查询
+                {{.Name}}In []{{.Type}} // in查询
+            {{- end}}
+            {{.Name}}Sort string // 排序
+        {{- end}}
     {{- end}}
 	SelectParams repoComm.SelectFrom
 }

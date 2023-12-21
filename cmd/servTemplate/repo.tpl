@@ -82,52 +82,54 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
 		tx = tx0.Model(model.{{.Model}}{})
 	}
    {{- range .ModelField}}
-   //需要额外调整
-   	if where.{{.Name}} != "" {
-        tx.Where("{{.NameSnake}}", where.{{.Name}})
-   	}
-   	if where.{{.Name}}Neq != "" {
-        tx.Where("{{.NameSnake}} <> ?", where.{{.Name}}Neq)
-    }
-    if where.{{.Name}}Null {
-        tx.Where("{{.NameSnake}} is null")
-    }
-
-   {{- if eq .Type "string"}}
-   	if where.{{.Name}}Like != "" {
-       tx.Where("{{.NameSnake}} like ?", "%"+where.{{.Name}}Like+"%")
-    }
-   {{- end}}
-
-    if len(where.{{.Name}}In) > 0 {
-      tx.Where("{{.NameSnake}} in ?", where.{{.Name}}In)
-    }
-
-    if where.{{.Name}}NotNull {
-        tx.Where("{{.NameSnake}} is not null")
-    }
-    if where.{{.Name}}Lt != "" {
-      tx.Where("{{.NameSnake}} < ?", where.{{.Name}}Lt)
-    }
-    if where.{{.Name}}Elt != "" {
-      tx.Where("{{.NameSnake}} <= ?", where.{{.Name}}Elt)
-    }
-    if where.{{.Name}}Gt != "" {
-      tx.Where("{{.NameSnake}} > ?", where.{{.Name}}Gt)
-    }
-    if where.{{.Name}}Egt != "" {
-      tx.Where("{{.NameSnake}} >= ?", where.{{.Name}}Egt)
-    }
-     if len(where.{{.Name}}NotIn) > 0 {
-      tx.Where("{{.NameSnake}} not in ?", where.{{.Name}}NotIn)
-    }
-    if where.{{.Name}}Sort != "" {
-        if where.{{.Name}}Sort == "asc" {
-            tx.Order("{{.NameSnake}} asc")
-        } else {
-            tx.Order("{{.NameSnake}} desc")
+    {{- if eq .IsStruct false}}
+       //需要额外调整
+        if where.{{.Name}} != "" {
+            tx.Where("{{.NameSnake}}", where.{{.Name}})
         }
-    }
+        if where.{{.Name}}Neq != "" {
+            tx.Where("{{.NameSnake}} <> ?", where.{{.Name}}Neq)
+        }
+        if where.{{.Name}}Null {
+            tx.Where("{{.NameSnake}} is null")
+        }
+
+       {{- if eq .Type "string"}}
+        if where.{{.Name}}Like != "" {
+           tx.Where("{{.NameSnake}} like ?", "%"+where.{{.Name}}Like+"%")
+        }
+       {{- end}}
+
+        if len(where.{{.Name}}In) > 0 {
+          tx.Where("{{.NameSnake}} in ?", where.{{.Name}}In)
+        }
+
+        if where.{{.Name}}NotNull {
+            tx.Where("{{.NameSnake}} is not null")
+        }
+        if where.{{.Name}}Lt != "" {
+          tx.Where("{{.NameSnake}} < ?", where.{{.Name}}Lt)
+        }
+        if where.{{.Name}}Elt != "" {
+          tx.Where("{{.NameSnake}} <= ?", where.{{.Name}}Elt)
+        }
+        if where.{{.Name}}Gt != "" {
+          tx.Where("{{.NameSnake}} > ?", where.{{.Name}}Gt)
+        }
+        if where.{{.Name}}Egt != "" {
+          tx.Where("{{.NameSnake}} >= ?", where.{{.Name}}Egt)
+        }
+         if len(where.{{.Name}}NotIn) > 0 {
+          tx.Where("{{.NameSnake}} not in ?", where.{{.Name}}NotIn)
+        }
+        if where.{{.Name}}Sort != "" {
+            if where.{{.Name}}Sort == "asc" {
+                tx.Order("{{.NameSnake}} asc")
+            } else {
+                tx.Order("{{.NameSnake}} desc")
+            }
+        }
+   {{- end}}
    {{- end}}
    where.SelectParams.SetTxGorm(tx)
 	return tx
