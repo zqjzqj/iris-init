@@ -20,6 +20,8 @@ type Field struct {
 	Search         bool
 	IsNumber       bool
 	IsPk           bool //是否是主键
+	IsStruct       bool
+	ReferencesName string
 }
 
 func GetIndexFields(fields []Field) map[string][]Field {
@@ -72,6 +74,23 @@ func GetUniqueFields(fields []Field) map[string][]Field {
 	return rr
 }
 
+func GetReferences(fields []Field) []Field {
+	r := make([]Field, 0)
+	for _, v := range fields {
+		if !v.IsStruct {
+			continue
+		}
+		for _, v2 := range fields {
+			if v.Name+"ID" == v2.Name {
+				v.ReferencesName = v2.Name
+				r = append(r, v)
+				break
+			}
+		}
+	}
+	return r
+}
+
 func RefStructField(_struct any) []Field {
 	var ref reflect.Type
 	v, ok := _struct.(reflect.Type)
@@ -102,6 +121,7 @@ func RefStructField(_struct any) []Field {
 				Index:      gormLabelStruct.Index,
 				IsPk:       gormLabelStruct.IsPk,
 				IsNumber:   global.IsNumber(ref.Field(i).Type),
+				IsStruct:   ref.Field(i).Type.Kind() == reflect.Struct,
 			}
 			if _f.Label == "" {
 				_f.Label = gormLabelStruct.Comment
