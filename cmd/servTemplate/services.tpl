@@ -154,6 +154,15 @@ func ({{.Alias}}Serv {{.Model}}Service) GetBy{{.Pk.Name}}Lock({{.Pk.Name}} {{.Pk
 	return {{.Alias}}Serv.repo.GetBy{{.Pk.Name}}Lock({{.Pk.Name}}, _select...)
 }
 
+{{range  $key, $item := .ReferencesField}}
+func ({{$.Alias}}Serv {{$.Model}}Service) Reload{{$item.Name}}({{$.Alias}} *model.{{$.Model}}) {
+    if {{$.Alias}}.{{$item.ReferencesName}} > 0 {
+		{{$.Alias}}.{{$item.Name}} = New{{$item.Name}}ServiceByOrm({{$.Alias}}Serv.repo.GetOrm()).
+			GetByID({{$.Alias}}.{{$item.ReferencesName}})
+	}
+}
+{{- end}}
+
 // 通过请求ctx编辑/新增一条数据
 func ({{.Alias}}Serv {{.Model}}Service) SaveByCtx(ctx iris.Context) (model.{{.Model}}, error) {
 	{{.Alias}}Validator := {{.Model}}Validator{}

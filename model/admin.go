@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	AdminRootId = 1
+	AdminRootID = 1
 )
 
 var AdmStatusDescMap = map[uint8]string{
@@ -52,7 +52,7 @@ func (adm Admin) IsStatusYes() bool {
 }
 
 func (adm Admin) IsRootAccount() bool {
-	return adm.ID == AdminRootId
+	return adm.ID == AdminRootID
 }
 
 func (adm *Admin) SetRoleID(roleID []string) {
