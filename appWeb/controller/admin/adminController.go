@@ -34,20 +34,22 @@ func (admCtrl AdminController) GetList(ctx iris.Context) appWeb.ResponseFormat {
 
 // 获取一条详细数据
 func (admCtrl AdminController) GetItem(ctx iris.Context) appWeb.ResponseFormat {
-	adm := services.NewAdminService().GetItem(ctx)
+	admServ := services.NewAdminService()
+	adm := admServ.GetItem(ctx)
 	if adm.ID == 0 {
 		return appWeb.NewFailResponse("无效的数据", nil)
 	}
-	services.NewAdminService().RefreshPermissions(&adm, false, false)
+	admServ.RefreshPermissions(&adm, false, false)
 	return appWeb.NewSuccessResponse("", adm.ShowMap())
 }
 
 func (admCtrl AdminController) PostEdit(ctx iris.Context) appWeb.ResponseFormat {
-	adm, err := services.NewAdminService().SaveByCtx(ctx, admCtrl.Admin.ID)
+	admServ := services.NewAdminService()
+	adm, err := admServ.SaveByCtx(ctx, admCtrl.Admin.ID)
 	if err != nil {
 		return appWeb.NewFailErrResponse(err, nil)
 	}
-	services.NewAdminService().RefreshPermissions(&adm, false, false)
+	admServ.RefreshPermissions(&adm, false, false)
 	return appWeb.NewSuccessResponse("", adm.ShowMap())
 }
 
