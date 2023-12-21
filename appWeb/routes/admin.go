@@ -3,32 +3,19 @@ package routes
 import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"github.com/kataras/iris/v12/sessions"
 	"iris-init/appWeb/controller/admin"
 	"iris-init/appWeb/middleware/adminMiddleware"
 	"iris-init/config"
 	"iris-init/services"
-	"net/http"
 )
 
 func RegisterRoutes(app *iris.Application) {
-	tmpl := iris.Django("./views/admin", ".html")
-	if !config.EnvIsPro() {
-		tmpl = tmpl.Reload(true)
+	var party iris.Party
+	if config.EnvIsDev() {
+		party = app.Party("/admin")
+	} else {
+		party = app.Party("/").Subdomain("admin-api")
 	}
-	party := app.Party("/") //.Subdomain("admin")
-	sess := sessions.New(sessions.Config{
-		Cookie: "iris-init",
-	})
-	party.Use(sess.Handler())
-	party.RegisterView(tmpl)
-	// 注册静态文件
-	party.HandleDir("/static", "./static")
-	party.OnErrorCode(iris.StatusNotFound, func(ctx iris.Context) {
-		if !ctx.IsAjax() /*&& !strings.HasPrefix(ctx.Request().URL.Path, "/api/")*/ {
-			ctx.Redirect("/err?Msg=页面未找到", http.StatusFound)
-		}
-	})
 
 	//重要！！！ admin所有需要设置权限的实际路由需要到控制器里去实际注册 并SetName 不然无法获取并生成到路由的权限--会被默认为不需要权限
 	//SetName格式 SetName("目录@菜单:按钮") 这里暂时只支持二级菜单
