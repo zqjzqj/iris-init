@@ -133,6 +133,11 @@ func RefStructField(_struct any) []Field {
 			}
 			if _f.Type == "sql.NullString" {
 				_f.Type = "string"
+				_f.IsStruct = false
+			}
+			if _f.Type == "time.Time" {
+				_f.Type = "string"
+				_f.IsStruct = false
 			}
 			if gormLabelStruct.Validate != "" && _f.Name != "ID" {
 				_f.ValidateLabel = `validate:"` + gormLabelStruct.Validate + `"`
