@@ -39,6 +39,7 @@ func (repo *RepoGorm) ResetLastOrm() {
 
 func (repo *RepoGorm) ResetOrm() {
 	repo.Orm = orm.GetDb()
+	repo.OrmLasts = make([]*gorm.DB, 0, 3)
 }
 
 func (repo *RepoGorm) Transaction(f func() error, _repos ...RepoInterface) error {
