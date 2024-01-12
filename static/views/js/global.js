@@ -1,4 +1,8 @@
 $(function(){
+    $("[data-action=import]").click(function(){
+        var params = $(".list-search").serialize()
+        location.href = "import?"+params
+    })
     var _pageLimits = $(".layui-laypage-limits select")
     _pageLimits.find("option").each(function(k, v){
         if ($(v).val() === _pageLimits.attr("data-curr")) {
