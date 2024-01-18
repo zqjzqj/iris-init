@@ -84,6 +84,11 @@ func (adminServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global
 				Desc:   true,
 			},
 		},
+		Preload: []repoComm.PreloadParams{
+			{
+				Query: "Organizer",
+			},
+		},
 	}
 	pager := global.NewPager(ctx)
 	if pager.Size < 0 {
@@ -201,14 +206,14 @@ func (admServ AdminService) SaveByValidator(admValidator AdminValidator) (model.
 
 func (admServ AdminService) Save(admin *model.Admin, _select ...string) error {
 	//其他类型的管理员需要save一下角色
-	rAdmRepo := repositories.NewRolesAdmRepo()
+	roleAdmServ := NewRolesAdminService()
 	return admServ.repo.Transaction(func() error {
 		err := admServ.repo.Save(admin, _select...)
 		if err != nil {
 			return err
 		}
-		return rAdmRepo.SaveByAdm(*admin)
-	}, rAdmRepo)
+		return roleAdmServ.SaveByAdm(*admin)
+	}, roleAdmServ.repo)
 }
 
 func (admServ AdminService) DeleteByCtx(ctx iris.Context) error {
@@ -220,9 +225,8 @@ func (admServ AdminService) DeleteByCtx(ctx iris.Context) error {
 	if err != nil {
 		return err
 	}
-	rolesAdmRepo := repositories.NewRolesAdmRepo()
-	rolesAdmRepo.SetOrm(admServ.repo.GetOrm())
-	_, _ = rolesAdmRepo.DeleteByAdmID(admId)
+	roleAdmServ := NewRolesAdminServiceByOrm(admServ.repo.GetOrm())
+	_ = roleAdmServ.DeleteByAdminID(admId)
 	return nil
 }
 
@@ -431,18 +435,19 @@ func (admServ AdminService) GetAdmByValidate(aValidator AdminValidator) (model.A
 }
 
 type AdminValidator struct {
-	ID       uint64
-	Username string `validate:"required" label:"账户名"`
-	Phone    string `validate:"required" label:"手机号码"`
-	QQ       string `label:"QQ号" validate:"max=20"`
-	Status   uint8  `validate:"oneof=0 1" label:"状态"`
-	RealName string `validate:"required" label:"真实姓名"`
-	Avatar   string `label:"头像"`
-	Password string `label:"密码"`
-	Sex      uint8  `validate:"oneof=0 1 2" label:"性别"`
-	Desc     string `label:"简介"`
-	RolesID  []string
-	Self     string //用于请求的时候在控制器区分一下是否是编辑当前用户的资料
+	ID          uint64
+	OrganizerID uint64 `label:"承办单位"`
+	Username    string `validate:"required" label:"账户名"`
+	Phone       string `validate:"required" label:"手机号码"`
+	QQ          string `label:"QQ号" validate:"max=20"`
+	Status      uint8  `validate:"oneof=0 1" label:"状态"`
+	RealName    string `validate:"required" label:"真实姓名"`
+	Avatar      string `label:"头像"`
+	Password    string `label:"密码"`
+	Sex         uint8  `validate:"oneof=0 1 2" label:"性别"`
+	Desc        string `label:"简介"`
+	RolesID     []string
+	Self        string //用于请求的时候在控制器区分一下是否是编辑当前用户的资料
 }
 
 func (aValidator AdminValidator) Validate() error {
