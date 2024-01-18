@@ -55,8 +55,8 @@ func (adm Admin) IsRootAccount() bool {
 	return adm.ID == AdminRootID
 }
 
-func (adm *Admin) SetRoleID(roleID []string) {
-	adm.RolesIDSlices = global.RemoveDuplicateElement(roleID)
+func (adm *Admin) SetRoleID(RoleID []string) {
+	adm.RolesIDSlices = global.RemoveDuplicateElement(RoleID)
 	adm.RolesID = strings.Join(adm.RolesIDSlices, ",")
 }
 
