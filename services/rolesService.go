@@ -145,7 +145,7 @@ func (roleServ RolesService) Delete(role model.Roles) error {
 		return nil
 	}
 	rPermRepo := repositories.NewRolesPermissionsRepo()
-	roleAdmRepo := repositories.NewRolesAdmRepo()
+	roleAdmServ := NewRolesAdminService()
 	return roleServ.repo.Transaction(func() error {
 		for _, v := range model.GetSysRoles() {
 			if v.ID == role.ID {
@@ -157,13 +157,13 @@ func (roleServ RolesService) Delete(role model.Roles) error {
 		if _err != nil {
 			return _err
 		}
-		_, _err = roleAdmRepo.DeleteByRoleID(role.ID)
+		_err = roleAdmServ.DeleteByRoleID(role.ID)
 		if _err != nil {
 			return _err
 		}
 		_, _err = roleServ.repo.DeleteByID(role.ID)
 		return nil
-	}, rPermRepo, roleAdmRepo)
+	}, rPermRepo, roleAdmServ.repo)
 }
 
 func (roleServ RolesService) DeleteByCtx(ctx iris.Context) error {
@@ -264,8 +264,16 @@ func (rolesServ RolesService) GetByIDLock(ID uint64, _select ...string) (model.R
 	return rolesServ.repo.GetByIDLock(ID, _select...)
 }
 
+func (rolesServ RolesService) GetByID(id uint64, _select ...string) model.Roles {
+	return rolesServ.repo.GetByID(id, _select...)
+}
+
 func (rolesServ RolesService) GetRolesByID(id ...uint64) []model.Roles {
 	return rolesServ.repo.GetRolesByID(id...)
+}
+
+func (rolesServ RolesService) ReloadAdmins(role *model.Roles) {
+	/*repositories.NewRolesAdmRepo().*/
 }
 
 type RolesValidator struct {
