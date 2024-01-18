@@ -34,7 +34,7 @@ func (rPermRepo RolesPermissionsRepoGorm) SaveByRole(role model.Roles) error {
 		rps := make([]model.RolesPermissions, 0, len(role.PermIdents))
 		for _, v := range role.PermIdents {
 			rps = append(rps, model.RolesPermissions{
-				RoleId:          role.ID,
+				RoleID:          role.ID,
 				PermissionIdent: v,
 			})
 		}
@@ -42,10 +42,10 @@ func (rPermRepo RolesPermissionsRepoGorm) SaveByRole(role model.Roles) error {
 	})
 }
 
-func (rPermRepo RolesPermissionsRepoGorm) GetPermissionsByRoles(roleId ...uint64) []string {
+func (rPermRepo RolesPermissionsRepoGorm) GetPermissionsByRoles(RoleID ...uint64) []string {
 	r := []string{}
 	rPermRepo.Orm.Model(model.RolesPermissions{}).
-		Where("role_id in ?", roleId).
+		Where("role_id in ?", RoleID).
 		Select("permission_ident").
 		Group("permission_ident").Scan(&r)
 	return r

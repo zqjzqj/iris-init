@@ -235,20 +235,20 @@ func (admServ AdminService) RefreshPermissions(adm *model.Admin, force, onlyRole
 			return
 		}
 	}
-	roleIDSlices := adm.RefreshRoleIDSlices()
-	if len(roleIDSlices) == 0 {
+	RoleIDSlices := adm.RefreshRoleIDSlices()
+	if len(RoleIDSlices) == 0 {
 		adm.Permissions = []string{}
 		adm.RolesName = []string{}
 		return
 	}
 
 	//仅仅只有超级管理员的情况
-	if len(roleIDSlices) == 1 && roleIDSlices[0] == model.RoleAdmin {
+	if len(RoleIDSlices) == 1 && RoleIDSlices[0] == model.RoleAdmin {
 		adm.Permissions = []string{model.RoleAdmin}
 		adm.RolesName = []string{model.RoleAdminName}
 		return
 	}
-	RolesIDUint64 := global.StrArrToUintArr(roleIDSlices)
+	RolesIDUint64 := global.StrArrToUintArr(RoleIDSlices)
 	roles := NewRolesServiceByOrm(admServ.repo.GetOrm()).GetRolesByID(RolesIDUint64...)
 
 	if len(roles) == 0 {

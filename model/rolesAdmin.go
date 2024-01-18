@@ -6,8 +6,8 @@ import (
 
 type RolesAdmin struct {
 	mField.FieldsPkUUidBinary
-	RoleId  uint64 `gorm:"comment:角色id;index:idx_role_admin_id"`
-	AdminId uint64 `gorm:"comment:管理员id;index:idx_role_admin_id;index:idx_admin_id"`
+	RoleID  uint64 `gorm:"comment:角色id;index:idx_role_admin_id"`
+	AdminID uint64 `gorm:"comment:管理员id;index:idx_role_admin_id;index:idx_admin_id"`
 	mField.FieldsTimeUnixModel
 }
 

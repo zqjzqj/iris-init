@@ -17,11 +17,11 @@ func NewRolesAdmRepo() repoInterface.RolesAdmRepo {
 	return &RolesAdmRepoGorm{repoComm.NewRepoGorm()}
 }
 
-func (rAdmRepo RolesAdmRepoGorm) DeleteByRoleID(roleID ...uint64) (rowsAffected int64, err error) {
-	if len(roleID) == 1 {
-		return rAdmRepo.Delete("role_id", roleID[0])
+func (rAdmRepo RolesAdmRepoGorm) DeleteByRoleID(RoleID ...uint64) (rowsAffected int64, err error) {
+	if len(RoleID) == 1 {
+		return rAdmRepo.Delete("role_id", RoleID[0])
 	}
-	return rAdmRepo.Delete("role_id in ?", roleID)
+	return rAdmRepo.Delete("role_id in ?", RoleID)
 }
 
 func (rAdmRepo RolesAdmRepoGorm) DeleteByAdmID(admID ...uint64) (rowsAffected int64, err error) {
@@ -57,8 +57,8 @@ func (rAdmRepo RolesAdmRepoGorm) SaveByAdm(adm model.Admin) error {
 				continue
 			}
 			rAdm = append(rAdm, model.RolesAdmin{
-				RoleId:  i,
-				AdminId: adm.ID,
+				RoleID:  i,
+				AdminID: adm.ID,
 			})
 		}
 		return tx.Create(&rAdm).Error
