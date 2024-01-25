@@ -56,7 +56,7 @@ func main() {
 		}
 		servTpl.Force = *force
 		_ = servTpl.GenerateFile(true)
-		if modelItem != "" {
+		if *_model != "" {
 			err := servTpl.GenerateModel()
 			if err != nil {
 				logs.PrintErr(err)
