@@ -6,7 +6,7 @@ import (
 )
 
 type FieldsPk struct {
-	ID uint64 `gorm:"primarykey" label:"ID"  OnlyRead:"true"`
+	ID uint64 `gorm:"primarykey" label:"ID"`
 }
 
 type FieldsPkUUidBinary struct {
