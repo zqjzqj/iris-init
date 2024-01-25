@@ -45,20 +45,24 @@ func main() {
 			return
 		}
 	}
-	servTpl := tplStruct.NewServTpl(*model, *alias, *ctrDir)
-	if *appRoot != "" {
-		servTpl.SetAppPath(*appRoot)
-	}
-	if *view != "" {
-		servTpl.SetViewDir(*view)
-	}
-	servTpl.Force = *force
-	_ = servTpl.GenerateFile(true)
-	if *_model != "" {
-		err := servTpl.GenerateModel()
-		if err != nil {
-			logs.PrintErr(err)
+	models := strings.Split(*model, ",")
+	for _, modelItem := range models {
+		servTpl := tplStruct.NewServTpl(modelItem, *alias, *ctrDir)
+		if *appRoot != "" {
+			servTpl.SetAppPath(*appRoot)
 		}
+		if *view != "" {
+			servTpl.SetViewDir(*view)
+		}
+		servTpl.Force = *force
+		_ = servTpl.GenerateFile(true)
+		if modelItem != "" {
+			err := servTpl.GenerateModel()
+			if err != nil {
+				logs.PrintErr(err)
+			}
+		}
+		logs.PrintlnSuccess("GenerateFile OK...", modelItem)
 	}
-	logs.PrintlnSuccess("GenerateFile OK...")
+
 }
