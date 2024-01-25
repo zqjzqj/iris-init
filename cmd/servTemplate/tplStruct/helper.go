@@ -21,7 +21,9 @@ type Field struct {
 	IsNumber       bool
 	IsPk           bool //是否是主键
 	IsStruct       bool
-	ReferencesName string
+	IsSlice        bool
+	References     string
+	ForeignKey     string
 }
 
 func GetIndexFields(fields []Field) map[string][]Field {
@@ -77,14 +79,19 @@ func GetUniqueFields(fields []Field) map[string][]Field {
 func GetReferences(fields []Field) []Field {
 	r := make([]Field, 0)
 	for _, v := range fields {
-		if !v.IsStruct {
+		if !v.IsStruct && !v.IsSlice {
 			continue
 		}
-		for _, v2 := range fields {
-			if v.Name+"ID" == v2.Name {
-				v.ReferencesName = v2.Name
-				r = append(r, v)
-				break
+		if v.References != "" && v.ForeignKey != "" {
+			r = append(r, v)
+		} else {
+			for _, v2 := range fields {
+				if v.Name+"ID" == v2.Name {
+					v.References = v2.Name
+					v.ForeignKey = v2.Name
+					r = append(r, v)
+					break
+				}
 			}
 		}
 	}
@@ -105,9 +112,12 @@ func RefStructField(_struct any) []Field {
 		if ref.Field(i).Type.Name() == "FieldsExtendsJsonType" {
 			continue
 		}
+
+		_fieldKind := ref.Field(i).Type.Kind()
 		//对于组合的结构 只反射mField包下的
-		if ref.Field(i).Type.Kind() == reflect.Struct &&
-			strings.HasSuffix(ref.Field(i).Type.PkgPath(), "model/mField") || ref.Field(i).Tag.Get("ref") == "true" {
+		if _fieldKind == reflect.Struct &&
+			strings.HasSuffix(ref.Field(i).Type.PkgPath(), "model/mField") ||
+			ref.Field(i).Tag.Get("ref") == "true" {
 			fields = append(fields, RefStructField(ref.Field(i).Type)...)
 		} else {
 			_tag := ref.Field(i).Tag
@@ -121,7 +131,12 @@ func RefStructField(_struct any) []Field {
 				Index:      gormLabelStruct.Index,
 				IsPk:       gormLabelStruct.IsPk,
 				IsNumber:   global.IsNumber(ref.Field(i).Type),
-				IsStruct:   ref.Field(i).Type.Kind() == reflect.Struct,
+				IsStruct:   _fieldKind == reflect.Struct,
+				IsSlice:    _fieldKind == reflect.Slice,
+			}
+			if _f.IsStruct || _f.IsSlice {
+				_f.References = gormLabelStruct.References
+				_f.ForeignKey = gormLabelStruct.ForeignKey
 			}
 			if _f.Label == "" {
 				_f.Label = gormLabelStruct.Comment
@@ -181,6 +196,12 @@ func GetValidateStrByGormLabel(gormLabel string) GormLabelStruct {
 		if strings.HasPrefix(v, "comment:") {
 			gormLabelStruct.Comment = strings.TrimLeft(v, "comment:")
 		}
+		if strings.HasPrefix(v, "references:") {
+			gormLabelStruct.References = strings.TrimLeft(v, "references:")
+		}
+		if strings.HasPrefix(v, "foreignKey:") {
+			gormLabelStruct.ForeignKey = strings.TrimLeft(v, "foreignKey:")
+		}
 		//如果包含索引
 		if strings.HasPrefix(v, "index:") {
 			_index := strings.Split(v, ",")
@@ -201,9 +222,11 @@ func GetValidateStrByGormLabel(gormLabel string) GormLabelStruct {
 }
 
 type GormLabelStruct struct {
-	Validate string
-	Unique   string
-	Index    string
-	Comment  string
-	IsPk     bool
+	Validate   string
+	Unique     string
+	Index      string
+	Comment    string
+	IsPk       bool
+	References string
+	ForeignKey string
 }
