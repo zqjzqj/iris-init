@@ -156,12 +156,8 @@ func ({{.Alias}}Serv {{.Model}}Service) GetBy{{.Pk.Name}}Lock({{.Pk.Name}} {{.Pk
 
 {{range  $key, $item := .ReferencesField}}
 func ({{$.Alias}}Serv {{$.Model}}Service) Reload{{$item.Name}}({{$.Alias}} *model.{{$.Model}}) {
-    var v reflect.Value
-    v = reflect.ValueOf({{$.Alias}}.{{$item.References}})
-    if v.IsValid() { // 值不存在
-         {{$.Alias}}.{{$item.Name}} = New{{$item.Name}}ServiceByOrm({{$.Alias}}Serv.repo.GetOrm()).
-         			GetBy{{$item.ForeignKey}}({{$.Alias}}.{{$item.References}})
-    }
+    {{$.Alias}}.{{$item.Name}} = New{{$item.Name}}ServiceByOrm({{$.Alias}}Serv.repo.GetOrm()).
+                    GetBy{{$item.ForeignKey}}({{$.Alias}}.{{$item.References}})
 }
 {{- end}}
 
