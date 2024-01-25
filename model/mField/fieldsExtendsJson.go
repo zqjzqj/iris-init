@@ -7,7 +7,7 @@ import (
 )
 
 type FieldsExtendsJsonType struct {
-	ExtraData       string                 `gorm:"type:text;comment:扩展字段" mapstructure:"extra_data"`
+	ExtraData       string                 `gorm:"type:text;comment:扩展字段" mapstructure:"extra_data"  OnlyRead:"true"`
 	extraDataMap    map[string]interface{} `gorm:"-"`
 	extraDataResult gjson.Result           `gorm:"-"`
 }

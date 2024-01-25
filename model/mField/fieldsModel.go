@@ -6,11 +6,11 @@ import (
 )
 
 type FieldsPk struct {
-	ID uint64 `gorm:"primarykey" label:"ID"`
+	ID uint64 `gorm:"primarykey" label:"ID"  OnlyRead:"true"`
 }
 
 type FieldsPkUUidBinary struct {
-	ID []byte `gorm:"primarykey;type:binary(16)" label:"ID"`
+	ID []byte `gorm:"primarykey;type:binary(16)" label:"ID"  OnlyRead:"true"`
 }
 
 func (pk *FieldsPkUUidBinary) BeforeCreate(tx *gorm.DB) (err error) {
