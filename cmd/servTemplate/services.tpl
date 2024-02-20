@@ -156,7 +156,7 @@ func ({{.Alias}}Serv {{.Model}}Service) GetBy{{.Pk.Name}}Lock({{.Pk.Name}} {{.Pk
 
 {{range  $key, $item := .ReferencesField}}
 func ({{$.Alias}}Serv {{$.Model}}Service) Reload{{$item.Name}}({{$.Alias}} *model.{{$.Model}}) {
-    {{$.Alias}}.{{$item.Name}} = New{{$item.Name}}ServiceByOrm({{$.Alias}}Serv.repo.GetOrm()).
+    {{$.Alias}}.{{$item.Name}} = New{{$item.ReferencesModel}}ServiceByOrm({{$.Alias}}Serv.repo.GetOrm()).
                     GetBy{{$item.ForeignKey}}({{$.Alias}}.{{$item.References}})
 }
 {{- end}}

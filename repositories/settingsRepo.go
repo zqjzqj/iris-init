@@ -51,7 +51,7 @@ func (settingsRepo *SettingsRepoGorm) Delete(settings model.Settings) (rowsAffec
 
 // 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构SettingsRepoGorm以外使用
 func (settingsRepo *SettingsRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
-	tx := settingsRepo.Orm.Where(query, args...).Delete(model.Settings{})
+	tx := settingsRepo.Orm.Where(query, args...).Delete(&model.Settings{})
 	return tx.RowsAffected, tx.Error
 }
 
@@ -70,7 +70,7 @@ func (settingsRepo *SettingsRepoGorm) UpdateByWhere(where repoInterface.Settings
 
 func (settingsRepo *SettingsRepoGorm) DeleteByWhere(where repoInterface.SettingsSearchWhere) (rowsAffected int64, err error) {
 	tx := settingsRepo.GetSearchWhereTx(where, nil)
-	r := tx.Delete(model.Settings{})
+	r := tx.Delete(&model.Settings{})
 	return r.RowsAffected, r.Error
 }
 
@@ -383,7 +383,7 @@ func (settingsRepo *SettingsRepoGorm) GetByKey(key string, _select ...string) mo
 func (settingsRepo *SettingsRepoGorm) DeleteByKey(key string) (rowsAffected int64, err error) {
 	tx := settingsRepo.Orm.
 		Where("key", key)
-	r := tx.Delete(model.Settings{})
+	r := tx.Delete(&model.Settings{})
 	return r.RowsAffected, r.Error
 }
 

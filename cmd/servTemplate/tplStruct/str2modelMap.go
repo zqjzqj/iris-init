@@ -7,4 +7,7 @@ var Str2ModelMap = map[string]any{
 	"Department":      model.Department{},
 	"DepartmentAdmin": model.DepartmentAdmin{},
 	"Roles":           model.Roles{},
+	"Project":         model.Project{},
+	"ProjectAudit":    model.ProjectAudit{},
+	"ApprovalProcess": model.ApprovalProcess{},
 }

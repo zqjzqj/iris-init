@@ -51,7 +51,7 @@ func (rolesRepo *RolesRepoGorm) Delete(roles model.Roles) (rowsAffected int64, e
 
 // 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构RolesRepoGorm以外使用
 func (rolesRepo *RolesRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
-	tx := rolesRepo.Orm.Where(query, args...).Delete(model.Roles{})
+	tx := rolesRepo.Orm.Where(query, args...).Delete(&model.Roles{})
 	return tx.RowsAffected, tx.Error
 }
 
@@ -70,7 +70,7 @@ func (rolesRepo *RolesRepoGorm) UpdateByWhere(where repoInterface.RolesSearchWhe
 
 func (rolesRepo *RolesRepoGorm) DeleteByWhere(where repoInterface.RolesSearchWhere) (rowsAffected int64, err error) {
 	tx := rolesRepo.GetSearchWhereTx(where, nil)
-	r := tx.Delete(model.Roles{})
+	r := tx.Delete(&model.Roles{})
 	return r.RowsAffected, r.Error
 }
 
@@ -369,7 +369,7 @@ func (rolesRepo *RolesRepoGorm) GetByName(name string, _select ...string) []mode
 func (rolesRepo *RolesRepoGorm) DeleteByName(name string) (rowsAffected int64, err error) {
 	tx := rolesRepo.Orm.
 		Where("name", name)
-	r := tx.Delete(model.Roles{})
+	r := tx.Delete(&model.Roles{})
 	return r.RowsAffected, r.Error
 }
 

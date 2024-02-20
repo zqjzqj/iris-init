@@ -7,28 +7,33 @@ import (
 )
 
 type Field struct {
-	Name           string
-	NameSnake      string
-	NameFirstLower string
-	Type           string
-	TypeOrigin     string
-	Label          string
-	ValidateLabel  string //主要用于service的验证标签
-	Unique         string
-	Index          string //用于生成 如 GetByField() []model.Model 这样的方法
-	OnlyRead       bool
-	Search         bool
-	IsNumber       bool
-	IsPk           bool //是否是主键
-	IsStruct       bool
-	IsSlice        bool
-	References     string
-	ForeignKey     string
+	Name            string
+	NameSnake       string
+	NameFirstLower  string
+	Type            string
+	TypeOrigin      string
+	Label           string
+	ValidateLabel   string //主要用于service的验证标签
+	Unique          string
+	Index           string //用于生成 如 GetByField() []model.Model 这样的方法
+	OnlyRead        bool
+	Search          bool
+	IsNumber        bool
+	IsPk            bool //是否是主键
+	IsStruct        bool
+	IsSlice         bool
+	IsSoftDelete    bool //是否是软删除字段
+	References      string
+	ForeignKey      string
+	ReferencesModel string
 }
 
 func GetIndexFields(fields []Field) map[string][]Field {
 	r := make(map[string][]Field)
 	for _, v := range fields {
+		if v.IsSoftDelete {
+			continue
+		}
 		if v.Index != "" {
 			if r[v.Index] == nil {
 				r[v.Index] = make([]Field, 0, 3)
@@ -54,6 +59,9 @@ func GetIndexFields(fields []Field) map[string][]Field {
 func GetUniqueFields(fields []Field) map[string][]Field {
 	r := make(map[string][]Field)
 	for _, v := range fields {
+		if v.IsSoftDelete { //软删除不需要作为字段查询，修改等条件
+			continue
+		}
 		if v.Unique != "" {
 			if r[v.Unique] == nil {
 				r[v.Unique] = make([]Field, 0, 3)
@@ -89,6 +97,7 @@ func GetReferences(fields []Field) []Field {
 				if v.Name+"ID" == v2.Name {
 					v.References = v2.Name
 					v.ForeignKey = v2.Name
+					v.ReferencesModel = v2.Name
 					r = append(r, v)
 					break
 				}
@@ -112,7 +121,6 @@ func RefStructField(_struct any) []Field {
 		if ref.Field(i).Type.Name() == "FieldsExtendsJsonType" {
 			continue
 		}
-
 		_fieldKind := ref.Field(i).Type.Kind()
 		//对于组合的结构 只反射mField包下的
 		if _fieldKind == reflect.Struct &&
@@ -123,20 +131,30 @@ func RefStructField(_struct any) []Field {
 			_tag := ref.Field(i).Tag
 			gormLabelStruct := GetValidateStrByGormLabel(_tag.Get("gorm"))
 			_f := Field{
-				Name:       ref.Field(i).Name,
-				Type:       ref.Field(i).Type.String(),
-				TypeOrigin: ref.Field(i).Type.String(),
-				Label:      ref.Field(i).Tag.Get("label"),
-				Unique:     gormLabelStruct.Unique,
-				Index:      gormLabelStruct.Index,
-				IsPk:       gormLabelStruct.IsPk,
-				IsNumber:   global.IsNumber(ref.Field(i).Type),
-				IsStruct:   _fieldKind == reflect.Struct,
-				IsSlice:    _fieldKind == reflect.Slice,
+				Name:         ref.Field(i).Name,
+				Type:         ref.Field(i).Type.String(),
+				TypeOrigin:   ref.Field(i).Type.String(),
+				Label:        ref.Field(i).Tag.Get("label"),
+				Unique:       gormLabelStruct.Unique,
+				Index:        gormLabelStruct.Index,
+				IsPk:         gormLabelStruct.IsPk,
+				IsNumber:     global.IsNumber(ref.Field(i).Type),
+				IsStruct:     _fieldKind == reflect.Struct,
+				IsSlice:      _fieldKind == reflect.Slice,
+				IsSoftDelete: _tag.Get("soft_delete") == "true",
 			}
-			if _f.IsStruct || _f.IsSlice {
+			if _f.IsSoftDelete { //软删除的归纳到结构里去
+				_f.IsStruct = true
+			}
+			//必须是model的 结构才获取关联对象的数据
+			if (_f.IsStruct || _f.IsSlice) && strings.Contains(ref.Field(i).Type.String(), "model.") {
 				_f.References = gormLabelStruct.References
 				_f.ForeignKey = gormLabelStruct.ForeignKey
+				if _f.IsStruct {
+					_f.ReferencesModel = ref.Field(i).Type.Name()
+				} else {
+					_f.ReferencesModel = strings.TrimLeft(ref.Field(i).Type.String(), "[]model.")
+				}
 			}
 			if _f.Label == "" {
 				_f.Label = gormLabelStruct.Comment

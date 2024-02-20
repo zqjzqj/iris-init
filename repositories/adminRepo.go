@@ -51,7 +51,7 @@ func (adminRepo *AdminRepoGorm) Delete(admin model.Admin) (rowsAffected int64, e
 
 // 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构AdminRepoGorm以外使用
 func (adminRepo *AdminRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
-	tx := adminRepo.Orm.Where(query, args...).Delete(model.Admin{})
+	tx := adminRepo.Orm.Where(query, args...).Delete(&model.Admin{})
 	return tx.RowsAffected, tx.Error
 }
 
@@ -70,7 +70,7 @@ func (adminRepo *AdminRepoGorm) UpdateByWhere(where repoInterface.AdminSearchWhe
 
 func (adminRepo *AdminRepoGorm) DeleteByWhere(where repoInterface.AdminSearchWhere) (rowsAffected int64, err error) {
 	tx := adminRepo.GetSearchWhereTx(where, nil)
-	r := tx.Delete(model.Admin{})
+	r := tx.Delete(&model.Admin{})
 	return r.RowsAffected, r.Error
 }
 
@@ -913,7 +913,7 @@ func (adminRepo *AdminRepoGorm) GetByPhone(phone string, _select ...string) mode
 func (adminRepo *AdminRepoGorm) DeleteByPhone(phone string) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.
 		Where("phone", phone)
-	r := tx.Delete(model.Admin{})
+	r := tx.Delete(&model.Admin{})
 	return r.RowsAffected, r.Error
 }
 func (adminRepo *AdminRepoGorm) GetByToken(token string, _select ...string) model.Admin {
@@ -930,7 +930,7 @@ func (adminRepo *AdminRepoGorm) GetByToken(token string, _select ...string) mode
 func (adminRepo *AdminRepoGorm) DeleteByToken(token string) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.
 		Where("token", token)
-	r := tx.Delete(model.Admin{})
+	r := tx.Delete(&model.Admin{})
 	return r.RowsAffected, r.Error
 }
 func (adminRepo *AdminRepoGorm) GetByUsername(username string, _select ...string) model.Admin {
@@ -947,7 +947,7 @@ func (adminRepo *AdminRepoGorm) GetByUsername(username string, _select ...string
 func (adminRepo *AdminRepoGorm) DeleteByUsername(username string) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.
 		Where("username", username)
-	r := tx.Delete(model.Admin{})
+	r := tx.Delete(&model.Admin{})
 	return r.RowsAffected, r.Error
 }
 func (adminRepo *AdminRepoGorm) GetByRealName(realName string, _select ...string) []model.Admin {
@@ -964,7 +964,7 @@ func (adminRepo *AdminRepoGorm) GetByRealName(realName string, _select ...string
 func (adminRepo *AdminRepoGorm) DeleteByRealName(realName string) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.
 		Where("real_name", realName)
-	r := tx.Delete(model.Admin{})
+	r := tx.Delete(&model.Admin{})
 	return r.RowsAffected, r.Error
 }
 func (adminRepo *AdminRepoGorm) GetByStatus(status uint8, _select ...string) []model.Admin {
@@ -981,7 +981,7 @@ func (adminRepo *AdminRepoGorm) GetByStatus(status uint8, _select ...string) []m
 func (adminRepo *AdminRepoGorm) DeleteByStatus(status uint8) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.
 		Where("status", status)
-	r := tx.Delete(model.Admin{})
+	r := tx.Delete(&model.Admin{})
 	return r.RowsAffected, r.Error
 }
 

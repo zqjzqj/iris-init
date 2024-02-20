@@ -580,7 +580,7 @@ func (permRepo PermissionsRepoGorm) GetOrCreatePermissionByName(name string, pid
 func (permissionsRepo *PermissionsRepoGorm) DeleteByLevel(level uint8) (rowsAffected int64, err error) {
 	tx := permissionsRepo.Orm.
 		Where("level", level)
-	r := tx.Delete(model.Permissions{})
+	r := tx.Delete(&model.Permissions{})
 	return r.RowsAffected, r.Error
 }
 
@@ -614,7 +614,7 @@ func (permissionsRepo *PermissionsRepoGorm) ScanByOrWhere(dest any, where ...rep
 func (permissionsRepo *PermissionsRepoGorm) DeleteByIdent(ident string) (rowsAffected int64, err error) {
 	tx := permissionsRepo.Orm.
 		Where("ident", ident)
-	r := tx.Delete(model.Permissions{})
+	r := tx.Delete(&model.Permissions{})
 	return r.RowsAffected, r.Error
 }
 func (permissionsRepo *PermissionsRepoGorm) GetByPid_Name(pid uint64, name string, _select ...string) model.Permissions {
@@ -633,7 +633,7 @@ func (permissionsRepo *PermissionsRepoGorm) DeleteByPid_Name(pid uint64, name st
 	tx := permissionsRepo.Orm.
 		Where("pid", pid).
 		Where("name", name)
-	r := tx.Delete(model.Permissions{})
+	r := tx.Delete(&model.Permissions{})
 	return r.RowsAffected, r.Error
 }
 func (permissionsRepo *PermissionsRepoGorm) GetByLevel(level uint8, _select ...string) []model.Permissions {
@@ -663,13 +663,13 @@ func (permissionsRepo *PermissionsRepoGorm) UpdateByWhere(where repoInterface.Pe
 
 func (permissionsRepo *PermissionsRepoGorm) DeleteByWhere(where repoInterface.PermissionsSearchWhere) (rowsAffected int64, err error) {
 	tx := permissionsRepo.GetSearchWhereTx(where, nil)
-	r := tx.Delete(model.Permissions{})
+	r := tx.Delete(&model.Permissions{})
 	return r.RowsAffected, r.Error
 }
 
 // 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构PermissionsRepoGorm以外使用
 func (permissionsRepo *PermissionsRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
-	tx := permissionsRepo.Orm.Where(query, args...).Delete(model.Permissions{})
+	tx := permissionsRepo.Orm.Where(query, args...).Delete(&model.Permissions{})
 	return tx.RowsAffected, tx.Error
 }
 
