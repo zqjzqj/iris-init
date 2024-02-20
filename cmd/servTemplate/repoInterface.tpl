@@ -59,6 +59,9 @@ type {{.Model}}SearchWhere struct {
             {{- end}}
             {{.Name}}Sort string // 排序
         {{- end}}
+        {{- if eq .IsSoftDelete true}}
+        Unscoped_Del bool
+        {{- end}}
     {{- end}}
 	SelectParams repoComm.SelectFrom
 }

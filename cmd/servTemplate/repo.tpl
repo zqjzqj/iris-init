@@ -51,7 +51,7 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) Delete({{.Alias}} model.{{.Model}}) (r
 
 //为了避免更换源之后的一些麻烦 该方法不建议在仓库结构{{.Model}}RepoGorm以外使用
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
-	tx := {{.Alias}}Repo.Orm.Where(query, args...).Delete(model.{{.Model}}{})
+	tx := {{.Alias}}Repo.Orm.Where(query, args...).Delete(&model.{{.Model}}{})
 	return tx.RowsAffected, tx.Error
 }
 
@@ -70,7 +70,7 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) UpdateByWhere(where repoInterface.{{
 
 func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteByWhere(where repoInterface.{{.Model}}SearchWhere) (rowsAffected int64, err error) {
 	tx := {{$.Alias}}Repo.GetSearchWhereTx(where, nil)
-	r := tx.Delete(model.{{$.Model}}{})
+	r := tx.Delete(&model.{{$.Model}}{})
 	return r.RowsAffected, r.Error
 }
 
@@ -130,9 +130,14 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
             }
         }
    {{- end}}
+   {{- if eq .IsSoftDelete true}}
+        if where.Unscoped_Del {
+            tx.Unscoped()
+        }
    {{- end}}
-   where.SelectParams.SetTxGorm(tx)
-	return tx
+   {{- end}}
+    where.SelectParams.SetTxGorm(tx)
+    return tx
 }
 
 //返回数据总数
@@ -188,7 +193,7 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{
 	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
 	{{- end}}
 	{{- end}}
-	r := tx.Delete(model.{{$.Model}}{})
+	r := tx.Delete(&model.{{$.Model}}{})
     return r.RowsAffected, r.Error
 }
 {{- end}}
@@ -220,7 +225,7 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{
 	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
 	{{- end}}
 	{{- end}}
-	r := tx.Delete(model.{{$.Model}}{})
+	r := tx.Delete(&model.{{$.Model}}{})
     return r.RowsAffected, r.Error
 }
 {{- end}}

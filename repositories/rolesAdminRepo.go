@@ -53,7 +53,7 @@ func (rolesAdminRepo *RolesAdminRepoGorm) Delete(rolesAdmin model.RolesAdmin) (r
 
 // 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构RolesAdminRepoGorm以外使用
 func (rolesAdminRepo *RolesAdminRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
-	tx := rolesAdminRepo.Orm.Where(query, args...).Delete(model.RolesAdmin{})
+	tx := rolesAdminRepo.Orm.Where(query, args...).Delete(&model.RolesAdmin{})
 	return tx.RowsAffected, tx.Error
 }
 
@@ -72,7 +72,7 @@ func (rolesAdminRepo *RolesAdminRepoGorm) UpdateByWhere(where repoInterface.Role
 
 func (rolesAdminRepo *RolesAdminRepoGorm) DeleteByWhere(where repoInterface.RolesAdminSearchWhere) (rowsAffected int64, err error) {
 	tx := rolesAdminRepo.GetSearchWhereTx(where, nil)
-	r := tx.Delete(model.RolesAdmin{})
+	r := tx.Delete(&model.RolesAdmin{})
 	return r.RowsAffected, r.Error
 }
 
@@ -325,7 +325,7 @@ func (rolesAdminRepo *RolesAdminRepoGorm) GetByAdminID(adminID uint64, _select .
 func (rolesAdminRepo *RolesAdminRepoGorm) DeleteByAdminID(adminID uint64) (rowsAffected int64, err error) {
 	tx := rolesAdminRepo.Orm.
 		Where("admin_id", adminID)
-	r := tx.Delete(model.RolesAdmin{})
+	r := tx.Delete(&model.RolesAdmin{})
 	return r.RowsAffected, r.Error
 }
 func (rolesAdminRepo *RolesAdminRepoGorm) GetByRoleID(roleID uint64, _select ...string) []model.RolesAdmin {
@@ -342,7 +342,7 @@ func (rolesAdminRepo *RolesAdminRepoGorm) GetByRoleID(roleID uint64, _select ...
 func (rolesAdminRepo *RolesAdminRepoGorm) DeleteByRoleID(roleID uint64) (rowsAffected int64, err error) {
 	tx := rolesAdminRepo.Orm.
 		Where("role_id", roleID)
-	r := tx.Delete(model.RolesAdmin{})
+	r := tx.Delete(&model.RolesAdmin{})
 	return r.RowsAffected, r.Error
 }
 
@@ -378,10 +378,10 @@ func (rolesAdminRepo *RolesAdminRepoGorm) SaveByAdm(adm model.Admin) error {
 		panic("SaveByAdm adm.ID is 0")
 	}
 	if adm.RolesID == "" || adm.RolesID == model.RoleAdmin {
-		return rolesAdminRepo.Orm.Where("admin_id", adm.ID).Delete(model.RolesAdmin{}).Error
+		return rolesAdminRepo.Orm.Where("admin_id", adm.ID).Delete(&model.RolesAdmin{}).Error
 	}
 	return rolesAdminRepo.Orm.Transaction(func(tx *gorm.DB) error {
-		err := tx.Where("admin_id", adm.ID).Delete(model.RolesAdmin{}).Error
+		err := tx.Where("admin_id", adm.ID).Delete(&model.RolesAdmin{}).Error
 		if err != nil {
 			return err
 		}

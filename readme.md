@@ -43,5 +43,6 @@
 -     go run .\cmd\generateTpl.go -createModel=Xxx //创建model  
 -     go run .\cmd\generateTpl.go -model=Xxx -ctrDir=user -view=user  //生成业务代码 
 -     go run .\cmd\generateTpl.go -migrate="model1,model2,model3" //生成迁移
+-     软删除的model字段必须包含 标签soft_delete:"true" 才会根据该字段生成对应的实际删除方法
       
       

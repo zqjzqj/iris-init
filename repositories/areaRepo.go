@@ -51,7 +51,7 @@ func (areaRepo *AreaRepoGorm) Delete(area model.Area) (rowsAffected int64, err e
 
 // 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构AreaRepoGorm以外使用
 func (areaRepo *AreaRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
-	tx := areaRepo.Orm.Where(query, args...).Delete(model.Area{})
+	tx := areaRepo.Orm.Where(query, args...).Delete(&model.Area{})
 	return tx.RowsAffected, tx.Error
 }
 
@@ -70,7 +70,7 @@ func (areaRepo *AreaRepoGorm) UpdateByWhere(where repoInterface.AreaSearchWhere,
 
 func (areaRepo *AreaRepoGorm) DeleteByWhere(where repoInterface.AreaSearchWhere) (rowsAffected int64, err error) {
 	tx := areaRepo.GetSearchWhereTx(where, nil)
-	r := tx.Delete(model.Area{})
+	r := tx.Delete(&model.Area{})
 	return r.RowsAffected, r.Error
 }
 
@@ -520,7 +520,7 @@ func (areaRepo *AreaRepoGorm) GetByFirst(first string, _select ...string) []mode
 func (areaRepo *AreaRepoGorm) DeleteByFirst(first string) (rowsAffected int64, err error) {
 	tx := areaRepo.Orm.
 		Where("first", first)
-	r := tx.Delete(model.Area{})
+	r := tx.Delete(&model.Area{})
 	return r.RowsAffected, r.Error
 }
 func (areaRepo *AreaRepoGorm) GetByLevel(level uint8, _select ...string) []model.Area {
@@ -537,7 +537,7 @@ func (areaRepo *AreaRepoGorm) GetByLevel(level uint8, _select ...string) []model
 func (areaRepo *AreaRepoGorm) DeleteByLevel(level uint8) (rowsAffected int64, err error) {
 	tx := areaRepo.Orm.
 		Where("level", level)
-	r := tx.Delete(model.Area{})
+	r := tx.Delete(&model.Area{})
 	return r.RowsAffected, r.Error
 }
 func (areaRepo *AreaRepoGorm) GetByPid(pid uint, _select ...string) []model.Area {
@@ -554,7 +554,7 @@ func (areaRepo *AreaRepoGorm) GetByPid(pid uint, _select ...string) []model.Area
 func (areaRepo *AreaRepoGorm) DeleteByPid(pid uint) (rowsAffected int64, err error) {
 	tx := areaRepo.Orm.
 		Where("pid", pid)
-	r := tx.Delete(model.Area{})
+	r := tx.Delete(&model.Area{})
 	return r.RowsAffected, r.Error
 }
 

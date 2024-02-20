@@ -21,11 +21,11 @@ func (rPermRepo RolesPermissionsRepoGorm) SaveByRole(role model.Roles) error {
 		panic("SaveByRole role.ID is 0")
 	}
 	if len(role.PermIdents) == 0 {
-		return rPermRepo.Orm.Where("role_id", role.ID).Delete(model.RolesPermissions{}).Error
+		return rPermRepo.Orm.Where("role_id", role.ID).Delete(&model.RolesPermissions{}).Error
 	}
 	//这里因为是单独对于该表的事务 所以直接在repo中完成
 	return rPermRepo.Orm.Transaction(func(tx *gorm.DB) error {
-		err := tx.Where("role_id", role.ID).Delete(model.RolesPermissions{}).Error
+		err := tx.Where("role_id", role.ID).Delete(&model.RolesPermissions{}).Error
 		if err != nil {
 			return err
 		}
