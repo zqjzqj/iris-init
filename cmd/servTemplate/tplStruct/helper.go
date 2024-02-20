@@ -145,6 +145,7 @@ func RefStructField(_struct any) []Field {
 			}
 			if _f.IsSoftDelete { //软删除的归纳到结构里去
 				_f.IsStruct = true
+				_f.OnlyRead = true
 			}
 			//必须是model的 结构才获取关联对象的数据
 			if (_f.IsStruct || _f.IsSlice) && strings.Contains(ref.Field(i).Type.String(), "model.") {
