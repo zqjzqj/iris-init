@@ -14,8 +14,8 @@ type Field struct {
 	TypeOrigin      string
 	Label           string
 	ValidateLabel   string //主要用于service的验证标签
-	Unique          string
-	Index           string //用于生成 如 GetByField() []model.Model 这样的方法
+	Unique          []string
+	Index           []string //用于生成 如 GetByField() []model.Model 这样的方法
 	OnlyRead        bool
 	Search          bool
 	IsNumber        bool
@@ -34,11 +34,13 @@ func GetIndexFields(fields []Field) map[string][]Field {
 		if v.IsSoftDelete {
 			continue
 		}
-		if v.Index != "" {
-			if r[v.Index] == nil {
-				r[v.Index] = make([]Field, 0, 3)
+		if len(v.Index) > 0 {
+			for _, indexVal := range v.Index {
+				if r[indexVal] == nil {
+					r[indexVal] = make([]Field, 0, 3)
+				}
+				r[indexVal] = append(r[indexVal], v)
 			}
-			r[v.Index] = append(r[v.Index], v)
 		}
 	}
 	if len(r) == 0 {
@@ -62,11 +64,13 @@ func GetUniqueFields(fields []Field) map[string][]Field {
 		if v.IsSoftDelete { //软删除不需要作为字段查询，修改等条件
 			continue
 		}
-		if v.Unique != "" {
-			if r[v.Unique] == nil {
-				r[v.Unique] = make([]Field, 0, 3)
+		if len(v.Unique) > 0 {
+			for _, uniqueVal := range v.Unique {
+				if r[uniqueVal] == nil {
+					r[uniqueVal] = make([]Field, 0, 3)
+				}
+				r[uniqueVal] = append(r[uniqueVal], v)
 			}
-			r[v.Unique] = append(r[v.Unique], v)
 		}
 	}
 	if len(r) == 0 {
@@ -181,10 +185,10 @@ func RefStructField(_struct any) []Field {
 				_f.Label = _f.Name
 			}
 			if _tag.Get("Unique") != "" {
-				_f.Unique = _tag.Get("Unique")
+				_f.Unique = append(_f.Unique, _tag.Get("Unique"))
 			}
 			if _tag.Get("Index") != "" {
-				_f.Index = _tag.Get("Index")
+				_f.Index = append(_f.Index, _tag.Get("Index"))
 			}
 			if _tag.Get("OnlyRead") == "true" {
 				_f.OnlyRead = true
@@ -201,7 +205,10 @@ func RefStructField(_struct any) []Field {
 func GetValidateStrByGormLabel(gormLabel string) GormLabelStruct {
 	_gormLabel := strings.Split(gormLabel, ";")
 	var required = true
-	gormLabelStruct := GormLabelStruct{}
+	gormLabelStruct := GormLabelStruct{
+		Index:  []string{},
+		Unique: []string{},
+	}
 	for _, v := range _gormLabel {
 		if strings.HasPrefix(v, "size:") {
 			gormLabelStruct.Validate += "max=" + strings.TrimLeft(v, "size:") + ","
@@ -225,9 +232,9 @@ func GetValidateStrByGormLabel(gormLabel string) GormLabelStruct {
 		if strings.HasPrefix(v, "index:") {
 			_index := strings.Split(v, ",")
 			if strings.Contains(v, ",unique") { //唯一索引
-				gormLabelStruct.Unique = strings.TrimLeft(_index[0], "index:")
+				gormLabelStruct.Unique = append(gormLabelStruct.Unique, strings.TrimLeft(_index[0], "index:"))
 			} else { //普通的索引
-				gormLabelStruct.Index = strings.TrimLeft(_index[0], "index:")
+				gormLabelStruct.Index = append(gormLabelStruct.Index, strings.TrimLeft(_index[0], "index:"))
 			}
 		}
 	}
@@ -242,8 +249,8 @@ func GetValidateStrByGormLabel(gormLabel string) GormLabelStruct {
 
 type GormLabelStruct struct {
 	Validate   string
-	Unique     string
-	Index      string
+	Unique     []string
+	Index      []string
 	Comment    string
 	IsPk       bool
 	References string
