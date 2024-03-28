@@ -21,7 +21,7 @@ func ({{.Alias}}Ctrl {{.Model}}Controller) BeforeActivation(b mvc.BeforeActivati
     b.Handle(http.MethodPost, "delete", "PostDelete").SetName("{{.Model}}@{{.Model}}List:删除")
 }
 
-func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) any {
+func ({{.Alias}}Ctrl {{.Model}}Controller) GetList(ctx iris.Context) {{- if .View}}any{{- else}}appWeb.ResponseFormat{{- end}} {
     {{.Alias}}Serv := services.New{{.Model}}Service()
     {{.Alias}}, pager := {{.Alias}}Serv.ListPage(ctx)
     {{- if .View}}
