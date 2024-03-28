@@ -118,6 +118,17 @@ func ({{$.Alias}}Serv {{$.Model}}Service) GetBy{{$key}}({{- range $item}}{{.Name
     return {{$.Alias}}Serv.repo.GetBy{{$key}}({{- range $item}}{{.NameFirstLower}}, {{- end}} _select...)
 }
 
+func ({{$.Alias}}Serv {{$.Model}}Service) GetBy{{$key}}Lock({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) (model.{{$.Model}}, repoComm.ReleaseLock) {
+    var v reflect.Value
+    {{- range $item}}
+    v = reflect.ValueOf({{.NameFirstLower}})
+    if !v.IsValid() { // 值不存在
+         return model.{{$.Model}}{}, nil;
+    }
+    {{- end}}
+    return {{$.Alias}}Serv.repo.GetBy{{$key}}Lock({{- range $item}}{{.NameFirstLower}}, {{- end}} _select...)
+}
+
 func ({{$.Alias}}Serv {{$.Model}}Service) Check{{$key}}Valid({{$.Alias}} model.{{$.Model}}) error {
     var v reflect.Value
     {{- range $item}}

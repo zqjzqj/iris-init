@@ -183,6 +183,27 @@ func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) GetBy{{$key}}({{- range $item}}{{.Na
 	return {{$.Alias}}
 }
 
+func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) GetBy{{$key}}Lock({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) (model.{{$.Model}}, repoComm.ReleaseLock) {
+    if !orm.IsBeginTransaction({{$.Alias}}Repo.Orm) {
+		panic("{{$.Alias}}Repo.GetBy{{$key}}Lock is must beginTransaction")
+	}
+    {{$.Alias}} := model.{{$.Model}}{}
+	tx := {{$.Alias}}Repo.Orm.
+	{{- range $index, $val := $item}}
+	{{- if eq $index (sub (len $item) 1)}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}})
+	{{- else}}
+	Where("{{$val.NameSnake}}", {{$val.NameFirstLower}}).
+	{{- end}}
+	{{- end}}
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	orm.LockForUpdate(tx).Find(&{{$.Alias}})
+	//这里返回一个空的释放锁方法 因为gorm在事务提交或回滚后会自动释放
+    return {{$.Alias}}, func() {}
+}
+
 
 func ({{$.Alias}}Repo *{{$.Model}}RepoGorm) DeleteBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}}) (rowsAffected int64, err error) {
 	tx := {{$.Alias}}Repo.Orm.
