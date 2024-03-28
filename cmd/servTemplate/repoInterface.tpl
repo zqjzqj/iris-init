@@ -20,6 +20,7 @@ type {{.Model}}Repo interface {
 	GetIDByWhere(where {{.Model}}SearchWhere) []{{.Pk.Type}}
     {{- range $key, $item := .UniqueField}}
     GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) model.{{$.Model}}
+    GetBy{{$key}}Lock({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) (model.{{$.Model}}, repoComm.ReleaseLock)
     {{- end}}
     {{- range $key, $item := .IndexField}}
     GetBy{{$key}}({{- range $item}}{{.NameFirstLower}} {{.Type}}, {{- end}} _select ...string) []model.{{$.Model}}
