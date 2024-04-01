@@ -35,9 +35,13 @@ type {{.Model}}Service struct {
 	repo repoInterface.{{.Model}}Repo
 }
 
+//留一个空的service层空方法 用于自定义或覆盖repo的方法
+func ({{.Alias}}Serv {{.Model}}Service) SearchWhere(ctx iris.Context, where *repoInterface.{{.Model}}SearchWhere) {}
+
 func ({{.Alias}}Serv {{.Model}}Service) ListPage(ctx iris.Context) ([]model.{{.Model}}, *global.Pager) {
 	where := repoInterface.{{.Model}}SearchWhere{}
 	_ = ctx.ReadQuery(&where)
+	{{.Alias}}Serv.SearchWhere(ctx, &where)
 	where.SelectParams = repoComm.SelectFrom{
         OrderBy: []repoComm.OrderByParams{
             {
