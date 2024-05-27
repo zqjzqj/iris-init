@@ -37,6 +37,7 @@ type Admin struct {
 	Desc                         string `gorm:"type:text;comment:描述简介"`
 	mField.FieldsTimeUnixModel   `mapstructure:",squash"`
 	mField.FieldsExtendsJsonType `mapstructure:",squash"`
+	RolesAdmin                   []RolesAdmin `gorm:"foreignKey:AdminID;references:ID;"`
 
 	RolesIDSlices []string `gorm:"-"`
 	Permissions   []string `gorm:"-"`
@@ -90,10 +91,28 @@ func (adm Admin) TokenValid() bool {
 	return adm.TokenStatus == global.IsYes
 }
 
+func (adm *Admin) SetRolesNameByRolesAdm() {
+	rolesAdm_len := len(adm.RolesAdmin)
+	if rolesAdm_len == 0 {
+		return
+	}
+	if adm.IsRootRole() {
+		//去掉多余的权限ID
+		adm.Permissions = []string{RoleAdmin}
+		adm.RolesName = []string{RoleAdminName}
+	} else {
+		adm.RolesName = make([]string, 0, rolesAdm_len)
+	}
+	for _, v := range adm.RolesAdmin {
+		adm.RolesName = append(adm.RolesName, v.Role.Name)
+	}
+}
+
 func (adm Admin) ShowMap() map[string]interface{} {
 	if adm.IsRootRole() {
 		adm.Permissions = nil
 	}
+	adm.SetRolesNameByRolesAdm()
 	r := map[string]interface{}{
 		"ID":            adm.ID,
 		"Phone":         adm.Phone.String,
