@@ -74,6 +74,9 @@ func (adm *Admin) RefreshRoleIDSlices() []string {
 }
 
 func (adm *Admin) IsRootRole() bool {
+	if adm.IsRootAccount() { //系统内置的root账户
+		return true
+	}
 	if adm.RolesIDSlices == nil {
 		adm.RefreshRoleIDSlices()
 	}
@@ -93,7 +96,7 @@ func (adm Admin) TokenValid() bool {
 
 func (adm *Admin) SetRolesNameByRolesAdm() {
 	rolesAdm_len := len(adm.RolesAdmin)
-	if rolesAdm_len == 0 {
+	if rolesAdm_len == 0 && !adm.IsRootRole() {
 		return
 	}
 	if adm.IsRootRole() {
