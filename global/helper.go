@@ -37,6 +37,15 @@ type ShuffleType interface {
 // 上传文件序号
 var UploadFileNum uint64
 
+func GetHttpBodyBytes(_url string) ([]byte, error) {
+	resp, err := http.Get(_url)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = resp.Body.Close() }()
+	return io.ReadAll(resp.Body)
+}
+
 func RemoveFile(path string, level int) error {
 	err := os.Remove(path)
 	if err != nil {
