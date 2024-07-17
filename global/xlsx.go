@@ -3,12 +3,15 @@ package global
 import (
 	"fmt"
 	"github.com/xuri/excelize/v2"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 	"os"
+	"strings"
 )
 
 // GenerateXLSX 生成xlsx文件，参数titles和data分别对应xlsx文件的标题和内容
-func GenerateXLSX(titles map[string]string, data []map[string]interface{}) (*excelize.File, error) {
+func GenerateXLSX(titles map[string]string, data []map[string]interface{}, autoImg bool) (*excelize.File, error) {
 	// 创建xlsx文件
 	f := excelize.NewFile()
 
@@ -75,8 +78,8 @@ func GenerateXLSX(titles map[string]string, data []map[string]interface{}) (*exc
 		},
 		Fill: excelize.Fill{},
 		Font: &excelize.Font{
-			Bold: true,
-			Size: 14,
+			Bold: false,
+			Size: 13,
 		},
 		Alignment: &excelize.Alignment{
 			Horizontal: "center",
@@ -108,7 +111,23 @@ func GenerateXLSX(titles map[string]string, data []map[string]interface{}) (*exc
 	for i, row := range data {
 		for k, v := range row {
 			cell := fmt.Sprintf("%s%d", k, i+2)
-			_ = f.SetCellValue("Sheet1", cell, v)
+			v_str, ok := v.(string)
+			if autoImg && ok && strings.HasPrefix(v_str, "http") { //这里直接当成网络图片处理
+				_bytes, _err := GetHttpBodyBytes(v_str)
+				if _err == nil {
+					err = f.AddPictureFromBytes("Sheet1", cell, &excelize.Picture{
+						Extension: ".jpg",
+						File:      _bytes,
+						Format: &excelize.GraphicOptions{
+							AutoFit: true,
+						},
+					})
+				} else {
+					_ = f.SetCellValue("Sheet1", cell, v)
+				}
+			} else {
+				_ = f.SetCellValue("Sheet1", cell, v)
+			}
 			_ = f.SetCellStyle("Sheet1", cell, cell, cellStyle)
 		}
 	}

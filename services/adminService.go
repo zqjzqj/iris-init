@@ -86,7 +86,7 @@ func (adminServ AdminService) ListPage(ctx iris.Context) ([]model.Admin, *global
 		},
 		Preload: []repoComm.PreloadParams{
 			{
-				Query: "Organizer",
+				Query: "RolesAdmin.Role",
 			},
 		},
 	}
@@ -359,7 +359,7 @@ func (admServ AdminService) ShowMapList(adm []model.Admin) []map[string]interfac
 	_adm := []map[string]interface{}{}
 	for _, v := range adm {
 		//刷新一下角色名称
-		admServ.RefreshPermissions(&v, false, false)
+		//admServ.RefreshPermissions(&v, false, false)
 		_adm = append(_adm, v.ShowMap())
 	}
 	return _adm
