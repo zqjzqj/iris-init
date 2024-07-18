@@ -2,10 +2,12 @@ package global
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/xuri/excelize/v2"
 	_ "image/jpeg"
 	_ "image/png"
 	"io"
+	"iris-init/logs"
 	"os"
 	"strings"
 )
@@ -154,28 +156,47 @@ func ParseXLSXByReader(reader io.Reader) ([]map[string]string, error) {
 	}()
 	// 获取第一个Sheet
 	sheetName := f.GetSheetName(0)
-	rows, err := f.GetRows(sheetName)
+	rows, err := f.Rows(sheetName)
 	if err != nil {
 		return nil, err
 	}
+	defer func() { _ = rows.Close() }()
 	// 获取表头
 	var headers []string
-	if len(rows) > 0 {
-		for _, cell := range rows[0] {
-			headers = append(headers, cell)
+	if rows.Next() {
+		headers, err = rows.Columns()
+		if err != nil {
+			return nil, err
 		}
 	}
 
-	// 获取数据
 	var data []map[string]string
-	for _, row := range rows[1:] {
+	rowIndex := 1
+	for rows.Next() {
+		rowIndex++
 		rowData := make(map[string]string)
-		for i, cell := range row {
-			rowData[headers[i]] = cell
+
+		for colIndex := range headers {
+			cellName, err := excelize.CoordinatesToCellName(colIndex+1, rowIndex)
+			if err != nil {
+				return nil, err
+			}
+			// 检查单元格是否包含图片
+			pictures, err := f.GetPictures(sheetName, cellName)
+			if err == nil && pictures != nil {
+				//这里根据需要修改
+				filename := fmt.Sprintf("./static/uploads/%s", uuid.New().String()+"."+pictures[0].Extension)
+				err = UploadLocalByBytes(pictures[0].File, uuid.New().String()+"."+pictures[0].Extension)
+				if err != nil {
+					logs.PrintErr("upload xlsx img err ", err)
+				}
+				rowData[headers[colIndex]] = strings.TrimLeft(filename, ".")
+			} else {
+				rowData[headers[colIndex]], _ = f.GetCellValue(sheetName, cellName)
+			}
 		}
 		data = append(data, rowData)
 	}
-
 	return data, nil
 }
 
