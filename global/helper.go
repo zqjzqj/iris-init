@@ -37,6 +37,10 @@ type ShuffleType interface {
 // 上传文件序号
 var UploadFileNum uint64
 
+func IsZeroValue(i interface{}) bool {
+	return reflect.DeepEqual(i, reflect.Zero(reflect.TypeOf(i)).Interface())
+}
+
 func GetHttpBodyBytes(_url string) ([]byte, error) {
 	resp, err := http.Get(_url)
 	if err != nil {
