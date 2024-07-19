@@ -1,6 +1,7 @@
 package global
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/xuri/excelize/v2"
@@ -146,7 +147,7 @@ func GenerateXLSX(titles map[string]string, data []map[string]interface{}, autoI
 	return f, nil
 }
 
-func ParseXLSXByReader(reader io.Reader) ([]map[string]string, error) {
+func ParseXLSXByReader(reader io.Reader, autoImg bool) ([]map[string]string, error) {
 	f, err := excelize.OpenReader(reader)
 	if err != nil {
 		return nil, err
@@ -156,6 +157,32 @@ func ParseXLSXByReader(reader io.Reader) ([]map[string]string, error) {
 	}()
 	// 获取第一个Sheet
 	sheetName := f.GetSheetName(0)
+	if !autoImg {
+		rows, err := f.GetRows(sheetName)
+		if err != nil {
+			return nil, err
+		}
+		// 获取表头
+		var headers []string
+		if len(rows) > 0 {
+			for _, cell := range rows[0] {
+				headers = append(headers, cell)
+			}
+		}
+
+		// 获取数据
+		var data []map[string]string
+		for _, row := range rows[1:] {
+			rowData := make(map[string]string)
+			for i, cell := range row {
+				rowData[headers[i]] = cell
+			}
+			data = append(data, rowData)
+		}
+		return data, nil
+	}
+
+	//这里是需要解析图片的 使用另外一种方式读取
 	rows, err := f.Rows(sheetName)
 	if err != nil {
 		return nil, err
@@ -184,13 +211,13 @@ func ParseXLSXByReader(reader io.Reader) ([]map[string]string, error) {
 			// 检查单元格是否包含图片
 			pictures, err := f.GetPictures(sheetName, cellName)
 			if err == nil && pictures != nil {
-				//这里根据需要修改
-				filename := fmt.Sprintf("./static/uploads/%s", uuid.New().String()+"."+pictures[0].Extension)
-				err = UploadLocalByBytes(pictures[0].File, uuid.New().String()+"."+pictures[0].Extension)
+				imgUrl, err := CosObjectPutByBuf(context.TODO(),
+					uuid.New().String()+"."+pictures[0].Extension,
+					bytes.NewReader(pictures[0].File), nil)
 				if err != nil {
 					logs.PrintErr("upload xlsx img err ", err)
 				}
-				rowData[headers[colIndex]] = strings.TrimLeft(filename, ".")
+				rowData[headers[colIndex]] = imgUrl
 			} else {
 				rowData[headers[colIndex]], _ = f.GetCellValue(sheetName, cellName)
 			}
@@ -200,7 +227,7 @@ func ParseXLSXByReader(reader io.Reader) ([]map[string]string, error) {
 	return data, nil
 }
 
-func ParseXLSX(path string) ([]map[string]string, error) {
+func ParseXLSX(path string, autoImg bool) ([]map[string]string, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -208,5 +235,5 @@ func ParseXLSX(path string) ([]map[string]string, error) {
 	defer func() {
 		_ = f.Close()
 	}()
-	return ParseXLSXByReader(f)
+	return ParseXLSXByReader(f, autoImg)
 }
