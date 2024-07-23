@@ -1007,7 +1007,8 @@ func (adminRepo *AdminRepoGorm) ScanByWhere(where repoInterface.AdminSearchWhere
 func (adminRepo *AdminRepoGorm) ScanByOrWhere(dest any, where ...repoInterface.AdminSearchWhere) error {
 	tx := adminRepo.Orm.Model(model.Admin{})
 	for _, v := range where {
-		tx.Or(adminRepo.GetSearchWhereTx(v, tx))
+		tx.Or(adminRepo.GetSearchWhereTx(v, nil))
+		v.SelectParams.SetTxGorm(tx)
 	}
 	return tx.Find(dest).Error
 }

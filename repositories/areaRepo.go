@@ -580,7 +580,8 @@ func (areaRepo *AreaRepoGorm) ScanByWhere(where repoInterface.AreaSearchWhere, d
 func (areaRepo *AreaRepoGorm) ScanByOrWhere(dest any, where ...repoInterface.AreaSearchWhere) error {
 	tx := areaRepo.Orm.Model(model.Area{})
 	for _, v := range where {
-		tx.Or(areaRepo.GetSearchWhereTx(v, tx))
+		tx.Or(areaRepo.GetSearchWhereTx(v, nil))
+		v.SelectParams.SetTxGorm(tx)
 	}
 	return tx.Find(dest).Error
 }

@@ -1,14 +1,11 @@
 package global
 
 import (
-	"bytes"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/xuri/excelize/v2"
 	_ "image/jpeg"
 	_ "image/png"
 	"io"
-	"iris-init/logs"
 	"os"
 	"strings"
 )
@@ -211,13 +208,13 @@ func ParseXLSXByReader(reader io.Reader, autoImg bool) ([]map[string]string, err
 			// 检查单元格是否包含图片
 			pictures, err := f.GetPictures(sheetName, cellName)
 			if err == nil && pictures != nil {
-				imgUrl, err := CosObjectPutByBuf(context.TODO(),
+				/*imgUrl, err := CosObjectPutByBuf(context.TODO(),
 					uuid.New().String()+"."+pictures[0].Extension,
 					bytes.NewReader(pictures[0].File), nil)
 				if err != nil {
 					logs.PrintErr("upload xlsx img err ", err)
 				}
-				rowData[headers[colIndex]] = imgUrl
+				rowData[headers[colIndex]] = imgUrl*/ //缓存自己的上传方法
 			} else {
 				rowData[headers[colIndex]], _ = f.GetCellValue(sheetName, cellName)
 			}
