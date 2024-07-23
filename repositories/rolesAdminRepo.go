@@ -368,7 +368,7 @@ func (rolesAdminRepo *RolesAdminRepoGorm) ScanByWhere(where repoInterface.RolesA
 func (rolesAdminRepo *RolesAdminRepoGorm) ScanByOrWhere(dest any, where ...repoInterface.RolesAdminSearchWhere) error {
 	tx := rolesAdminRepo.Orm.Model(model.RolesAdmin{})
 	for _, v := range where {
-		tx.Or(rolesAdminRepo.GetSearchWhereTx(v, nil))
+		tx.Or(rolesAdminRepo.GetSearchWhereTx(v, tx))
 	}
 	return tx.Find(dest).Error
 }
