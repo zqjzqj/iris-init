@@ -606,7 +606,7 @@ func (permissionsRepo *PermissionsRepoGorm) ScanByWhere(where repoInterface.Perm
 func (permissionsRepo *PermissionsRepoGorm) ScanByOrWhere(dest any, where ...repoInterface.PermissionsSearchWhere) error {
 	tx := permissionsRepo.Orm.Model(model.Permissions{})
 	for _, v := range where {
-		tx.Or(permissionsRepo.GetSearchWhereTx(v, nil))
+		tx.Or(permissionsRepo.GetSearchWhereTx(v, tx))
 	}
 	return tx.Find(dest).Error
 }

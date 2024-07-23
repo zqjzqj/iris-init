@@ -409,7 +409,7 @@ func (settingsRepo *SettingsRepoGorm) ScanByWhere(where repoInterface.SettingsSe
 func (settingsRepo *SettingsRepoGorm) ScanByOrWhere(dest any, where ...repoInterface.SettingsSearchWhere) error {
 	tx := settingsRepo.Orm.Model(model.Settings{})
 	for _, v := range where {
-		tx.Or(settingsRepo.GetSearchWhereTx(v, nil))
+		tx.Or(settingsRepo.GetSearchWhereTx(v, tx))
 	}
 	return tx.Find(dest).Error
 }
