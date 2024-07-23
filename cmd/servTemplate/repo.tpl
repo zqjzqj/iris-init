@@ -273,7 +273,7 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByWhere(where repoInterface.{{.Mod
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) ScanByOrWhere(dest any, where ...repoInterface.{{.Model}}SearchWhere) error {
 	tx := {{.Alias}}Repo.Orm.Model(model.{{.Model}}{})
 	for _, v := range where {
-		tx.Or({{.Alias}}Repo.GetSearchWhereTx(v, nil))
+		tx.Or({{.Alias}}Repo.GetSearchWhereTx(v, tx))
 	}
 	return tx.Find(dest).Error
 }
