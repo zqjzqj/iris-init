@@ -51,9 +51,6 @@ func GetReqToken(ctx iris.Context) string {
 		token = ctx.URLParamTrim(ReqTokenName)
 	}
 	if token == "" {
-		token = ctx.PostValue(ReqTokenName)
-	}
-	if token == "" {
 		//从session获取
 		if sess := sessions.Get(ctx); sess != nil {
 			t := sess.Get(ReqTokenName)
