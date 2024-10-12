@@ -116,6 +116,21 @@ func IsNumber(v any) bool {
 	}
 }
 
+func IntToLetter(n int) string {
+	if n < 1 {
+		return ""
+	}
+
+	result := ""
+	for n > 0 {
+		n-- // 调整范围到0-25
+		result = string('A'+(n%26)) + result
+		n /= 26
+	}
+
+	return result
+}
+
 func GetNewFilename(oldFilename string) string {
 	i := atomic.AddUint64(&UploadFileNum, 1)
 	return fmt.Sprintf("%s%d_%s", time.Now().Format(DateTimeFormatStrCompact), i, oldFilename)
@@ -518,6 +533,14 @@ func EllipsisString(s string, length int) string {
 		return s
 	}
 	return string(ss[:length]) + "..."
+}
+
+func Str2Time_DateOrTime(val string) (time.Time, error) {
+	t, err := Str2Time(time.DateTime, val)
+	if err == nil {
+		return t, nil
+	}
+	return Str2Time(time.DateOnly, val)
 }
 
 func Str2Time(layout, val string) (time.Time, error) {
