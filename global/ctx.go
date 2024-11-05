@@ -22,6 +22,10 @@ func NewContext(parent context.Context) *Context {
 	}
 }
 
+func ResetGlobalCtx() {
+	globalContext = NewContext(context.Background())
+}
+
 func GetGlobalCtx() context.Context {
 	return globalContext.Ctx
 }
