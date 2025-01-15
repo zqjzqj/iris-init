@@ -16,14 +16,14 @@ func NewAdminRepo() repoInterface.AdminRepo {
 	return &AdminRepoGorm{repoComm.NewRepoGorm()}
 }
 
-// 该方法需要自己去完善 GetSearchWhereTx方法内部
+//该方法需要自己去完善 GetSearchWhereTx方法内部
 func (adminRepo *AdminRepoGorm) GetByWhere(where repoInterface.AdminSearchWhere) model.Admin {
 	admin := model.Admin{}
 	_ = adminRepo.GetSearchWhereTx(where, nil).Limit(1).Find(&admin)
 	return admin
 }
 
-// 该方法需要自己去完善 GetSearchWhereTx方法内部
+//该方法需要自己去完善 GetSearchWhereTx方法内部
 func (adminRepo *AdminRepoGorm) GetIDByWhere(where repoInterface.AdminSearchWhere) []uint64 {
 	var ID []uint64
 	tx := adminRepo.GetSearchWhereTx(where, nil)
@@ -43,13 +43,13 @@ func (adminRepo *AdminRepoGorm) SaveOmit(admin *model.Admin, _omit ...string) er
 	return repoComm.SaveModelOmit(adminRepo.Orm, admin, _omit...)
 }
 
-// 这里因为gorm的缘故 传入的admin主键必须不为空
+//这里因为gorm的缘故 传入的admin主键必须不为空
 func (adminRepo *AdminRepoGorm) Delete(admin model.Admin) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.Delete(admin)
 	return tx.RowsAffected, tx.Error
 }
 
-// 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构AdminRepoGorm以外使用
+//为了避免更换源之后的一些麻烦 该方法不建议在仓库结构AdminRepoGorm以外使用
 func (adminRepo *AdminRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.Where(query, args...).Delete(&model.Admin{})
 	return tx.RowsAffected, tx.Error
@@ -792,6 +792,86 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 		}
 	}
 	//需要额外调整
+	if where.RolesAdmin != "" {
+		tx.Where("roles_admin", where.RolesAdmin)
+	}
+	if where.RolesAdminNeq != "" {
+		tx.Where("roles_admin <> ?", where.RolesAdminNeq)
+	}
+	if where.RolesAdminNull {
+		tx.Where("roles_admin is null")
+	}
+
+	if len(where.RolesAdminIn) > 0 {
+		tx.Where("roles_admin in ?", where.RolesAdminIn)
+	}
+
+	if where.RolesAdminNotNull {
+		tx.Where("roles_admin is not null")
+	}
+	if where.RolesAdminLt != "" {
+		tx.Where("roles_admin < ?", where.RolesAdminLt)
+	}
+	if where.RolesAdminElt != "" {
+		tx.Where("roles_admin <= ?", where.RolesAdminElt)
+	}
+	if where.RolesAdminGt != "" {
+		tx.Where("roles_admin > ?", where.RolesAdminGt)
+	}
+	if where.RolesAdminEgt != "" {
+		tx.Where("roles_admin >= ?", where.RolesAdminEgt)
+	}
+	if len(where.RolesAdminNotIn) > 0 {
+		tx.Where("roles_admin not in ?", where.RolesAdminNotIn)
+	}
+	if where.RolesAdminSort != "" {
+		if where.RolesAdminSort == "asc" {
+			tx.Order("roles_admin asc")
+		} else {
+			tx.Order("roles_admin desc")
+		}
+	}
+	//需要额外调整
+	if where.RolesIDSlices != "" {
+		tx.Where("roles_id_slices", where.RolesIDSlices)
+	}
+	if where.RolesIDSlicesNeq != "" {
+		tx.Where("roles_id_slices <> ?", where.RolesIDSlicesNeq)
+	}
+	if where.RolesIDSlicesNull {
+		tx.Where("roles_id_slices is null")
+	}
+
+	if len(where.RolesIDSlicesIn) > 0 {
+		tx.Where("roles_id_slices in ?", where.RolesIDSlicesIn)
+	}
+
+	if where.RolesIDSlicesNotNull {
+		tx.Where("roles_id_slices is not null")
+	}
+	if where.RolesIDSlicesLt != "" {
+		tx.Where("roles_id_slices < ?", where.RolesIDSlicesLt)
+	}
+	if where.RolesIDSlicesElt != "" {
+		tx.Where("roles_id_slices <= ?", where.RolesIDSlicesElt)
+	}
+	if where.RolesIDSlicesGt != "" {
+		tx.Where("roles_id_slices > ?", where.RolesIDSlicesGt)
+	}
+	if where.RolesIDSlicesEgt != "" {
+		tx.Where("roles_id_slices >= ?", where.RolesIDSlicesEgt)
+	}
+	if len(where.RolesIDSlicesNotIn) > 0 {
+		tx.Where("roles_id_slices not in ?", where.RolesIDSlicesNotIn)
+	}
+	if where.RolesIDSlicesSort != "" {
+		if where.RolesIDSlicesSort == "asc" {
+			tx.Order("roles_id_slices asc")
+		} else {
+			tx.Order("roles_id_slices desc")
+		}
+	}
+	//需要额外调整
 	if where.Permissions != "" {
 		tx.Where("permissions", where.Permissions)
 	}
@@ -875,7 +955,7 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 	return tx
 }
 
-// 返回数据总数
+//返回数据总数
 func (adminRepo *AdminRepoGorm) GetTotalCount(where repoInterface.AdminSearchWhere) int64 {
 	tx := adminRepo.GetSearchWhereTx(where, nil)
 	var r int64
@@ -910,6 +990,21 @@ func (adminRepo *AdminRepoGorm) GetByPhone(phone string, _select ...string) mode
 	return admin
 }
 
+func (adminRepo *AdminRepoGorm) GetByPhoneLock(phone string, _select ...string) (model.Admin, repoComm.ReleaseLock) {
+	if !orm.IsBeginTransaction(adminRepo.Orm) {
+		panic("adminRepo.GetByPhoneLock is must beginTransaction")
+	}
+	admin := model.Admin{}
+	tx := adminRepo.Orm.
+		Where("phone", phone)
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	orm.LockForUpdate(tx).Find(&admin)
+	//这里返回一个空的释放锁方法 因为gorm在事务提交或回滚后会自动释放
+	return admin, func() {}
+}
+
 func (adminRepo *AdminRepoGorm) DeleteByPhone(phone string) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.
 		Where("phone", phone)
@@ -927,6 +1022,21 @@ func (adminRepo *AdminRepoGorm) GetByToken(token string, _select ...string) mode
 	return admin
 }
 
+func (adminRepo *AdminRepoGorm) GetByTokenLock(token string, _select ...string) (model.Admin, repoComm.ReleaseLock) {
+	if !orm.IsBeginTransaction(adminRepo.Orm) {
+		panic("adminRepo.GetByTokenLock is must beginTransaction")
+	}
+	admin := model.Admin{}
+	tx := adminRepo.Orm.
+		Where("token", token)
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	orm.LockForUpdate(tx).Find(&admin)
+	//这里返回一个空的释放锁方法 因为gorm在事务提交或回滚后会自动释放
+	return admin, func() {}
+}
+
 func (adminRepo *AdminRepoGorm) DeleteByToken(token string) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.
 		Where("token", token)
@@ -942,6 +1052,21 @@ func (adminRepo *AdminRepoGorm) GetByUsername(username string, _select ...string
 	}
 	tx.Find(&admin)
 	return admin
+}
+
+func (adminRepo *AdminRepoGorm) GetByUsernameLock(username string, _select ...string) (model.Admin, repoComm.ReleaseLock) {
+	if !orm.IsBeginTransaction(adminRepo.Orm) {
+		panic("adminRepo.GetByUsernameLock is must beginTransaction")
+	}
+	admin := model.Admin{}
+	tx := adminRepo.Orm.
+		Where("username", username)
+	if len(_select) > 0 {
+		tx = tx.Select(_select)
+	}
+	orm.LockForUpdate(tx).Find(&admin)
+	//这里返回一个空的释放锁方法 因为gorm在事务提交或回滚后会自动释放
+	return admin, func() {}
 }
 
 func (adminRepo *AdminRepoGorm) DeleteByUsername(username string) (rowsAffected int64, err error) {

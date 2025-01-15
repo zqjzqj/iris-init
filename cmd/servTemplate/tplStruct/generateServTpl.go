@@ -31,6 +31,7 @@ type ServTpl struct {
 	viewListTplPath      string
 	viewItemTplPath      string
 	Force                bool
+	CoverRepo            bool
 	ModelField           []Field
 	UniqueField          map[string][]Field
 	IndexField           map[string][]Field
@@ -176,7 +177,7 @@ func (servTpl ServTpl) GenerateRepoInterface() error {
 		"UniqueField": servTpl.UniqueField,
 		"IndexField":  servTpl.IndexField,
 		"Pk":          servTpl.Pk,
-	})
+	}, servTpl.CoverRepo)
 }
 
 func (servTpl ServTpl) GenerateRepo() error {
@@ -185,7 +186,7 @@ func (servTpl ServTpl) GenerateRepo() error {
 		"UniqueField": servTpl.UniqueField,
 		"IndexField":  servTpl.IndexField,
 		"Pk":          servTpl.Pk,
-	})
+	}, servTpl.CoverRepo)
 }
 
 func (servTpl ServTpl) GenerateService() error {
@@ -195,14 +196,14 @@ func (servTpl ServTpl) GenerateService() error {
 		"IndexField":      servTpl.IndexField,
 		"ReferencesField": servTpl.ReferencesField,
 		"Pk":              servTpl.Pk,
-	})
+	}, false)
 }
 
 func (servTpl ServTpl) GenerateModel() error {
 	return servTpl.generateFile(servTpl.modelTplPath, servTpl.modelPath, map[string]any{
 		"ModelField": servTpl.ModelField,
 		"TableName":  global.SnakeString(servTpl.Model),
-	})
+	}, false)
 }
 
 func (servTpl ServTpl) GenerateController() error {
@@ -216,7 +217,7 @@ func (servTpl ServTpl) GenerateController() error {
 	return servTpl.generateFile(servTpl.controllerTplPath, servTpl.controllerPath, map[string]any{
 		"Package": _package,
 		"View":    servTpl.ViewDir,
-	})
+	}, false)
 }
 
 func (servTpl ServTpl) GenerateView() error {
@@ -232,17 +233,17 @@ func (servTpl ServTpl) GenerateView() error {
 	err := servTpl.generateFile(servTpl.viewListTplPath, viewList, map[string]any{
 		"View":       servTpl.ViewDir,
 		"ModelField": servTpl.ModelField,
-	})
+	}, false)
 	if err != nil {
 		return err
 	}
 	return servTpl.generateFile(servTpl.viewItemTplPath, viewItem, map[string]any{
 		"View":       servTpl.ViewDir,
 		"ModelField": servTpl.ModelField,
-	})
+	}, false)
 }
 
-func (servTpl ServTpl) generateFile(tplPath, filePath string, data map[string]any) error {
+func (servTpl ServTpl) generateFile(tplPath, filePath string, data map[string]any, cover bool) error {
 	_riTplBytes, err := os.ReadFile(tplPath)
 	if err != nil {
 		return err
@@ -253,19 +254,22 @@ func (servTpl ServTpl) generateFile(tplPath, filePath string, data map[string]an
 	if err != nil {
 		return err
 	}
-	if !servTpl.Force {
-		if global.FileExists(filePath) {
-			return sErr.New("tpl file exists " + filePath)
-		}
-	} else {
-		var i = 0
-		for {
-			filePath = fmt.Sprintf("%s/_%d_%s.go", path.Dir(filePath), i+1, path.Base(filePath))
-			if !global.FileExists(filePath) {
-				break
+	if !cover {
+		if !servTpl.Force {
+			if global.FileExists(filePath) {
+				return sErr.New("tpl file exists " + filePath)
+			}
+		} else {
+			var i = 0
+			for {
+				filePath = fmt.Sprintf("%s/_%d_%s.go", path.Dir(filePath), i+1, path.Base(filePath))
+				if !global.FileExists(filePath) {
+					break
+				}
 			}
 		}
 	}
+
 	f, err := os.Create(filePath)
 	defer func() { _ = f.Close() }()
 	if err != nil {

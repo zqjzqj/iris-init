@@ -17,6 +17,7 @@ var alias = flag.String("alias", "", "alias")
 var appRoot = flag.String("appRoot", "", "appRoot项目路径，默认为当前目录") //rollback
 var ctrDir = flag.String("ctrDir", "", "控制器生成的子目录，默认为空")        //rollback
 var force = flag.Bool("force", false, "重名是否强制生成， 为true则会选择一个新的文件名生成，但不会覆盖已存在的文件")
+var coverRepo = flag.Bool("coverRepo", false, "是否覆盖repo文件")
 
 func init() {
 	flag.Parse()
@@ -24,7 +25,7 @@ func init() {
 }
 
 func main() {
-	if *createModel != "" {
+	if *createModel != "" { //创建model
 		modelTpl := tplStruct.NewModelTpl(*createModel, *tableName)
 		err := modelTpl.GenerateFile()
 		if err != nil {
@@ -33,7 +34,7 @@ func main() {
 		logs.PrintlnSuccess("create model ok...")
 		return
 	}
-	if *migrate != "" {
+	if *migrate != "" { //创建迁移
 		models := strings.Split(*migrate, ",")
 		migrateTpl := tplStruct.NewMigrateTpl(models)
 		err := migrateTpl.GenerateFile()
@@ -46,7 +47,7 @@ func main() {
 		}
 	}
 	models := strings.Split(*model, ",")
-	for _, modelItem := range models {
+	for _, modelItem := range models { //根据model创建 repo server controller
 		servTpl := tplStruct.NewServTpl(modelItem, *alias, *ctrDir)
 		if *appRoot != "" {
 			servTpl.SetAppPath(*appRoot)
@@ -55,6 +56,7 @@ func main() {
 			servTpl.SetViewDir(*view)
 		}
 		servTpl.Force = *force
+		servTpl.CoverRepo = *coverRepo
 		_ = servTpl.GenerateFile(true)
 		if *_model != "" {
 			err := servTpl.GenerateModel()

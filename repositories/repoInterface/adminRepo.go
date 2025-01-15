@@ -19,8 +19,11 @@ type AdminRepo interface {
 	GetByWhere(where AdminSearchWhere) model.Admin
 	GetIDByWhere(where AdminSearchWhere) []uint64
 	GetByPhone(phone string, _select ...string) model.Admin
+	GetByPhoneLock(phone string, _select ...string) (model.Admin, repoComm.ReleaseLock)
 	GetByToken(token string, _select ...string) model.Admin
+	GetByTokenLock(token string, _select ...string) (model.Admin, repoComm.ReleaseLock)
 	GetByUsername(username string, _select ...string) model.Admin
+	GetByUsernameLock(username string, _select ...string) (model.Admin, repoComm.ReleaseLock)
 	GetByRealName(realName string, _select ...string) []model.Admin
 	GetByStatus(status uint8, _select ...string) []model.Admin
 	DeleteByPhone(phone string) (rowsAffected int64, err error)
@@ -232,6 +235,28 @@ type AdminSearchWhere struct {
 	UpdatedAtNotIn       []int64 // not in查询
 	UpdatedAtIn          []int64 // in查询
 	UpdatedAtSort        string  // 排序
+	RolesAdmin           string
+	RolesAdminNeq        string //不等于条件
+	RolesAdminNull       bool
+	RolesAdminNotNull    bool
+	RolesAdminLt         string               // RolesAdmin < RolesAdminLt
+	RolesAdminGt         string               // RolesAdmin > RolesAdminGt
+	RolesAdminElt        string               // RolesAdmin <= RolesAdminElt
+	RolesAdminEgt        string               // RolesAdmin >= RolesAdminEgt
+	RolesAdminNotIn      [][]model.RolesAdmin // not in查询
+	RolesAdminIn         [][]model.RolesAdmin // in查询
+	RolesAdminSort       string               // 排序
+	RolesIDSlices        string
+	RolesIDSlicesNeq     string //不等于条件
+	RolesIDSlicesNull    bool
+	RolesIDSlicesNotNull bool
+	RolesIDSlicesLt      string     // RolesIDSlices < RolesIDSlicesLt
+	RolesIDSlicesGt      string     // RolesIDSlices > RolesIDSlicesGt
+	RolesIDSlicesElt     string     // RolesIDSlices <= RolesIDSlicesElt
+	RolesIDSlicesEgt     string     // RolesIDSlices >= RolesIDSlicesEgt
+	RolesIDSlicesNotIn   [][]string // not in查询
+	RolesIDSlicesIn      [][]string // in查询
+	RolesIDSlicesSort    string     // 排序
 	Permissions          string
 	PermissionsNeq       string //不等于条件
 	PermissionsNull      bool
