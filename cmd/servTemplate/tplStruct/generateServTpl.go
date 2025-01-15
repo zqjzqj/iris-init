@@ -254,7 +254,7 @@ func (servTpl ServTpl) generateFile(tplPath, filePath string, data map[string]an
 	if err != nil {
 		return err
 	}
-	if !cover {
+	if !cover { //如果没有设置覆盖的情况
 		if !servTpl.Force {
 			if global.FileExists(filePath) {
 				return sErr.New("tpl file exists " + filePath)
