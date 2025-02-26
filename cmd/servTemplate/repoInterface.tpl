@@ -44,6 +44,7 @@ type {{.Model}}SearchWhere struct {
             {{.Name}}Neq string //不等于条件
             {{.Name}}Null bool
             {{.Name}}NotNull bool
+            {{.Name}}Any any
             {{- if eq .Type "string" }}
                 {{.Name}}Like string
             {{- end}}

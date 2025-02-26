@@ -84,6 +84,9 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetSearchWhereTx(where repoInterface.{
    {{- range .ModelField}}
     {{- if eq .IsStruct false}}
        //需要额外调整
+        if where.{{.Name}}Any != nil {
+           tx.Where(where.{{.Name}}Any)
+       }
         if where.{{.Name}} != "" {
             tx.Where("{{.NameSnake}}", where.{{.Name}})
         }
