@@ -219,6 +219,9 @@ func GetValidateStrByGormLabel(gormLabel string) GormLabelStruct {
 		if strings.HasPrefix(v, "primarykey") {
 			gormLabelStruct.IsPk = true
 		}
+		if strings.Contains(v, "primary key") {
+			gormLabelStruct.IsPk = true
+		}
 		if strings.HasPrefix(v, "comment:") {
 			gormLabelStruct.Comment = strings.TrimLeft(v, "comment:")
 		}
