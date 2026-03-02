@@ -1,6 +1,6 @@
 package model
 
-import "iris-init/model/mField"
+import "9xbet_risk/model/mField"
 
 type Area struct {
 	mField.FieldsPk

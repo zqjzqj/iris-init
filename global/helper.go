@@ -1,6 +1,7 @@
 package global
 
 import (
+	"9xbet_risk/sErr"
 	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
@@ -9,7 +10,6 @@ import (
 	"github.com/google/uuid"
 	idvalidator "github.com/guanguans/id-validator"
 	"io"
-	"iris-init/sErr"
 	"math/rand"
 	"net/http"
 	"os"

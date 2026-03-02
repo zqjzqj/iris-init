@@ -2,12 +2,12 @@ package services
 
 import (
     "github.com/kataras/iris/v12"
-    "iris-init/global"
-    "iris-init/model"
-    "iris-init/repositories"
-    "iris-init/repositories/repoComm"
-    "iris-init/repositories/repoInterface"
-    "iris-init/sErr"
+    "9xbet_risk/global"
+    "9xbet_risk/model"
+    "9xbet_risk/repositories"
+    "9xbet_risk/repositories/repoComm"
+    "9xbet_risk/repositories/repoInterface"
+    "9xbet_risk/sErr"
     {{- $stop := false }}
     {{- range .UniqueField}}
      {{- if not $stop}}

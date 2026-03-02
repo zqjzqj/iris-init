@@ -1,8 +1,8 @@
 package repoInterface
 
 import (
-	"iris-init/model"
-	"iris-init/repositories/repoComm"
+	"9xbet_risk/model"
+	"9xbet_risk/repositories/repoComm"
 )
 
 type {{.Model}}Repo interface {

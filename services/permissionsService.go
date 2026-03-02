@@ -1,13 +1,13 @@
 package services
 
 import (
+	"9xbet_risk/global"
+	"9xbet_risk/logs"
+	"9xbet_risk/model"
+	"9xbet_risk/repositories"
+	"9xbet_risk/repositories/repoInterface"
 	"fmt"
 	"github.com/kataras/iris/v12"
-	"iris-init/global"
-	"iris-init/logs"
-	"iris-init/model"
-	"iris-init/repositories"
-	"iris-init/repositories/repoInterface"
 	"strconv"
 	"strings"
 )

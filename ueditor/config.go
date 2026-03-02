@@ -1,10 +1,10 @@
 package ueditor
 
 import (
+	"9xbet_risk/ueditor/ueditorCommon"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"iris-init/ueditor/ueditorCommon"
 	"os"
 	"strings"
 )

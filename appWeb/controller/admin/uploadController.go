@@ -1,10 +1,10 @@
 package admin
 
 import (
+	"9xbet_risk/appWeb"
+	"9xbet_risk/global"
+	"9xbet_risk/ueditor"
 	"github.com/kataras/iris/v12"
-	"iris-init/appWeb"
-	"iris-init/global"
-	"iris-init/ueditor"
 	"strings"
 )
 

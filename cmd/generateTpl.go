@@ -1,9 +1,9 @@
 package main
 
 import (
+	"9xbet_risk/cmd/servTemplate/tplStruct"
+	"9xbet_risk/logs"
 	"flag"
-	"iris-init/cmd/servTemplate/tplStruct"
-	"iris-init/logs"
 	"strings"
 )
 

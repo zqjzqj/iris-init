@@ -1,11 +1,11 @@
 package tplStruct
 
 import (
+	"9xbet_risk/global"
+	"9xbet_risk/logs"
+	"9xbet_risk/migrates"
+	"9xbet_risk/sErr"
 	"fmt"
-	"iris-init/global"
-	"iris-init/logs"
-	"iris-init/migrates"
-	"iris-init/sErr"
 	"os"
 	"reflect"
 	"strings"

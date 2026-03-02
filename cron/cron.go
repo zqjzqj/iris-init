@@ -1,9 +1,9 @@
 package cron
 
 import (
+	"9xbet_risk/logs"
+	"9xbet_risk/services"
 	cron2 "github.com/robfig/cron/v3"
-	"iris-init/logs"
-	"iris-init/services"
 )
 
 var cron *cron2.Cron

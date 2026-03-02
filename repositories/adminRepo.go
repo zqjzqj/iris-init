@@ -1,11 +1,11 @@
 package repositories
 
 import (
+	"9xbet_risk/model"
+	"9xbet_risk/orm"
+	"9xbet_risk/repositories/repoComm"
+	"9xbet_risk/repositories/repoInterface"
 	"gorm.io/gorm"
-	"iris-init/model"
-	"iris-init/orm"
-	"iris-init/repositories/repoComm"
-	"iris-init/repositories/repoInterface"
 )
 
 type AdminRepoGorm struct {
@@ -16,14 +16,14 @@ func NewAdminRepo() repoInterface.AdminRepo {
 	return &AdminRepoGorm{repoComm.NewRepoGorm()}
 }
 
-//该方法需要自己去完善 GetSearchWhereTx方法内部
+// 该方法需要自己去完善 GetSearchWhereTx方法内部
 func (adminRepo *AdminRepoGorm) GetByWhere(where repoInterface.AdminSearchWhere) model.Admin {
 	admin := model.Admin{}
 	_ = adminRepo.GetSearchWhereTx(where, nil).Limit(1).Find(&admin)
 	return admin
 }
 
-//该方法需要自己去完善 GetSearchWhereTx方法内部
+// 该方法需要自己去完善 GetSearchWhereTx方法内部
 func (adminRepo *AdminRepoGorm) GetIDByWhere(where repoInterface.AdminSearchWhere) []uint64 {
 	var ID []uint64
 	tx := adminRepo.GetSearchWhereTx(where, nil)
@@ -43,13 +43,13 @@ func (adminRepo *AdminRepoGorm) SaveOmit(admin *model.Admin, _omit ...string) er
 	return repoComm.SaveModelOmit(adminRepo.Orm, admin, _omit...)
 }
 
-//这里因为gorm的缘故 传入的admin主键必须不为空
+// 这里因为gorm的缘故 传入的admin主键必须不为空
 func (adminRepo *AdminRepoGorm) Delete(admin model.Admin) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.Delete(admin)
 	return tx.RowsAffected, tx.Error
 }
 
-//为了避免更换源之后的一些麻烦 该方法不建议在仓库结构AdminRepoGorm以外使用
+// 为了避免更换源之后的一些麻烦 该方法不建议在仓库结构AdminRepoGorm以外使用
 func (adminRepo *AdminRepoGorm) deleteByWhere(query string, args ...interface{}) (rowsAffected int64, err error) {
 	tx := adminRepo.Orm.Where(query, args...).Delete(&model.Admin{})
 	return tx.RowsAffected, tx.Error
@@ -955,7 +955,7 @@ func (adminRepo *AdminRepoGorm) GetSearchWhereTx(where repoInterface.AdminSearch
 	return tx
 }
 
-//返回数据总数
+// 返回数据总数
 func (adminRepo *AdminRepoGorm) GetTotalCount(where repoInterface.AdminSearchWhere) int64 {
 	tx := adminRepo.GetSearchWhereTx(where, nil)
 	var r int64

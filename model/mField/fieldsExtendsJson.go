@@ -1,9 +1,9 @@
 package mField
 
 import (
+	"9xbet_risk/global"
 	"encoding/json"
 	"github.com/tidwall/gjson"
-	"iris-init/global"
 )
 
 type FieldsExtendsJsonType struct {

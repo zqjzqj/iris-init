@@ -2,10 +2,10 @@ package repositories
 
 import (
 	"gorm.io/gorm"
-	"iris-init/model"
-	"iris-init/orm"
-	"iris-init/repositories/repoComm"
-	"iris-init/repositories/repoInterface"
+	"9xbet_risk/model"
+	"9xbet_risk/orm"
+	"9xbet_risk/repositories/repoComm"
+	"9xbet_risk/repositories/repoInterface"
 )
 
 type {{.Model}}RepoGorm struct {

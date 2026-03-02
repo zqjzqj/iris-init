@@ -1,6 +1,6 @@
 package tplStruct
 
-import "iris-init/model"
+import "9xbet_risk/model"
 
 var Str2ModelMap = map[string]any{
 	"Admin": model.Admin{},

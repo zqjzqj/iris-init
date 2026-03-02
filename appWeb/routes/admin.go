@@ -1,13 +1,13 @@
 package routes
 
 import (
+	"9xbet_risk/appWeb/controller/admin"
+	"9xbet_risk/appWeb/middleware/adminMiddleware"
+	"9xbet_risk/config"
+	"9xbet_risk/services"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"github.com/kataras/iris/v12/sessions"
-	"iris-init/appWeb/controller/admin"
-	"iris-init/appWeb/middleware/adminMiddleware"
-	"iris-init/config"
-	"iris-init/services"
 	"net/http"
 )
 
@@ -18,7 +18,7 @@ func RegisterRoutes(app *iris.Application) {
 	}
 	party := app.Party("/") //.Subdomain("admin")
 	sess := sessions.New(sessions.Config{
-		Cookie: "iris-init",
+		Cookie: "9xbet_risk",
 	})
 	party.Use(sess.Handler())
 	party.RegisterView(tmpl)

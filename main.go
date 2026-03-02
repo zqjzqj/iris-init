@@ -1,6 +1,12 @@
 package main
 
 import (
+	"9xbet_risk/appWeb/routes"
+	"9xbet_risk/config"
+	"9xbet_risk/cron"
+	"9xbet_risk/global"
+	"9xbet_risk/logs"
+	"9xbet_risk/migrates"
 	"flag"
 	"fmt"
 	"github.com/kataras/iris/v12"
@@ -8,12 +14,6 @@ import (
 	recover2 "github.com/kataras/iris/v12/middleware/recover"
 	"github.com/rs/cors"
 	"github.com/zqjzqj/pRuntime"
-	"iris-init/appWeb/routes"
-	"iris-init/config"
-	"iris-init/cron"
-	"iris-init/global"
-	"iris-init/logs"
-	"iris-init/migrates"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -51,7 +51,7 @@ func main() {
 	if config.RunBackground() {
 		if runtime.GOOS != "windows" {
 			//设置一下pid文件
-			pRuntime.SetPidFile("./iris-init.pid")
+			pRuntime.SetPidFile("./9xbet_risk.pid")
 			pRuntime.RunBackground()
 		} else {
 			logs.PrintlnWarning("windows不支持后台运行模式")

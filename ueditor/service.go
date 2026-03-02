@@ -1,8 +1,8 @@
 package ueditor
 
 import (
+	"9xbet_risk/ueditor/storage"
 	"errors"
-	"iris-init/ueditor/storage"
 	"net/http"
 )
 

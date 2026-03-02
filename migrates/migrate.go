@@ -1,8 +1,8 @@
 package migrates
 
 import (
+	"9xbet_risk/logs"
 	"github.com/go-gormigrate/gormigrate/v2"
-	"iris-init/logs"
 )
 
 type MigrateInterface interface {

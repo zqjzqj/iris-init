@@ -1,15 +1,15 @@
 package services
 
 import (
+	"9xbet_risk/global"
+	"9xbet_risk/model"
+	"9xbet_risk/repositories"
+	"9xbet_risk/repositories/repoComm"
+	"9xbet_risk/repositories/repoInterface"
+	"9xbet_risk/sErr"
 	"database/sql"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/core/router"
-	"iris-init/global"
-	"iris-init/model"
-	"iris-init/repositories"
-	"iris-init/repositories/repoComm"
-	"iris-init/repositories/repoInterface"
-	"iris-init/sErr"
 	"reflect"
 	"time"
 )

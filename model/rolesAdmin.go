@@ -1,7 +1,7 @@
 package model
 
 import (
-	"iris-init/model/mField"
+	"9xbet_risk/model/mField"
 )
 
 type RolesAdmin struct {

@@ -3,8 +3,8 @@ package migrates
 import (
     "github.com/go-gormigrate/gormigrate/v2"
     "gorm.io/gorm"
-    "iris-init/model"
-    "iris-init/orm"
+    "9xbet_risk/model"
+    "9xbet_risk/orm"
 )
 
 type Migrate_{{.MigrateName}} struct{}

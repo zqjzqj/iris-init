@@ -1,10 +1,10 @@
 package storage
 
 import (
+	"9xbet_risk/global"
+	"9xbet_risk/ueditor/ueditorCommon"
 	"errors"
 	"io"
-	"iris-init/global"
-	"iris-init/ueditor/ueditorCommon"
 )
 
 type LocalFile struct {

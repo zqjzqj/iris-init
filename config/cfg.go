@@ -1,13 +1,13 @@
 package config
 
 import (
+	"9xbet_risk/logs"
+	"9xbet_risk/orm"
+	"9xbet_risk/sErr"
 	"encoding/json"
 	"github.com/spf13/viper"
 	"github.com/tidwall/gjson"
 	"gorm.io/gorm/logger"
-	"iris-init/logs"
-	"iris-init/orm"
-	"iris-init/sErr"
 	"log"
 	"os"
 	"path/filepath"

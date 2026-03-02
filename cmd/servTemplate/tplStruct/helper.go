@@ -1,7 +1,7 @@
 package tplStruct
 
 import (
-	"iris-init/global"
+	"9xbet_risk/global"
 	"reflect"
 	"strings"
 )
