@@ -1,9 +1,9 @@
 package global
 
 import (
-	"9xbet_risk/logs"
 	"context"
 	context2 "github.com/kataras/iris/v12/context"
+	"iris-init/logs"
 	"time"
 )
 

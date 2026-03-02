@@ -1,11 +1,11 @@
 package ueditor
 
 import (
-	"9xbet_risk/ueditor/storage"
-	"9xbet_risk/ueditor/ueditorCommon"
 	"encoding/base64"
 	"errors"
 	"io/ioutil"
+	"iris-init/ueditor/storage"
+	"iris-init/ueditor/ueditorCommon"
 	"math/rand"
 	"mime/multipart"
 	"net/http"

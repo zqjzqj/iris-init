@@ -1,8 +1,8 @@
 package repoComm
 
 import (
-	"9xbet_risk/orm"
 	"gorm.io/gorm"
+	"iris-init/orm"
 )
 
 type RepoGorm struct {

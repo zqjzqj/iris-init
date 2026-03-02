@@ -1,10 +1,10 @@
 package tplStruct
 
 import (
-	"9xbet_risk/global"
-	"9xbet_risk/logs"
-	"9xbet_risk/sErr"
 	"fmt"
+	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/sErr"
 	"os"
 	"os/exec"
 	"path"
@@ -48,7 +48,7 @@ func NewServTpl(_model, alias, ctrDir string) ServTpl {
 	st.SetAppPath(pwd)
 	_modelStruct, ok := Str2ModelMap[st.Model]
 	if !ok {
-		logs.PrintErr(fmt.Sprintf("请先在cmd/servTemplate/tplStruct/str2modelMap.go中添加model的映射关系%s=>model.%s{}, 或使用go run ./cmd/generateTpl.go -createModel=%s命令创建", _model, _model, _model))
+		logs.PrintErr("请先在cmd/servTemplate/tplStruct/str2modelMap.go中添加model的映射关系%s=>model.%s{}, 或使用go run ./cmd/generateTpl.go -createModel=%s命令创建", _model, _model, _model)
 		panic("model参数错误")
 	}
 	st.ModelField = RefStructField(_modelStruct)

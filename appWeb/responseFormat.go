@@ -1,11 +1,11 @@
 package appWeb
 
 import (
-	"9xbet_risk/global"
 	"bytes"
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"io"
+	"iris-init/global"
 	"net/url"
 )
 

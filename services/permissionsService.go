@@ -1,13 +1,13 @@
 package services
 
 import (
-	"9xbet_risk/global"
-	"9xbet_risk/logs"
-	"9xbet_risk/model"
-	"9xbet_risk/repositories"
-	"9xbet_risk/repositories/repoInterface"
 	"fmt"
 	"github.com/kataras/iris/v12"
+	"iris-init/global"
+	"iris-init/logs"
+	"iris-init/model"
+	"iris-init/repositories"
+	"iris-init/repositories/repoInterface"
 	"strconv"
 	"strings"
 )
@@ -119,7 +119,7 @@ func (permServ PermissionsService) GenerateAdminPermissionsByRoutes(app *iris.Ap
 				perm, err := permServ.repo.GetOrCreatePermissionByName(_dir, _pid, model.PermissionsLevelDir, sort)
 				_pid = perm.ID
 				if err != nil {
-					logs.PrintErr("get dir pid fail ", _dir, err)
+					logs.PrintErr("get dir pid fail %s %v", _dir, err)
 					return
 				}
 			}
@@ -135,7 +135,7 @@ func (permServ PermissionsService) GenerateAdminPermissionsByRoutes(app *iris.Ap
 			perm, err := permServ.repo.GetOrCreatePermissionByName(_btn, pid, model.PermissionsLevelMenu, sort)
 			pid = perm.ID
 			if err != nil {
-				logs.PrintErr(err)
+				logs.PrintErr("%v", err)
 				continue
 			}
 			//拿出最后一个作为path 并且排除第一个已创建的菜单
@@ -164,7 +164,7 @@ func (permServ PermissionsService) GenerateAdminPermissionsByRoutes(app *iris.Ap
 		path.Method = r.Method
 		path.GenerateIdent()
 		if err := permServ.repo.Save(&path); err != nil {
-			logs.PrintErr("save path fail ", path.Name, err)
+			logs.PrintErr("save path fail %s, %v", path.Name, err)
 			continue
 		}
 		logs.PrintlnSuccess("save path success ", mBtn, path.Name, path.Method, path.Path)

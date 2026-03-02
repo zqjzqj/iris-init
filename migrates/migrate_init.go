@@ -1,13 +1,13 @@
 package migrates
 
 import (
-	"9xbet_risk/logs"
-	"9xbet_risk/model"
-	"9xbet_risk/orm"
-	"9xbet_risk/services"
 	"fmt"
 	"github.com/go-gormigrate/gormigrate/v2"
 	"gorm.io/gorm"
+	"iris-init/logs"
+	"iris-init/model"
+	"iris-init/orm"
+	"iris-init/services"
 	"strings"
 )
 

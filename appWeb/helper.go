@@ -1,12 +1,12 @@
 package appWeb
 
 import (
-	"9xbet_risk/global"
-	"9xbet_risk/model"
-	"9xbet_risk/services"
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
+	"iris-init/global"
+	"iris-init/model"
+	"iris-init/services"
 	"net/url"
 	"strings"
 )
@@ -86,7 +86,7 @@ func ResponseDataView(view string, dataView DataView, ctx iris.Context) mvc.Resu
 	}
 	dataView.Title = services.NewSettingsService().GetWebsiteTitle()
 	if dataView.Title == "" {
-		dataView.Title = "9xbet_risk"
+		dataView.Title = "iris-init"
 	}
 	dataView.LoadStaticResource()
 	//模板注入公共参数

@@ -1,6 +1,7 @@
 package logs
 
 import (
+	"fmt"
 	"github.com/gookit/color"
 	"log"
 	"os"
@@ -33,31 +34,30 @@ func Println(v ...interface{}) {
 	}
 }
 
-func print2(color2 color.Color, v ...interface{}) {
+func print2(color2 color.Color, format string, v ...interface{}) {
 	if IsPrintLog {
 		s := time.Now().Format("2006-01-02 15:04:05")
-		v = append([]interface{}{"[" + s + "]"}, v...)
-		color2.Light().Println(v...)
+		color2.Light().Println(s, fmt.Sprintf(format, v...))
 	}
 }
 
-func PrintlnSuccess(v ...interface{}) {
-	print2(color.Green, v...)
+func PrintlnSuccess(format string, v ...interface{}) {
+	print2(color.Green, format, v...)
 }
 
-func PrintlnInfo(v ...interface{}) {
-	print2(color.LightCyan, v...)
+func PrintlnInfo(format string, v ...interface{}) {
+	print2(color.LightCyan, format, v...)
 }
 
-func PrintlnWarning(v ...interface{}) {
-	print2(color.Yellow, v...)
+func PrintlnWarning(format string, v ...interface{}) {
+	print2(color.Yellow, format, v...)
 }
 
-func PrintErr(v ...interface{}) {
-	print2(color.FgLightRed, v...)
+func PrintErr(format string, v ...interface{}) {
+	print2(color.FgLightRed, format, v...)
 }
 
-func Fatal(v ...interface{}) {
-	PrintErr(v...)
+func Fatal(format string, v ...interface{}) {
+	PrintErr(format, v...)
 	os.Exit(1)
 }

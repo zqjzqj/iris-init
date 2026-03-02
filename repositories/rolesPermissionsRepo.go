@@ -1,11 +1,11 @@
 package repositories
 
 import (
-	"9xbet_risk/global"
-	"9xbet_risk/model"
-	"9xbet_risk/repositories/repoComm"
-	"9xbet_risk/repositories/repoInterface"
 	"gorm.io/gorm"
+	"iris-init/global"
+	"iris-init/model"
+	"iris-init/repositories/repoComm"
+	"iris-init/repositories/repoInterface"
 )
 
 type RolesPermissionsRepoGorm struct {

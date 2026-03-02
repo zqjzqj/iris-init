@@ -3,12 +3,12 @@ package {{.Package}}
 import (
 	"github.com/kataras/iris/v12"
     "github.com/kataras/iris/v12/mvc"
-    "9xbet_risk/appWeb"
-    "9xbet_risk/services"
+    "iris-init/appWeb"
+    "iris-init/services"
     {{- if .View}}
-    "9xbet_risk/global"
+    "iris-init/global"
     {{- end}}
-    "9xbet_risk/sErr"
+    "iris-init/sErr"
     "net/http"
 )
 

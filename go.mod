@@ -1,4 +1,4 @@
-module 9xbet_risk
+module iris-init
 
 go 1.20
 

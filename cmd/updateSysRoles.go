@@ -1,10 +1,10 @@
 package main
 
 import (
-	"9xbet_risk/config"
-	"9xbet_risk/logs"
-	"9xbet_risk/services"
 	"flag"
+	"iris-init/config"
+	"iris-init/logs"
+	"iris-init/services"
 	"os"
 )
 

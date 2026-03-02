@@ -1,9 +1,9 @@
 package model
 
 import (
-	"9xbet_risk/global"
-	"9xbet_risk/model/mField"
 	"database/sql"
+	"iris-init/global"
+	"iris-init/model/mField"
 	"strings"
 	"time"
 )
