@@ -6,14 +6,28 @@ import (
 	"iris-init/orm"
 	"iris-init/repositories/repoComm"
 	"iris-init/repositories/repoInterface"
+	{{- if eq .RedisRepo true}}
+	"github.com/redis/go-redis/v9"
+	"iris-init/redis_serv"
+	{{- end}}
 )
 
 type {{.Model}}RepoGorm struct {
 	repoComm.RepoGorm
+	{{- if eq .RedisRepo true}}
+	rdb redis.UniversalClient
+	{{- end}}
 }
 
 func New{{.Model}}Repo() repoInterface.{{.Model}}Repo {
-	return &{{.Model}}RepoGorm{repoComm.NewRepoGorm()}
+    {{- if eq .RedisRepo true}}
+        return &{{.Model}}RepoGorm{
+                rdb:      redis_serv.GetRdb(),
+                RepoGorm: repoComm.NewRepoGorm(),
+            }
+    {{- else}}
+        return &{{.Model}}RepoGorm{repoComm.NewRepoGorm()}
+    {{- end}}
 }
 
 //该方法需要自己去完善 GetSearchWhereTx方法内部

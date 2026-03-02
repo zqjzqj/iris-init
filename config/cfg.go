@@ -34,12 +34,17 @@ type Cfg struct {
 	pprofPort     int
 	logs          LogsCfg
 	web           Web
+	redis         RedisCfg
 }
 
 type LogsCfg struct {
 	IsPrint     bool
 	LogFilePath string
 	LogFile     *os.File
+}
+
+func GetRedisCfg() RedisCfg {
+	return cfg.redis
 }
 
 func PprofPort() int {
@@ -104,6 +109,11 @@ func LoadConfigJson(p string) error {
 	}
 	//载入日志配置
 	if err = loadLogsCfg(); err != nil {
+		return err
+	}
+
+	//载入redis配置
+	if err = loadRedisCfg(); err != nil {
 		return err
 	}
 	return nil

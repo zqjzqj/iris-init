@@ -32,6 +32,7 @@ type ServTpl struct {
 	viewItemTplPath      string
 	Force                bool
 	CoverRepo            bool
+	RedisRepo            bool
 	ModelField           []Field
 	UniqueField          map[string][]Field
 	IndexField           map[string][]Field
@@ -186,6 +187,7 @@ func (servTpl ServTpl) GenerateRepo() error {
 		"UniqueField": servTpl.UniqueField,
 		"IndexField":  servTpl.IndexField,
 		"Pk":          servTpl.Pk,
+		"RedisRepo":   servTpl.RedisRepo,
 	}, servTpl.CoverRepo)
 }
 
