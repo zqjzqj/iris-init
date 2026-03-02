@@ -29,7 +29,7 @@ func main() {
 		modelTpl := tplStruct.NewModelTpl(*createModel, *tableName)
 		err := modelTpl.GenerateFile()
 		if err != nil {
-			logs.Fatal(err)
+			logs.Fatal("%v", err)
 		}
 		logs.PrintlnSuccess("create model ok...")
 		return
@@ -39,7 +39,7 @@ func main() {
 		migrateTpl := tplStruct.NewMigrateTpl(models)
 		err := migrateTpl.GenerateFile()
 		if err != nil {
-			logs.Fatal(err)
+			logs.Fatal("%v", err)
 		}
 		logs.PrintlnSuccess("Migrate OK...")
 		if *model == "" {
@@ -61,7 +61,7 @@ func main() {
 		if *_model != "" {
 			err := servTpl.GenerateModel()
 			if err != nil {
-				logs.PrintErr(err)
+				logs.PrintErr("%v", err)
 			}
 		}
 		logs.PrintlnSuccess("GenerateFile OK...", modelItem)
