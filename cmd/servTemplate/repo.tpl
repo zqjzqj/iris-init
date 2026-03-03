@@ -45,6 +45,16 @@ func ({{.Alias}}Repo *{{.Model}}RepoGorm) GetIDByWhere(where repoInterface.{{.Mo
 	return {{.Pk.Name}}
 }
 
+func ({{.Alias}}Repo *{{.Model}}RepoGorm) BatchCreate(
+	list *[]model.{{.Model}},
+	batch int,
+) error {
+	if list == nil || len(*list) == 0 {
+		return nil
+	}
+	return {{.Alias}}Repo.Orm.CreateInBatches(list, batch).Error
+}
+
 func ({{.Alias}}Repo *{{.Model}}RepoGorm) Create({{.Alias}} *[]model.{{.Model}}) error {
 	return {{.Alias}}Repo.Orm.Create({{.Alias}}).Error
 }

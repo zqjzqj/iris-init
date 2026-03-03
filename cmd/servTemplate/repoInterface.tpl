@@ -35,6 +35,7 @@ type {{.Model}}Repo interface {
     DeleteByWhere(where {{.Model}}SearchWhere) (rowsAffected int64, err error)
     ScanByWhere(where {{.Model}}SearchWhere, dest any) error
     ScanByOrWhere(dest any, where ...{{.Model}}SearchWhere) error
+    BatchCreate(list *[]model.{{.Model}}, batch int) error
 }
 
 type {{.Model}}SearchWhere struct {
