@@ -203,6 +203,13 @@ func ({{.Alias}}Serv {{.Model}}Service) Create({{.Alias}} *[]model.{{.Model}}) e
 	return {{.Alias}}Serv.repo.Create({{.Alias}})
 }
 
+func ({{.Alias}}Serv {{.Model}}Service) BatchCreate(
+	list *[]model.{{.Model}},
+	batch int,
+) error {
+	return {{.Alias}}Serv.repo.BatchCreate(list, batch)
+}
+
 func ({{.Alias}}Serv {{.Model}}Service) DeleteByCtx(ctx iris.Context) error {
 	return {{.Alias}}Serv.DeleteByID(uint64(ctx.PostValueInt64Default("{{.Pk.Name}}", 0)))
 }
